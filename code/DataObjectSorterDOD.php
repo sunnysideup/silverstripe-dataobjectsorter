@@ -38,7 +38,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 			}
 			$baseDataClass = ClassInfo($this->owner->ClassName);
 			if($baseDataClass) {
-				if(isset $_REQUEST("dos")) {
+				if(isset ($_REQUEST["dos"])) {
 					foreach ($_REQUEST['dos'] as $position => $id) {
 						$i++;
 						$position = intval($position);
