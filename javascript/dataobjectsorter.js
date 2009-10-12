@@ -1,12 +1,12 @@
 (function($) {
 	$(document).ready(
 		function() {
-			$("#test-list").sortable(
+			$("#DataObjectSorterList").sortable(
 				{
 					handle : ".sortHandle",
 					update : function () {
 						var order = $('#DataObjectSorterList').sortable('serialize');
-						$("#DataObjectSorterListInfo").load( DataObjectSorterURL + "?" + order );
+						$("#DataObjectSorterListInfo").load( DataObjectSorterURL + "dodataobjectsort/?" + order );
 						}
 				}
 			);

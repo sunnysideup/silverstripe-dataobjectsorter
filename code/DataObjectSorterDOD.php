@@ -25,10 +25,10 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 
 
-	function updatesortorder() {
+	function dodataobjectsort() {
 		$i = 0;
-		if($this->canEdit()) {
-			$extraSQL = '';
+		if($this->owner->canEdit()) {
+			$extraSet = '';
 			$extraWhere = '';
 			if(self::$do_not_add_alternative_sort_field) {
 				$field = "Sort";
@@ -36,7 +36,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 			else {
 				$field = "AlternativeSortNumber";
 			}
-			$baseDataClass = ClassInfo($this->owner->ClassName);
+			$baseDataClass = ClassInfo::baseDataClass($this->owner->ClassName);
 			if($baseDataClass) {
 				if(isset ($_REQUEST["dos"])) {
 					foreach ($_REQUEST['dos'] as $position => $id) {
@@ -48,10 +48,14 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 							$extraWhere = ' OR `'.$baseDataClass.'`.`Sort` <> '.$position;
 						}
 						$sql = 'UPDATE `'.$baseDataClass.'` SET `'.$baseDataClass.'`.`'.$field.'` = '.$position.' '.$extraSet.' WHERE `'.$baseDataClass.'`.`ID` = '.$id.' AND (`'.$baseDataClass.'`.`'.$field.'` <> '.$position.' '.$extraWhere.') LIMIT 1;';
-						echo DB::query($sql);
+						//echo $sql .'<hr />';
+						DB::query($sql);
+						$i = $i + mysql_affected_rows();
 						if("SiteTree" == $baseDataClass) {
 							$sql_Live = str_replace('`SiteTree`', '`SiteTree_Live`', $sql);
-							echo DB::query($sql_Live);
+							//echo $sql_Live .'<hr />';
+							DB::query($sql_Live);
+							$i = $i + mysql_affected_rows() - 1;
 						}
 					}
 				}
@@ -65,6 +69,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 	function initDataObjectSorter() {
 		Requirements::javascript("dataobjectsorter/javascript/jquery-1.3.2.min.js");
+		Requirements::block("jsparty/jquery/jquery.js");
 		Requirements::javascript("dataobjectsorter/javascript/jquery-ui-1.7.2.custom.min.js");
 		Requirements::themedCSS("dataobjectsorter");
 		Requirements::customScript('var DataObjectSorterURL = "'.Director::absoluteURL($this->owner->Link()).'";');
