@@ -27,35 +27,40 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 	function updatesortorder() {
 		$i = 0;
-		$extraSQL = '';
-		$extraWhere = '';
-		if(self::$do_not_add_alternative_sort_field) {
-			$field = "Sort";
-		}
-		else {
-			$field = "AlternativeSortNumber";
-		}
-		$baseDataClass = ClassInfo($this->owner->ClassName);
-		if($baseDataClass) {
-			if(isset $_REQUEST("dos")) {
-				foreach ($_REQUEST['dos'] as $position => $id) {
-					$i++;
-					$position = intval($position);
-					$id = intval($id);
-					if(self::$also_update_sort_field && !self::$do_not_add_alternative_sort_field) {
-						$extraSet = ', `'.$baseDataClass.'`.`Sort` = '.$position;
-						$extraWhere = ' OR `'.$baseDataClass.'`.`Sort` <> '.$position;
-					}
-					$sql = 'UPDATE `'.$baseDataClass.'` SET `'.$baseDataClass.'`.`'.$field.'` = '.$position.' '.$extraSet.' WHERE `'.$baseDataClass.'`.`ID` = '.$id.' AND (`'.$baseDataClass.'`.`'.$field.'` <> '.$position.' '.$extraWhere.') LIMIT 1;';
-					echo DB::query($sql);
-					if("SiteTree" == $baseDataClass) {
-						$sql_Live = str_replace('`SiteTree`', '`SiteTree_Live`', $sql);
-						echo DB::query($sql_Live);
+		if($this->canEdit()) {
+			$extraSQL = '';
+			$extraWhere = '';
+			if(self::$do_not_add_alternative_sort_field) {
+				$field = "Sort";
+			}
+			else {
+				$field = "AlternativeSortNumber";
+			}
+			$baseDataClass = ClassInfo($this->owner->ClassName);
+			if($baseDataClass) {
+				if(isset $_REQUEST("dos")) {
+					foreach ($_REQUEST['dos'] as $position => $id) {
+						$i++;
+						$position = intval($position);
+						$id = intval($id);
+						if(self::$also_update_sort_field && !self::$do_not_add_alternative_sort_field) {
+							$extraSet = ', `'.$baseDataClass.'`.`Sort` = '.$position;
+							$extraWhere = ' OR `'.$baseDataClass.'`.`Sort` <> '.$position;
+						}
+						$sql = 'UPDATE `'.$baseDataClass.'` SET `'.$baseDataClass.'`.`'.$field.'` = '.$position.' '.$extraSet.' WHERE `'.$baseDataClass.'`.`ID` = '.$id.' AND (`'.$baseDataClass.'`.`'.$field.'` <> '.$position.' '.$extraWhere.') LIMIT 1;';
+						echo DB::query($sql);
+						if("SiteTree" == $baseDataClass) {
+							$sql_Live = str_replace('`SiteTree`', '`SiteTree_Live`', $sql);
+							echo DB::query($sql_Live);
+						}
 					}
 				}
 			}
+			return "Updated $i record(s)";
 		}
-		return "Updated $i record(s)";
+		else {
+			return "please log-in as an administrator to make changes to the sort order";
+		}
 	}
 
 	function initDataObjectSorter() {
