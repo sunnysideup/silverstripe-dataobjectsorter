@@ -22,6 +22,14 @@ Documentation
 
 
 
+TO DO
+-----------------------------------------------
+# sort out URL for DataObject (SiteTree is sorted)
+# create form-field for in form OR in CMS (use LiteralField filled with HTML)
+# use more elegant SQL rather than raw insertion (e.g. DataObject::get())
+# save up all SQL statements and insert all in one time
+
+
 
 Installation Instructions
 -----------------------------------------------
