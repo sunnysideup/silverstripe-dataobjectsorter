@@ -4,10 +4,10 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 
 	protected static $also_update_sort_field = false;
-		static function set_also_update_sort_field($v) {self::$also_update_sort_field = $v ? true : false;}
+		static function set_also_update_sort_field($v) {self::$also_update_sort_field = ($v ? true : false);}
 
 	protected static $do_not_add_alternative_sort_field = false;
-		static function set_do_not_add_alternative_sort_field($v) {self::$do_not_add_alternative_sort_field = $v ? true : false;}
+		static function set_do_not_add_alternative_sort_field($v) {self::$do_not_add_alternative_sort_field = ($v ? true : false);}
 
 
 	function extraDBFields(){
@@ -69,7 +69,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 	function initDataObjectSorter() {
 		Requirements::javascript("dataobjectsorter/javascript/jquery-1.3.2.min.js");
-		Requirements::block("jsparty/jquery/jquery.js");
+		Requirements::block(THIRDPARTY_DIR."/jquery/jquery.js");
 		Requirements::javascript("dataobjectsorter/javascript/jquery-ui-1.7.2.custom.min.js");
 		Requirements::themedCSS("dataobjectsorter");
 		Requirements::customScript('var DataObjectSorterURL = "'.Director::absoluteURL($this->owner->Link()).'";');
