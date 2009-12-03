@@ -75,3 +75,5 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 		Requirements::customScript('var DataObjectSorterURL = "'.Director::absoluteURL($this->owner->Link()).'";');
 	}
 }
+
+
