@@ -10,7 +10,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 		static function set_do_not_add_alternative_sort_field($v) {self::$do_not_add_alternative_sort_field = ($v ? true : false);}
 
 
-	function extraDBFields(){
+	function extraStatics(){
 		if(self::$do_not_add_alternative_sort_field) {
 			return array();
 		}
