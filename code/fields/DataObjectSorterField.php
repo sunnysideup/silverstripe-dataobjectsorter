@@ -12,11 +12,11 @@ class DataObjectSorterField extends LiteralField{
 	protected $content;
 
 	function __construct($name, $ClassName) {
+		Requirements::javascript("dataobjectsorter/javascript/jquery-1.3.2.min.js");
+		Requirements::block(THIRDPARTY_DIR."/jquery/jquery.js");
+		Requirements::javascript("dataobjectsorter/javascript/jquery-ui-1.7.2.custom.min.js");
+		Requirements::themedCSS("dataobjectsorter");
 		$objects = DataObject::get($ClassName);
-		foreach($ClassName as $Obj) {
-			$Obj->initDataObjectSorter();
-			break;
-		}
 		$dos = new DataObjectSet();
 		$dos->Children = $objects;
 		$content = $this->customise($dos)->renderWith("DataObjectSorterField");
@@ -25,4 +25,3 @@ class DataObjectSorterField extends LiteralField{
 
 }
 
-?>
