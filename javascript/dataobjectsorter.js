@@ -5,9 +5,10 @@
 				{
 					handle : ".sortHandle",
 					update : function () {
+						$("#DataObjectSorterListInfo").text("updating records, please wait ...");
 						var order = $('#DataObjectSorterList').sortable('serialize');
-						$("#DataObjectSorterListInfo").load( DataObjectSorterURL + "dodataobjectsort/?" + order );
-						}
+						$("#DataObjectSorterListInfo").load( DataObjectSorterURL + "?" + order );
+					}
 				}
 			);
 		}

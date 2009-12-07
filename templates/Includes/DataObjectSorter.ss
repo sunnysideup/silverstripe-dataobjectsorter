@@ -1,4 +1,3 @@
-<% require javascript(dataobjectsorter/javascript/dataobjectsorter.js) %>
 <div id="DataObjectSorterListInfo"></div>
 <ul id="DataObjectSorterList">
 <% control Children  %>
