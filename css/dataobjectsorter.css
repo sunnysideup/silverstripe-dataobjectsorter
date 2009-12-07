@@ -1,3 +1,4 @@
-
+#DataObjectSorterListInfo {text-align: center;}
+#DataObjectSorterListInfo h1, p {margin: 0; padding: 0; text-align: center;}
 #DataObjectSorterList li { border: 1px dotted green; background-color: grey; padding: 1em; margin: 1em; list-style: none;}
 #DataObjectSorterList img.sortHandle { margin-right: 20px; cursor: move;}
