@@ -24,6 +24,8 @@ var DataObjectOneFieldUpdate = {
 
 	fieldNameSelector: "#DataObjectOneFieldUpdateFieldName",
 
+	loadingText: "updating data ...",
+
 	fieldName: "",
 
 	init: function () {
@@ -38,11 +40,14 @@ var DataObjectOneFieldUpdate = {
 				if(table) {
 					if(parseInt(id)) {
 						if(DataObjectOneFieldUpdate.fieldName) {
+							jQuery(this).parent("span").parent("li").addClass("loading");
+							jQuery(DataObjectOneFieldUpdate.feedbackSelector).html(DataObjectOneFieldUpdate.loadingText);
 							jQuery.get(
 								DataObjectOneFieldUpdateURL + table + "/" + DataObjectOneFieldUpdate.fieldName + "/?value=" + escape(value) + "&id=" + id,
 								{},
 								function(data) {
 									jQuery(DataObjectOneFieldUpdate.feedbackSelector).html(data)
+									jQuery(".loading").removeClass("loading");
 								}
 							);
 						}
