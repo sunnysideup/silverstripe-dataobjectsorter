@@ -33,6 +33,9 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 
 	function dodataobjectsort() {
+		if(!Permission::check("ADMIN")) {
+			Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
+		}
 		$i = 0;
 		if($this->owner->canEdit()) {
 			$extraSet = '';
@@ -80,6 +83,20 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 		Requirements::themedCSS("dataobjectsorter");
 		Requirements::customScript('var DataObjectSorterURL = "'.Director::absoluteURL("dataobjectsorter/dodataobjectsort/".$this->owner->ClassName."/").'";');
 	}
+
+	function dataObjectSorterPopupLink($fieldOrID = "", $id = 0) {
+		$link = 'dataobjectsorter/'.$this->owner->ClassName."/";
+		if($fieldOrID) {
+			$link .= $fieldOrID.'/';
+		}
+		if($id) {
+		 $link .= $id.'/';
+		}
+		return '
+		<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$this->owner->ClassName.$fieldOrID.$id.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">click here to sort list</a>
+	}
+
+
 }
 
 
