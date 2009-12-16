@@ -16,9 +16,8 @@
 Director::addRules(90, array(
 	'dataobjectsorter//$Action/$ID/$OtherID' => 'DataObjectSorterController',
 ));
-//action = show / updatefield
 Director::addRules(90, array(
-	'dataobjectonefieldupdate//$Action/$ID/$OtherID' => 'DataObjectSorterController',
+	'dataobjectonefieldupdate//$Action/$ID/$OtherID' => 'DataObjectOneFieldUpdateController',
 ));
 //===================---------------- END dataobjectsorter MODULE ----------------===================
 
