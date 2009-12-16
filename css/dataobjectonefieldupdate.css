@@ -5,4 +5,5 @@
 		#DataObjectOneFieldUpdateUL li input {width: 20em;}
 			#DataObjectOneFieldUpdateUL li input:focus {border-color: red;}
 
-.loading {background-image: url(../images/loading.gif); background-position: right top; background-repeat: no-repeat; }
+.loading {background-image: url(../images/loading.gif); background-position: right top; background-repeat: no-repeat; background-color: #ccc;}
+	.loading input {background-color: #ccc;}
