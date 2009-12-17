@@ -36,7 +36,7 @@ var DataObjectOneFieldUpdate = {
 				var nameArray = nameValue.split("/");
 				var table = nameArray[0];
 				var id = nameArray[1];
-				var value = parseInt(jQuery(this).val());
+				var value = jQuery(this).val();
 				if(table) {
 					if(parseInt(id)) {
 						if(DataObjectOneFieldUpdate.fieldName) {
