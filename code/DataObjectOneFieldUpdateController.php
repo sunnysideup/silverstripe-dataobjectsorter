@@ -59,11 +59,7 @@ class DataObjectOneFieldUpdateController  extends Controller{
 			$table = $request->param("ID");
 			$field = $request->param("OtherID");
 			$id = intval($request->getVar("id"));
-			echo "a".$request->getVar("value");
-			echo "b".$_GET["value"];
-
 			$newValue = $request->getVar("value");
-			echo "c".$newValue;
 			if($memberID = Member::currentUserID() ) {
 				if(class_exists($table) && $id && ($newValue || $newValue === 0)) {
 					if($obj = DataObject::get_by_id($table, $id)) {
