@@ -1,7 +1,11 @@
 <?php
 /**
  *@author nicolaas [at] sunnysideup.co.nz
- *@todo: pagination (and many other things)
+ *@todo:
+ *  pagination (and many other things)
+ *  use scaffolding method (of some sort) to get right field type
+ *
+ *
  *@package: dataobjectsorter
  *@description: allows you to quickly review and update one field for all records
  * e.g. update price for all products
@@ -55,7 +59,11 @@ class DataObjectOneFieldUpdateController  extends Controller{
 			$table = $request->param("ID");
 			$field = $request->param("OtherID");
 			$id = intval($request->getVar("id"));
-			$newValue = intval($request->getVar("value"));
+			echo "a".$request->getVar("value");
+			echo "b".$_GET["value"];
+
+			$newValue = $request->getVar("value");
+			echo "c".$newValue;
 			if($memberID = Member::currentUserID() ) {
 				if(class_exists($table) && $id && ($newValue || $newValue === 0)) {
 					if($obj = DataObject::get_by_id($table, $id)) {
