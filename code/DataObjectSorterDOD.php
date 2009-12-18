@@ -92,8 +92,20 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 		if($id) {
 		 $link .= $id.'/';
 		}
+		if(method_exists($this->owner, "Title")) {
+			$title = $this->owner->Title();
+		}
+		elseif($title = $this->owner->Title) {
+
+		}
+		elseif($title = $this->owner->Name) {
+
+		}
+		else {
+			$title = "list #".$this->owner->ID;
+		}
 		return '
-		<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$this->owner->ClassName.$fieldOrID.$id.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">click here to sort list</a>';
+		<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$this->owner->ClassName.$fieldOrID.$id.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">click here to sort '.$title.'</a>';
 	}
 
 
