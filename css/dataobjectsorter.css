@@ -1,8 +1,8 @@
 #DataObjectSorterListInfo {border: 1px dotted #333; background-color: #ccc; padding: 1em; margin: 1em; font-size: 0.8em}
 #DataObjectSorterListInfo h1, p {margin: 0; padding: 0; text-align: center;}
-#DataObjectSorterList li { border: 1px dotted green; list-style: none; margin: 0!important; padding: 0!important;}
-	#DataObjectSorterList div.sortHandle { cursor: move; background-color: grey; padding: 1em; margin: 1em; }
-	#DataObjectSorterList li:hover { background-color: #778811;}
+#DataObjectSorterList li { list-style: none; margin: 1em; padding: 0!important; border: 1px solid #fff;}
+	#DataObjectSorterList div.sortHandle { cursor: move; background-color: silver; padding: 1em; border: 1px dotted green; }
+	#DataObjectSorterList div.sortHandle:hover { background-color: #778811;}
 	#DataObjectSorterList li.ui-sortable-helper {border: 1px solid red;}
 	#DataObjectSorterList img.moveMe { margin-right: 20px; }
 
