@@ -2,7 +2,7 @@
 #DataObjectSorterListInfo h1, p {margin: 0; padding: 0; text-align: center;}
 #DataObjectSorterList li { border: 1px dotted green; background-color: grey; padding: 1em; margin: 1em; list-style: none;}
 	#DataObjectSorterList li:hover { background-color: #778811;}
-	#DataObjectSorterList li:focus { background-color: #778811;}
+
 	#DataObjectSorterList li.ui-sortable-helper {border: 1px solid red;}
 #DataObjectSorterList img.sortHandle { margin-right: 20px; cursor: move;}
 
