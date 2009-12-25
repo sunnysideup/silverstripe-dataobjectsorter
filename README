@@ -25,6 +25,15 @@ other DataObjects You can use the standard "sort" field
 - make sure it is created - OR an alternative sort field field
 or both.
 
+to create links, please use:
+
+DataObjectOneFieldUpdateController::popup_link($ClassName, $FieldName)
+
+OR
+
+$MySortableDataObject->dataObjectSorterPopupLink($filterFieldOrID = "", $id = 0, $listName = "list");
+for $filterFieldOrID, you will use the ParentID ID value OR another field name
+where $ID then is the "should be equal to" value.
 
 
 
@@ -34,6 +43,8 @@ TO DO
 # create form-field for in form OR in CMS (use LiteralField filled with HTML)
 # use more elegant SQL rather than raw insertion (e.g. DataObject::get())
 # save up all SQL statements and insert all in one time
+
+
 
 
 

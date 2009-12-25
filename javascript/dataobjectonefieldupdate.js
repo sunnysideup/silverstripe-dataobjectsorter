@@ -6,6 +6,7 @@
 (function($){
 	$(document).ready(
 		function() {
+			DataObjectOneFieldUpdate.dirtyfixes();
 			DataObjectOneFieldUpdate.init();
 		}
 	);
@@ -27,6 +28,27 @@ var DataObjectOneFieldUpdate = {
 	loadingText: "updating data ...",
 
 	fieldName: "",
+
+	dirtyfixes: function() {
+		jQuery(this.inputSelector).each(
+			function(i) {
+				var typeClass = jQuery(this).attr("type");
+				if("checkbox" == typeClass) {
+					jQuery(this).change(
+						function() {
+							if(jQuery(this).attr("checked")) {
+								jQuery(this).attr("value", 1);
+							}
+							else {
+								jQuery(this).attr("value", 0);
+							}
+						}
+					)
+				}
+				jQuery(this).addClass(typeClass);
+			}
+		)
+	},
 
 	init: function () {
 		DataObjectOneFieldUpdate.fieldName = jQuery(DataObjectOneFieldUpdate.fieldNameSelector).val();

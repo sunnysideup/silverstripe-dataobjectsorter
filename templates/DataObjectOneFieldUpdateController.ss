@@ -4,7 +4,6 @@
   <head>
 		<% base_tag %>
 		$MetaTags
-		<title>Update Objects</title>
 	</head>
 	<body>
 		<% include DataObjectOneFieldUpdate %>

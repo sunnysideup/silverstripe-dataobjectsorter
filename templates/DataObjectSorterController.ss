@@ -4,7 +4,6 @@
   <head>
 		<% base_tag %>
 		$MetaTags
-		<title>Sort Objects</title>
 	</head>
 	<body>
 		<% include DataObjectSorter %>
