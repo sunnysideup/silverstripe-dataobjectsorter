@@ -12,6 +12,6 @@
 	</li>
 <% end_control %>
 </ul>
-<% end_if %>
 </form>
+<% end_if %>
 <h1 class="DataObjectOneFieldUpdateFeedback">please update fields above ($SecureFieldToBeUpdated in $SecureTableToBeUpdated) - NB: there is no undo!</h1>
