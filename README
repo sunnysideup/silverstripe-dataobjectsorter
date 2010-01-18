@@ -19,11 +19,7 @@ SilverStripe 2.3.0 or greater.
 
 Documentation
 -----------------------------------------------
-This module allows you to sort DataObjects
-using drag-and-drop. You can use this on pages or
-other DataObjects You can use the standard "sort" field
-- make sure it is created - OR an alternative sort field field
-or both.
+see http://silverstripe-webdevelopment.com/dataobjectsorter
 
 to create links, please use:
 
