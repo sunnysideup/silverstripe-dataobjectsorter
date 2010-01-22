@@ -57,7 +57,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 				new HiddenField("Field", "Field", $field),
 				new HiddenField("Record", "Record", $record)
 			),
-			$actions = new FieldSet(new FormAction("save", "save"))
+			$actions = new FieldSet(new FormAction("save", "save and close"))
 		);
 		return $form;
 	}
@@ -69,7 +69,9 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 		$obj = DataObject::get_by_id($table, $record);
 		$obj->$field = $data[$field];
 		$obj->write();
-		return "SAVED";
+		return '
+			<p>Your changes have been saved, please <a href="#" onclick="self.close(); return false;">close window</a>.</p>
+			<script type="text/javascript">self.close();</script>';
 	}
 
 	function getFormField($obj, $fieldName) {

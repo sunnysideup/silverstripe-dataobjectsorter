@@ -1,0 +1,7 @@
+body {background-color: #bbb; font-family: arial, verdana, helvetica;}
+fieldset input:focus {background-color: pink;}
+fieldset input.text {width: 95%; padding: 10px;}
+fieldset {border: none; border: 1px dotted gold; background-color: #aaa;}
+label {font-weight: bold; color: #555;font-size: 2.3em;}
+.Actions input {margin: 20px auto; font-size: 2.3em; background-color: green; display: block; color: white;}
+.Actions input:hover {background-color: pink;}
