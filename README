@@ -50,8 +50,9 @@ Installation Instructions
 
 2. copy configurations from this module's _config.php file
 into mysite/_config.php file and edit settings as required.
-NB. the idea is not to edit the module, but instead customise it
-in your mysite folder at all so that you can upgrade it later.
+NB. the idea is not to edit the module at all, but instead customise
+it from your mysite folder, so that you can upgrade the module without redoing the settings.
+
 
 3. add $this->initDataObjectSorter() to your code - e.g. to your
 Page_Controller::init function.
