@@ -8,12 +8,15 @@
 
 class DataObjectOneFieldOneRecordUpdateController extends Controller{
 
-	public static function popup_link($ClassName, $FieldName, $recordID) {
+	public static function popup_link($ClassName, $FieldName, $recordID, $linkText = '') {
+		if(!$linkText) {
+			$linkText = 'click here to edit';
+		}
 		$obj = singleton($ClassName);
 		if($obj->canEdit()) {
 			$link = 'dataobjectonefieldonerecordupdate/show/'.$ClassName."/".$FieldName."/?id=".$recordID;
 			return '
-				<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.$recordID.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">click here to edit</a>';
+				<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.$recordID.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
 		}
 	}
 
@@ -117,9 +120,11 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 
 	protected function SecureTableToBeUpdated() {
 		if(isset($_POST["Table"])) {
-			return addslashes($_POST["Table"]);
+			$table = addslashes($_POST["Table"]);
 		}
-		$table = Director::URLParam("ID");
+		else {
+			$table = Director::URLParam("ID");
+		}
 		if(class_exists($table)) {
 			return $table;
 		}
@@ -127,6 +132,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 			user_error("could not find record: $table", E_USER_ERROR);
 		}
 	}
+
 
 	protected function SecureRecordToBeUpdated() {
 		if(isset($_POST["Record"])) {

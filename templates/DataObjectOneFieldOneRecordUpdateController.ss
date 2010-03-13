@@ -6,7 +6,7 @@
 		<% base_tag %>
 		$MetaTags
 	</head>
-	<body>
+	<body class="typography">
 		<% include DataObjectOneFieldOneRecordUpdate %>
 	</body>
 </html>

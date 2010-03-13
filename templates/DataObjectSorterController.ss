@@ -5,7 +5,7 @@
 		<% base_tag %>
 		$MetaTags
 	</head>
-	<body>
+	<body class="typography">
 		<% include DataObjectSorter %>
 	</body>
 </html>
