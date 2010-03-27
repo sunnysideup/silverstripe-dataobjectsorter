@@ -119,7 +119,7 @@ class DataObjectOneFieldUpdateController  extends Controller{
 				}
 			}
 			else {
-				user_error("you need to be logged-in to make the changes", E_USER_ERROR);
+				user_error("you need to be logged in to make the changes", E_USER_ERROR);
 			}
 		}
 		else {
