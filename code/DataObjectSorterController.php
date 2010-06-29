@@ -9,6 +9,7 @@
 class DataObjectSorterController  extends Controller{
 
 	function Children() {
+		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
 		$class = Director::URLParam("Action");
 		if($class) {
 			if(class_exists($class)) {
@@ -16,17 +17,17 @@ class DataObjectSorterController  extends Controller{
 				$filterField = Convert::raw2sql(Director::URLParam("ID"));
 				$filterValue = Convert::raw2sql(Director::URLParam("OtherID"));
 				if($filterField && $filterValue) {
-					$where = "`$filterField` = '$filterValue'";
+					$where = "{$bt}$filterField{$bt} = '$filterValue'";
 				}
 				elseif(is_numeric($filterField)) {
-					$where = "`ParentID` = '$filterField'";
+					$where = "{$bt}ParentID{$bt} = '$filterField'";
 				}
 				$sort = "";
 				if(DataObjectSorterDOD::get_do_not_add_alternative_sort_field()) {
-					$sort = "`Sort` ASC";
+					$sort = "{$bt}Sort{$bt} ASC";
 				}
 				else{
-					$sort = "`AlternativeSortNumber` ASC";
+					$sort = "{$bt}AlternativeSortNumber{$bt} ASC";
 				}
 				$objects = DataObject::get($class, $where, $sort);
 				if($objects && $objects->count()) {

@@ -33,6 +33,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 
 	function dodataobjectsort() {
+		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
 		if(!Permission::check("ADMIN")) {
 			Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
 		}
@@ -54,14 +55,19 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 						$position = intval($position);
 						$id = intval($id);
 						if(self::$also_update_sort_field && !self::$do_not_add_alternative_sort_field) {
-							$extraSet = ', `'.$baseDataClass.'`.`Sort` = '.$position;
-							$extraWhere = ' OR `'.$baseDataClass.'`.`Sort` <> '.$position;
+							$extraSet = ", {$bt}".$baseDataClass."{$bt}.{$bt}Sort{$bt} = ".$position;
+							$extraWhere = " OR {$bt}".$baseDataClass."{$bt}.{$bt}Sort{$bt} <> ".$position;
 						}
-						$sql = 'UPDATE `'.$baseDataClass.'` SET `'.$baseDataClass.'`.`'.$field.'` = '.$position.' '.$extraSet.' WHERE `'.$baseDataClass.'`.`ID` = '.$id.' AND (`'.$baseDataClass.'`.`'.$field.'` <> '.$position.' '.$extraWhere.') LIMIT 1;';
+						$sql = "
+							UPDATE {$bt}".$baseDataClass."{$bt}
+							SET {$bt}".$baseDataClass."{$bt}.{$bt}".$field."{$bt} = ".$position. " ".$extraSet."
+							WHERE {$bt}".$baseDataClass."{$bt}.{$bt}ID{$bt} = ".$id."
+								AND ({$bt}".$baseDataClass."{$bt}.{$bt}".$field."{$bt} <> ".$position." ".$extraWhere.")
+							LIMIT 1;";
 						//echo $sql .'<hr />';
 						DB::query($sql);
 						if("SiteTree" == $baseDataClass) {
-							$sql_Live = str_replace('`SiteTree`', '`SiteTree_Live`', $sql);
+							$sql_Live = str_replace("{$bt}SiteTree{$bt}", "{$bt}SiteTree_Live{$bt}", $sql);
 							//echo $sql_Live .'<hr />';
 							DB::query($sql_Live);
 						}

@@ -59,6 +59,14 @@ var DataObjectOneFieldUpdate = {
 				var table = nameArray[0];
 				var id = nameArray[1];
 				var value = jQuery(this).val();
+				if(jQuery(this).attr("type") == "checkbox") {
+					if(jQuery(this).is(":checked")) {
+						value = 1;
+					}
+					else {
+						value = 0;
+					}
+				}
 				if(table) {
 					if(parseInt(id)) {
 						if(DataObjectOneFieldUpdate.fieldName) {

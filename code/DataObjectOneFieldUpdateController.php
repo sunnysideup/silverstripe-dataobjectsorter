@@ -15,16 +15,31 @@
  *
  **/
 
-class DataObjectOneFieldUpdateController  extends Controller{
+class DataObjectOneFieldUpdateController extends Controller{
 
-	public static function popup_link($ClassName, $FieldName) {
+
+
+
+	public static function popup_link($ClassName, $FieldName, $where = '') {
 		$obj = singleton($ClassName);
+		if($where) {
+		self::set_dataobject_one_field_update_controller_where($where);
+		}
 		if($obj->canEdit()) {
 			$link = 'dataobjectonefieldupdate/show/'.$ClassName."/".$FieldName;
 			return '
 				<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">click here to edit</a>';
 		}
 	}
+
+	static fuction get_dataobject_one_field_update_controller_where() {
+		return Session::get("DataObjectOneFieldUpdateControllerWhere");
+	}
+
+	static fuction set_dataobject_one_field_update_controller_where($where) {
+		Session::set("DataObjectOneFieldUpdateControllerWhere", $where)
+	}
+
 
 	static $allowed_actions = array("updatefield", "show");
 
@@ -44,7 +59,11 @@ class DataObjectOneFieldUpdateController  extends Controller{
 	function DataObjectsToBeUpdated() {
 		$table = $this->SecureTableToBeUpdated();
 		$field = $this->SecureFieldToBeUpdated();
-		$objects = DataObject::get($table);
+		$where = self::get_dataobject_one_field_update_controller_where();
+		if(!$where) {
+			$where = '';
+		}
+		$objects = DataObject::get($table, $where);
 		foreach($objects as $obj) {
 			$obj->FieldToBeUpdatedValue = $obj->$field;
 			$obj->FormField = $this->getFormField($obj, $field);
