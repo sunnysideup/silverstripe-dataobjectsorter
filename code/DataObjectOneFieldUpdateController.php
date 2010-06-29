@@ -23,7 +23,10 @@ class DataObjectOneFieldUpdateController extends Controller{
 	public static function popup_link($ClassName, $FieldName, $where = '') {
 		$obj = singleton($ClassName);
 		if($where) {
-		self::set_dataobject_one_field_update_controller_where($where);
+			self::set_dataobject_one_field_update_controller_where($where);
+		}
+		else {
+			self::unset_dataobject_one_field_update_controller_where($where);
 		}
 		if($obj->canEdit()) {
 			$link = 'dataobjectonefieldupdate/show/'.$ClassName."/".$FieldName;
@@ -32,12 +35,17 @@ class DataObjectOneFieldUpdateController extends Controller{
 		}
 	}
 
-	static fuction get_dataobject_one_field_update_controller_where() {
+	static function get_dataobject_one_field_update_controller_where() {
 		return Session::get("DataObjectOneFieldUpdateControllerWhere");
 	}
 
-	static fuction set_dataobject_one_field_update_controller_where($where) {
-		Session::set("DataObjectOneFieldUpdateControllerWhere", $where)
+	static function set_dataobject_one_field_update_controller_where($where) {
+		Session::set("DataObjectOneFieldUpdateControllerWhere", $where);
+	}
+
+	static function unset_dataobject_one_field_update_controller_where($where) {
+		Session::set("DataObjectOneFieldUpdateControllerWhere", "");
+		Session::clear("DataObjectOneFieldUpdateControllerWhere");
 	}
 
 
