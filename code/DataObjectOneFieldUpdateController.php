@@ -32,6 +32,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 		}
 		if($sort) {
 			self::set_dataobject_one_field_update_controller_sort($sort);
+
 		}
 		else {
 			self::unset_dataobject_one_field_update_controller_sort($sort);
@@ -108,15 +109,17 @@ class DataObjectOneFieldUpdateController extends Controller{
 			$join = '',
 			$limit = "$start, ".self::get_page_size()
 		);
-		foreach($objects as $obj) {
-			$obj->FieldToBeUpdatedValue = $obj->$field;
-			$obj->FormField = $this->getFormField($obj, $field);
-			$obj->FormField->setName($obj->ClassName."/".$obj->ID);
-			$obj->FormField->addExtraClass("updateField");
-			$obj->FormField->setValue($obj->$field);
-		}
-		if(!$obj->canEdit()) {
-			Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
+		if($objects) {
+			foreach($objects as $obj) {
+				$obj->FieldToBeUpdatedValue = $obj->$field;
+				$obj->FormField = $this->getFormField($obj, $field);
+				$obj->FormField->setName($obj->ClassName."/".$obj->ID);
+				$obj->FormField->addExtraClass("updateField");
+				$obj->FormField->setValue($obj->$field);
+			}
+			if(!$obj->canEdit()) {
+				Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
+			}
 		}
 		return $objects;
 	}
