@@ -22,13 +22,19 @@ class DataObjectOneFieldUpdateController extends Controller{
 		static function get_page_size() {return self::$page_size;}
 
 
-	public static function popup_link($ClassName, $FieldName, $where = '') {
+	public static function popup_link($ClassName, $FieldName, $where = '', $sort = '') {
 		$obj = singleton($ClassName);
 		if($where) {
 			self::set_dataobject_one_field_update_controller_where($where);
 		}
 		else {
 			self::unset_dataobject_one_field_update_controller_where($where);
+		}
+		if($sort) {
+			self::set_dataobject_one_field_update_controller_sort($sort);
+		}
+		else {
+			self::unset_dataobject_one_field_update_controller_sort($sort);
 		}
 		if($obj->canEdit()) {
 			$link = 'dataobjectonefieldupdate/show/'.$ClassName."/".$FieldName;
@@ -48,6 +54,19 @@ class DataObjectOneFieldUpdateController extends Controller{
 	static function unset_dataobject_one_field_update_controller_where($where) {
 		Session::set("DataObjectOneFieldUpdateControllerWhere", "");
 		Session::clear("DataObjectOneFieldUpdateControllerWhere");
+	}
+
+	static function get_dataobject_one_field_update_controller_sort() {
+		return Session::get("DataObjectOneFieldUpdateControllerSort");
+	}
+
+	static function set_dataobject_one_field_update_controller_sort($sort) {
+		Session::set("DataObjectOneFieldUpdateControllerSort", $sort);
+	}
+
+	static function unset_dataobject_one_field_update_controller_sort($sort) {
+		Session::set("DataObjectOneFieldUpdateControllerSort", "");
+		Session::clear("DataObjectOneFieldUpdateControllerSort");
 	}
 
 
@@ -74,6 +93,10 @@ class DataObjectOneFieldUpdateController extends Controller{
 		if(!$where) {
 			$where = '';
 		}
+		$sort = self::get_dataobject_one_field_update_controller_sort();
+		if(!$sort) {
+			$sort = '';
+		}
 		$start = 0;
 		if(isset($this->requestParams["start"])) {
 			$start = $this->requestParams["start"];
@@ -81,8 +104,8 @@ class DataObjectOneFieldUpdateController extends Controller{
 		$objects = DataObject::get(
 			$table,
 			$where,
-			$sort = "{$bt}$field{$bt}, {$bt}ParentPage{$bt}.{$bt}Sort{$bt}, {$bt}SiteTree{$bt}.{$bt}Sort{$bt}" ,
-			$join = "INNER JOIN SiteTree ParentPage ON ParentPage.ID = SiteTree.ParentID",
+			$sort,
+			$join = '',
 			$limit = "$start, ".self::get_page_size()
 		);
 		foreach($objects as $obj) {
