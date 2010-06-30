@@ -73,9 +73,9 @@ class DataObjectOneFieldUpdateController extends Controller{
 		if(!$where) {
 			$where = '';
 		}
-		$start = $this->requestVar("start");
-		if(!$start) {
-			$start = 0;
+		$start = 0;
+		if(isset($this->requestParams["start"])) {
+			$start = $this->requestParams["start"];
 		}
 		$objects = DataObject::get($table, $where, $sort = null, $join = null, $limit = "$start, ".self::get_page_size());
 		foreach($objects as $obj) {

@@ -1,17 +1,6 @@
 <% if DataObjectsToBeUpdated %>
 
-
-<% if DataObjectsToBeUpdated.MoreThanOnePage %>
-  <p>
-  <% control DataObjectsToBeUpdated.Pages %>
-    <% if CurrentBool %>
-      <strong>$PageNum</strong>
-    <% else %>
-      <a href="$Link" title="Go to page $PageNum">$PageNum</a>
-    <% end_if %>
-  <% end_control %>
-  </p>
-<% end_if %>
+<% include DataObjectsToBeUpdatedPagination %>
 
 <h1 class="DataObjectOneFieldUpdateFeedback">please update fields below (<em>$SecureFieldToBeUpdated</em> in <em>$HumanReadableTableName</em>) - NB: there is no undo!</h1>
 
@@ -29,21 +18,11 @@
 </ul>
 </form>
 <h1 class="DataObjectOneFieldUpdateFeedback">please update fields above ($SecureFieldToBeUpdated in $SecureTableToBeUpdated) - NB: there is no undo!</h1>
-
-<% if DataObjectsToBeUpdated.MoreThanOnePage %>
-  <p>
-  <% control DataObjectsToBeUpdated.Pages %>
-    <% if CurrentBool %>
-      <strong>$PageNum</strong>
-    <% else %>
-      <a href="$Link" title="Go to page $PageNum">$PageNum</a>
-    <% end_if %>
-  <% end_control %>
-  </p>
-<% end_if %>
-
-
+<% include DataObjectsToBeUpdatedPagination %>
 <% else %>
 <p>No records can be found.</p>
 <% end_if %>
+
+
+
 
