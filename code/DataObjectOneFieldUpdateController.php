@@ -2,9 +2,9 @@
 /**
  *@author nicolaas [at] sunnysideup.co.nz
  *@todo:
- *  pagination (and many other things)
+ *  pagination
  *  use scaffolding method (of some sort) to get right field type
- *
+ * (and many other things)
  *
  *@package: dataobjectsorter
  *@description: allows you to quickly review and update one field for all records
@@ -17,7 +17,9 @@
 
 class DataObjectOneFieldUpdateController extends Controller{
 
-
+	protected static $page_size = 3;
+		static function set_page_size($v) {self::$page_size = $v;}
+		static function get_page_size() {return self::$page_size;}
 
 
 	public static function popup_link($ClassName, $FieldName, $where = '') {
@@ -71,7 +73,11 @@ class DataObjectOneFieldUpdateController extends Controller{
 		if(!$where) {
 			$where = '';
 		}
-		$objects = DataObject::get($table, $where);
+		$start = $this->requestVar("start");
+		if(!$start) {
+			$start = 0;
+		}
+		$objects = DataObject::get($table, $where, $sort = null, $join = null, $limit = "$start, ".self::get_page_size());
 		foreach($objects as $obj) {
 			$obj->FieldToBeUpdatedValue = $obj->$field;
 			$obj->FormField = $this->getFormField($obj, $field);
