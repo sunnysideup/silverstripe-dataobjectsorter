@@ -82,7 +82,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 			$table,
 			$where,
 			$sort = "{$bt}$field{$bt}, {$bt}ParentPage{$bt}.{$bt}Sort{$bt}, {$bt}SiteTree{$bt}.{$bt}Sort{$bt}" ,
-			$join = "SiteTree ParentPage ON ParentPage.ID = SiteTree.ParentID",
+			$join = "INNER JOIN SiteTree ParentPage ON ParentPage.ID = SiteTree.ParentID",
 			$limit = "$start, ".self::get_page_size()
 		);
 		foreach($objects as $obj) {
