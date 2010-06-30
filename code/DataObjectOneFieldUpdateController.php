@@ -17,7 +17,7 @@
 
 class DataObjectOneFieldUpdateController extends Controller{
 
-	protected static $page_size = 3;
+	protected static $page_size = 50;
 		static function set_page_size($v) {self::$page_size = $v;}
 		static function get_page_size() {return self::$page_size;}
 
