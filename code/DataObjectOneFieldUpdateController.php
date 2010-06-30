@@ -67,6 +67,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 	}
 
 	function DataObjectsToBeUpdated() {
+		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
 		$table = $this->SecureTableToBeUpdated();
 		$field = $this->SecureFieldToBeUpdated();
 		$where = self::get_dataobject_one_field_update_controller_where();
@@ -77,7 +78,13 @@ class DataObjectOneFieldUpdateController extends Controller{
 		if(isset($this->requestParams["start"])) {
 			$start = $this->requestParams["start"];
 		}
-		$objects = DataObject::get($table, $where, $sort = null, $join = null, $limit = "$start, ".self::get_page_size());
+		$objects = DataObject::get(
+			$table,
+			$where,
+			$sort = "{$bt}$field{$bt}, {$bt}ParentPage{$bt}.{$bt}Sort{$bt}, {$bt}SiteTree{$bt}.{$bt}Sort{$bt}" ,
+			$join = "SiteTree ParentPage ON ParentPage.ID = SiteTree.ParentID",
+			$limit = "$start, ".self::get_page_size()
+		);
 		foreach($objects as $obj) {
 			$obj->FieldToBeUpdatedValue = $obj->$field;
 			$obj->FormField = $this->getFormField($obj, $field);
