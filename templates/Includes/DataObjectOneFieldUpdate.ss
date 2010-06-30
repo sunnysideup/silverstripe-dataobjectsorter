@@ -1,5 +1,20 @@
-<h1 class="DataObjectOneFieldUpdateFeedback">please update fields below (<em>$SecureFieldToBeUpdated</em> in <em>$HumanReadableTableName</em>) - NB: there is no undo!</h1>
 <% if DataObjectsToBeUpdated %>
+
+
+<% if DataObjectsToBeUpdated.MoreThanOnePage %>
+  <p>
+  <% control DataObjectsToBeUpdated.Pages %>
+    <% if CurrentBool %>
+      <strong>$PageNum</strong>
+    <% else %>
+      <a href="$Link" title="Go to page $PageNum">$PageNum</a>
+    <% end_if %>
+  <% end_control %>
+  </p>
+<% end_if %>
+
+<h1 class="DataObjectOneFieldUpdateFeedback">please update fields below (<em>$SecureFieldToBeUpdated</em> in <em>$HumanReadableTableName</em>) - NB: there is no undo!</h1>
+
 <form id="tokenEffortForm" action="#" method="get">
 <input type="hidden" name="field" id="DataObjectOneFieldUpdateFieldName" value="$SecureFieldToBeUpdated" />
 <ul id="DataObjectOneFieldUpdateUL">
@@ -13,5 +28,22 @@
 <% end_control %>
 </ul>
 </form>
-<% end_if %>
 <h1 class="DataObjectOneFieldUpdateFeedback">please update fields above ($SecureFieldToBeUpdated in $SecureTableToBeUpdated) - NB: there is no undo!</h1>
+
+<% if DataObjectsToBeUpdated.MoreThanOnePage %>
+  <p>
+  <% control DataObjectsToBeUpdated.Pages %>
+    <% if CurrentBool %>
+      <strong>$PageNum</strong>
+    <% else %>
+      <a href="$Link" title="Go to page $PageNum">$PageNum</a>
+    <% end_if %>
+  <% end_control %>
+  </p>
+<% end_if %>
+
+
+<% else %>
+<p>No records can be found.</p>
+<% end_if %>
+
