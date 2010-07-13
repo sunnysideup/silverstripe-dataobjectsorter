@@ -10,14 +10,16 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 
 	protected static $also_update_sort_field = false;
-		static function set_also_update_sort_field($v) {self::$also_update_sort_field = ($v ? true : false);}
+		static function set_also_update_sort_field($v) {self::$also_update_sort_field = $v;}
 		static function get_also_update_sort_field() {return self::$also_update_sort_field;}
 
 	protected static $do_not_add_alternative_sort_field = false;
-		static function set_do_not_add_alternative_sort_field($v) {self::$do_not_add_alternative_sort_field = ($v ? true : false);}
+		static function set_do_not_add_alternative_sort_field($v) {self::$do_not_add_alternative_sort_field = $v;}
 		static function get_do_not_add_alternative_sort_field() {return self::$do_not_add_alternative_sort_field;}
 
 	function extraStatics(){
+		//this is not actually working because in dev/build, this statement is executed BEFORE the settting above is applied!
+		//maybe add field in another way????
 		if(self::$do_not_add_alternative_sort_field) {
 			return array();
 		}
@@ -92,7 +94,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 	function dataObjectSorterPopupLink($filterFieldOrID = "", $id = 0, $listName = "list") {
 		if($this->owner->canEdit()) {
-			$link = 'dataobjectsorter/'.$this->owner->ClassName."/";
+			$link = 'dataobjectsorter/sort/'.$this->owner->ClassName."/";
 			if($filterFieldOrID) {
 				$link .= $filterFieldOrID.'/';
 			}

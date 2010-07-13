@@ -20,7 +20,7 @@ class DataObjectOneRecordUpdateController extends Controller{
 		}
 	}
 
-	static $allowed_actions = array("OneRecordForm", "show");
+	static $allowed_actions = array("onerecordform", "show", "save");
 
 	function init() {
 		// Only administrators can run this method
@@ -35,7 +35,7 @@ class DataObjectOneRecordUpdateController extends Controller{
 		Requirements::themedCSS("dataobjectonerecordupdate");
 	}
 
-	function OneRecordForm() {
+	function onerecordform() {
 		$table = $this->SecureTableToBeUpdated();
 		$record = $this->SecureRecordToBeUpdated();
 		$obj = DataObject::get_by_id($table, $record);
@@ -78,18 +78,23 @@ class DataObjectOneRecordUpdateController extends Controller{
 			<script type="text/javascript">self.close();</script>';
 	}
 
-	function getFormFields($obj) {
-		return $obj->getFrontEndFields();
-	}
-
-
-	function HumanReadableTableName() {
-		return singleton($this->SecureTableToBeUpdated())->plural_name();
-	}
-
 	function show() {
 		return array();
 	}
+
+
+	public function HumanReadableTableName() {
+		return singleton($this->SecureTableToBeUpdated())->plural_name();
+	}
+
+	public function Link() {
+		return "dataobjectonerecordupdate/";
+	}
+
+	protected function getFormFields($obj) {
+		return $obj->getFrontEndFields();
+	}
+
 
 	protected function SecureTableToBeUpdated() {
 		if(isset($_POST["Table"])) {
@@ -114,10 +119,6 @@ class DataObjectOneRecordUpdateController extends Controller{
 			$recordID = Director::URLParam("OtherID");
 		}
 		return intval($recordID);
-	}
-
-	function Link() {
-		return "dataobjectonerecordupdate/";
 	}
 
 

@@ -8,14 +8,40 @@
 
 class DataObjectSorterController  extends Controller{
 
-	function Children() {
+	static $allowed_actions = array("sort", "startsort", "dodataobjectsort" );
+
+	function sort() {
+		return array();
+	}
+
+	function startsort() {
+		return array();
+	}
+
+	function dodataobjectsort() {
+		$class = Director::URLParam("ID");
+		if($class) {
+			if(class_exists($class)) {
+				$obj = DataObject::get_one($class);
+				return $obj->dodataobjectsort();
+			}
+			else {
+				user_error("$class does not exist", E_USER_WARNING);
+			}
+		}
+		else {
+			user_error("Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.", E_USER_WARNING);
+		}
+	}
+
+	public function Children() {
 		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
-		$class = Director::URLParam("Action");
+		$class = Director::URLParam("ID");
 		if($class) {
 			if(class_exists($class)) {
 				$where = '';
-				$filterField = Convert::raw2sql(Director::URLParam("ID"));
-				$filterValue = Convert::raw2sql(Director::URLParam("OtherID"));
+				$filterField = Convert::raw2sql(Director::URLParam("OtherID"));
+				$filterValue = Convert::raw2sql(Director::URLParam("ThirdID"));
 				if($filterField && $filterValue) {
 					$where = "{$bt}$filterField{$bt} = '$filterValue'";
 				}
@@ -54,28 +80,5 @@ class DataObjectSorterController  extends Controller{
 		}
 	}
 
-	function startsort() {
-		return array();
-	}
-
-	function index() {
-		return array();
-	}
-
-	function dodataobjectsort() {
-		$class = Director::URLParam("ID");
-		if($class) {
-			if(class_exists($class)) {
-				$obj = DataObject::get_one($class);
-				return $obj->dodataobjectsort();
-			}
-			else {
-				user_error("$class does not exist", E_USER_WARNING);
-			}
-		}
-		else {
-			user_error("Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.", E_USER_WARNING);
-		}
-	}
 
 }

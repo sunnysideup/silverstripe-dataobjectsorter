@@ -10,7 +10,7 @@
  *@description: allows you to quickly review and update one field for all records
  * e.g. update price for all products
  * URL is like this
- * dataobjectonefieldupdate//$Action/$ID/$OtherID
+ * dataobjectonefieldupdate/update/$Action/$ID/$OtherID
  * dataobjectonefieldupdate/[show]/[updatefield]/[tablename]/[fieldname]
  *
  **/
@@ -86,52 +86,6 @@ class DataObjectOneFieldUpdateController extends Controller{
 		Requirements::themedCSS("dataobjectonefieldupdate");
 	}
 
-	function DataObjectsToBeUpdated() {
-		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
-		$table = $this->SecureTableToBeUpdated();
-		$field = $this->SecureFieldToBeUpdated();
-		$where = self::get_dataobject_one_field_update_controller_where();
-		if(!$where) {
-			$where = '';
-		}
-		$sort = self::get_dataobject_one_field_update_controller_sort();
-		if(!$sort) {
-			$sort = '';
-		}
-		$start = 0;
-		if(isset($this->requestParams["start"])) {
-			$start = $this->requestParams["start"];
-		}
-		$objects = DataObject::get(
-			$table,
-			$where,
-			$sort,
-			$join = '',
-			$limit = "$start, ".self::get_page_size()
-		);
-		if($objects) {
-			foreach($objects as $obj) {
-				$obj->FieldToBeUpdatedValue = $obj->$field;
-				$obj->FormField = $this->getFormField($obj, $field);
-				$obj->FormField->setName($obj->ClassName."/".$obj->ID);
-				$obj->FormField->addExtraClass("updateField");
-				$obj->FormField->setValue($obj->$field);
-			}
-			if(!$obj->canEdit()) {
-				Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
-			}
-		}
-		return $objects;
-	}
-
-	function getFormField($obj, $fieldName) {
-		$fields = $obj->getFrontEndFields();
-		foreach($fields as $field) {
-			if($field->Name() == $fieldName) {
-				return $field;
-			}
-		}
-	}
 
 	function show() {
 		return array();
@@ -193,6 +147,54 @@ class DataObjectOneFieldUpdateController extends Controller{
 		}
 	}
 
+	//used in template
+	public function DataObjectsToBeUpdated() {
+		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
+		$table = $this->SecureTableToBeUpdated();
+		$field = $this->SecureFieldToBeUpdated();
+		$where = self::get_dataobject_one_field_update_controller_where();
+		if(!$where) {
+			$where = '';
+		}
+		$sort = self::get_dataobject_one_field_update_controller_sort();
+		if(!$sort) {
+			$sort = '';
+		}
+		$start = 0;
+		if(isset($this->requestParams["start"])) {
+			$start = $this->requestParams["start"];
+		}
+		$objects = DataObject::get(
+			$table,
+			$where,
+			$sort,
+			$join = '',
+			$limit = "$start, ".self::get_page_size()
+		);
+		if($objects) {
+			foreach($objects as $obj) {
+				$obj->FieldToBeUpdatedValue = $obj->$field;
+				$obj->FormField = $this->getFormField($obj, $field);
+				$obj->FormField->setName($obj->ClassName."/".$obj->ID);
+				$obj->FormField->addExtraClass("updateField");
+				$obj->FormField->setValue($obj->$field);
+			}
+			if(!$obj->canEdit()) {
+				Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
+			}
+		}
+		return $objects;
+	}
+
+	protected function getFormField($obj, $fieldName) {
+		$fields = $obj->getFrontEndFields();
+		foreach($fields as $field) {
+			if($field->Name() == $fieldName) {
+				return $field;
+			}
+		}
+	}
+
 	protected function SecureFieldToBeUpdated() {
 		$field = Director::URLParam("OtherID");
 		if($table = $this->SecureTableToBeUpdated()) {
@@ -223,7 +225,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 		}
 	}
 
-	function HumanReadableTableName() {
+	protected function HumanReadableTableName() {
 		return singleton($this->SecureTableToBeUpdated())->plural_name();
 	}
 

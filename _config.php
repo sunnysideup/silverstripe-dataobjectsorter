@@ -12,17 +12,18 @@
 //Object::add_extension('SiteTree', 'DataObjectSorterDOD');
 //DataObjectSorterDOD::set_also_update_sort_field(true);
 //DataObjectSorterDOD::set_do_not_add_alternative_sort_field(true);
-Director::addRules(90, array(
-	'dataobjectsorter//$Action/$ID/$OtherID' => 'DataObjectSorterController',
-));
-Director::addRules(90, array(
-	'dataobjectonefieldupdate//$Action/$ID/$OtherID' => 'DataObjectOneFieldUpdateController',
-));
-Director::addRules(90, array(
-	'dataobjectonefieldonerecordupdate//$Action/$ID/$OtherID' => 'DataObjectOneFieldOneRecordUpdateController',
-));
-Director::addRules(90, array(
-	'dataobjectonerecordupdate//$Action/$ID/$OtherID' => 'DataObjectOneRecordUpdateController',
-));
 //===================---------------- END dataobjectsorter MODULE ----------------===================
 
+Director::addRules(90, array(
+	//sorter
+	'dataobjectsorter/$Action/$ID/$OtherID/$ThirdID' => 'DataObjectSorterController',
+
+	//one field
+	'dataobjectonefieldupdate/$Action/$ID/$OtherID/$ThirdID' => 'DataObjectOneFieldUpdateController',
+
+	//one field for one record
+	'dataobjectonefieldonerecordupdate/$Action/$ID/$OtherID/$ThirdID' => 'DataObjectOneFieldOneRecordUpdateController',
+
+	//one record
+	'dataobjectonerecordupdate/$Action/$ID/$OtherID/$ThirdID' => 'DataObjectOneRecordUpdateController',
+));

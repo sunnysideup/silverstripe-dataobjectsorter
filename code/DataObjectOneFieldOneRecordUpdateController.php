@@ -20,7 +20,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 		}
 	}
 
-	static $allowed_actions = array("OneFieldForm", "show");
+	static $allowed_actions = array("onefieldform", "show", "save");
 
 	function init() {
 		// Only administrators can run this method
@@ -35,7 +35,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 		Requirements::themedCSS("dataobjectonefieldonerecordupdate");
 	}
 
-	function OneFieldForm() {
+	function onefieldform() {
 		$table = $this->SecureTableToBeUpdated();
 		$field = $this->SecureFieldToBeUpdated();
 		$record = $this->SecureRecordToBeUpdated();
@@ -77,7 +77,20 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 			<script type="text/javascript">self.close();</script>';
 	}
 
-	function getFormField($obj, $fieldName) {
+	function show() {
+		return array();
+	}
+
+
+	public function HumanReadableTableName() {
+		return singleton($this->SecureTableToBeUpdated())->plural_name();
+	}
+
+	public function Link() {
+		return "dataobjectonefieldonerecordupdate/";
+	}
+
+	protected function getFormField($obj, $fieldName) {
 		$fields = $obj->getFrontEndFields();
 		foreach($fields as $field) {
 			if($field->Name() == $fieldName) {
@@ -87,13 +100,6 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 	}
 
 
-	function HumanReadableTableName() {
-		return singleton($this->SecureTableToBeUpdated())->plural_name();
-	}
-
-	function show() {
-		return array();
-	}
 
 	protected function SecureFieldToBeUpdated() {
 		if(isset($_POST["Field"])) {
@@ -143,10 +149,6 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 			return intval($record);
 		}
 		return 0;
-	}
-
-	function Link() {
-		return "dataobjectonefieldonerecordupdate/";
 	}
 
 
