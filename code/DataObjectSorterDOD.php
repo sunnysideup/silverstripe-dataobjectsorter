@@ -85,7 +85,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 	function initDataObjectSorter() {
 		Requirements::block(THIRDPARTY_DIR."/jquery/jquery.js");
-		Requirements::javascript("dataobjectsorter/javascript/jquery-1.3.2.min.js");
+		Requirements::javascript(THIRDPARTY_DIR."/jquery/jquery.js");
 		Requirements::javascript("dataobjectsorter/javascript/jquery-ui-1.7.2.custom.min.js");
 		Requirements::javascript("dataobjectsorter/javascript/dataobjectsorter.js");
 		Requirements::themedCSS("dataobjectsorter");
