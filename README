@@ -31,6 +31,10 @@ $MySortableDataObject->dataObjectSorterPopupLink($filterFieldOrID = "", $id = 0,
 for $filterFieldOrID, you will use the ParentID ID value OR another field name
 where $ID then is the "should be equal to" value.
 
+** example:
+
+$link = DataObjectOneFieldUpdateController::popup_link("SiteTree", "URLSegment", $where = "URLSegment LIKE '%-2%'", $sort = '');
+$fields->AddFieldToTab("Root.Content.Check, new LiteralField("linkToURLFix", $link);
 
 
 TO DO
