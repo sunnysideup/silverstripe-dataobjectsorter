@@ -83,27 +83,6 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 		}
 	}
 
-	function initDataObjectSorter() {
-		Requirements::javascript(THIRDPARTY_DIR."/jquery/jquery.js");
-		Requirements::javascript("dataobjectsorter/javascript/jquery-ui-1.7.2.custom.min.js");
-		Requirements::javascript("dataobjectsorter/javascript/dataobjectsorter.js");
-		Requirements::themedCSS("dataobjectsorter");
-		Requirements::customScript('var DataObjectSorterURL = "'.Director::absoluteURL("dataobjectsorter/dodataobjectsort/".$this->owner->ClassName."/").'";');
-	}
-
-	protected function dataObjectSorterPopupLink($filterFieldOrID = "", $id = 0, $listName = "list") {
-		if($this->owner->canEdit()) {
-			$link = 'dataobjectsorter/sort/'.$this->owner->ClassName."/";
-			if($filterFieldOrID) {
-				$link .= $filterFieldOrID.'/';
-			}
-			if($id) {
-			 $link .= $id.'/';
-			}
-			return '
-			<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$this->owner->ClassName.$filterFieldOrID.$id.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">click here to sort '.$listName.'</a>';
-		}
-	}
 
 
 }
