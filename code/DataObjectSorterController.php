@@ -6,7 +6,7 @@
  *@package: dataobjectsorter
  **/
 
-class DataObjectSorterController  extends Controller{
+class DataObjectSorterController extends Controller{
 
 	static $allowed_actions = array("sort", "startsort", "dodataobjectsort" );
 

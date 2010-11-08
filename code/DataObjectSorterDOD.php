@@ -91,7 +91,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 		Requirements::customScript('var DataObjectSorterURL = "'.Director::absoluteURL("dataobjectsorter/dodataobjectsort/".$this->owner->ClassName."/").'";');
 	}
 
-	function dataObjectSorterPopupLink($filterFieldOrID = "", $id = 0, $listName = "list") {
+	protected function dataObjectSorterPopupLink($filterFieldOrID = "", $id = 0, $listName = "list") {
 		if($this->owner->canEdit()) {
 			$link = 'dataobjectsorter/sort/'.$this->owner->ClassName."/";
 			if($filterFieldOrID) {
