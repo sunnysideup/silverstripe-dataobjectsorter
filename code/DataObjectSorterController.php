@@ -59,7 +59,7 @@ class DataObjectSorterController extends Controller{
 				if($objects && $objects->count()) {
 					foreach($objects as $obj) {
 						if($obj->hasField("Sort") || $obj->hasField("AlternativeSortNumber")) {
-							$obj->initDataObjectSorter();
+							self::add_requirements($class);
 							return $objects;
 						}
 						else {
@@ -79,6 +79,31 @@ class DataObjectSorterController extends Controller{
 			user_error("Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.", E_USER_WARNING);
 		}
 	}
+
+
+	function add_requirements($className) {
+		Requirements::javascript(THIRDPARTY_DIR."/jquery/jquery.js");
+		Requirements::javascript("dataobjectsorter/javascript/jquery-ui-1.7.2.custom.min.js");
+		Requirements::javascript("dataobjectsorter/javascript/dataobjectsorter.js");
+		Requirements::themedCSS("dataobjectsorter");
+		Requirements::customScript('var DataObjectSorterURL = "'.Director::absoluteURL("dataobjectsorter/dodataobjectsort/".$className."/").'";', 'initDataObjectSorter');
+	}
+
+	function popup_link($className, $filterField = "", $filterValue = "", $linkText = "sort this list") {
+		$obj = singleton($className);
+		if($obj->canEdit()) {
+			$link = 'dataobjectsorter/sort/'.$className."/";
+			if($filterField) {
+				$link .= $filterField.'/';
+			}
+			if($filterValue) {
+			 $link .= $filterValue.'/';
+			}
+			return '
+			<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$className.$filterField.$filterValue.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
+		}
+	}
+
 
 
 }
