@@ -88,7 +88,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 	 **/
 
 	function($filterField, $filterValue) {
-		return DataObjectSorterController::popup_link($className = $this->ClassName, $filterField, $filterValue, $linkText = "sort this list")
+		return DataObjectSorterController::popup_link($className = $this->ClassName, $filterField, $filterValue, $linkText = "sort this list");
 	}
 
 }
