@@ -91,12 +91,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 	}
 
 	protected function getFormField($obj, $fieldName) {
-		$fields = $obj->getFrontEndFields();
-		foreach($fields as $field) {
-			if($field->Name() == $fieldName) {
-				return $field;
-			}
-		}
+		return $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
 	}
 
 
