@@ -19,7 +19,7 @@ var DataObjectOneFieldUpdate = {
 
 	ulSelector: "#DataObjectOneFieldUpdateUL",
 
-	inputSelector: "#DataObjectOneFieldUpdateUL input.updateField",
+	inputSelector: "#DataObjectOneFieldUpdateUL input.updateField, #DataObjectOneFieldUpdateUL textarea.updateField",
 
 	feedbackSelector: ".DataObjectOneFieldUpdateFeedback",
 
@@ -47,13 +47,15 @@ var DataObjectOneFieldUpdate = {
 				}
 				jQuery(this).addClass(typeClass);
 			}
-		)
+		);
 	},
 
 	init: function () {
 		DataObjectOneFieldUpdate.fieldName = jQuery(DataObjectOneFieldUpdate.fieldNameSelector).val();
 		jQuery(DataObjectOneFieldUpdate.inputSelector).change(
 			function () {
+				var el = this;
+				jQuery(this).css("border", "2px solid orange");;
 				var nameValue = jQuery(this).attr("name");
 				var nameArray = nameValue.split("/");
 				var table = nameArray[0];
@@ -76,6 +78,7 @@ var DataObjectOneFieldUpdate = {
 								DataObjectOneFieldUpdateURL + table + "/" + DataObjectOneFieldUpdate.fieldName + "/?value=" + escape(value) + "&id=" + id,
 								{},
 								function(data) {
+									jQuery(el).css("border", "2px solid green");;
 									jQuery(DataObjectOneFieldUpdate.feedbackSelector).html(data)
 									jQuery(".loading").removeClass("loading");
 								}
@@ -93,7 +96,7 @@ var DataObjectOneFieldUpdate = {
 					jQuery(DataObjectOneFieldUpdate.feedbackSelector).html("ERROR: could not find table to update");
 				}
 			}
-		);
+		).css("border", "2px solid blue");
 	}
 
 
