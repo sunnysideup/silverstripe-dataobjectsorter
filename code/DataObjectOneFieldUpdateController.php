@@ -52,7 +52,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 		// Only administrators can run this method
 
 		parent::init();
-		if(!Permission::check("ADMIN")) {
+		if(!Permission::check("CMS_ACCESS_CMSMain")) {
 			Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
 			return;
 		}
@@ -70,7 +70,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 	}
 
 	function updatefield($request = null) {
-		if(Permission::check("ADMIN")) {
+		if(Permission::check("CMS_ACCESS_CMSMain")) {
 			$table = $request->param("ID");
 			$field = $request->param("OtherID");
 			$id = intval($request->getVar("id"));

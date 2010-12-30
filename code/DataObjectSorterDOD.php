@@ -36,7 +36,7 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 
 	function dodataobjectsort() {
 		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
-		if(!Permission::check("ADMIN")) {
+		if(!Permission::check("CMS_ACCESS_CMSMain")) {
 			Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
 		}
 		$i = 0;
