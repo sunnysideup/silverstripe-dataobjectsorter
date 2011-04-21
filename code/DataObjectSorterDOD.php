@@ -91,6 +91,12 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 		return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText = "sort this list");
 	}
 
+	function updateCMSFields(&$fields) {
+		if(self::$do_not_add_alternative_sort_field) {
+			$fields->removeFieldFromTab("Root.Main", "AlternativeSortNumber");
+		}
+	}
+
 }
 
 
