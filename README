@@ -1,0 +1,68 @@
+###############################################
+Data Object Sorter
+Pre 0.1 proof of concept
+###############################################
+
+Credits
+-----------------------------------------------
+Thanks a million to:
+http://www.wil-linssen.com/extending-the-jquery-sortable-with-ajax-mysql/
+for the inspiration
+
+Developer
+-----------------------------------------------
+Nicolaas [at] sunnysideup.co.nz
+
+Requirements
+-----------------------------------------------
+SilverStripe 2.3.0 or greater.
+
+Documentation
+-----------------------------------------------
+see http://silverstripe-webdevelopment.com/dataobjectsorter
+
+to create links, please use:
+
+DataObjectOneFieldUpdateController::popup_link($ClassName, $FieldName)
+
+OR
+
+$MySortableDataObject->dataObjectSorterPopupLink($filterFieldOrID = "", $id = 0, $listName = "list");
+for $filterFieldOrID, you will use the ParentID ID value OR another field name
+where $ID then is the "should be equal to" value.
+
+** example:
+
+$link = DataObjectOneFieldUpdateController::popup_link("SiteTree", "URLSegment", $where = "MetaTitle IS NULL OR MetaTitle = ''", $sort = '');
+$fields->AddFieldToTab("Root.Content.Check", new LiteralField("metatitleFixes", "Check Page Titles...".$link));
+
+
+TO DO
+-----------------------------------------------
+# sort out URL for DataObject (SiteTree is sorted)
+# create form-field for in form OR in CMS (use LiteralField filled with HTML)
+# use more elegant SQL rather than raw insertion (e.g. DataObject::get())
+# save up all SQL statements and insert all in one time
+
+
+
+
+
+Installation Instructions
+-----------------------------------------------
+1. Find out how to add modules to SS and add module as per usual.
+
+2. copy configurations from this module's _config.php file
+into mysite/_config.php file and edit settings as required.
+NB. the idea is not to edit the module at all, but instead customise
+it from your mysite folder, so that you can upgrade the module without redoing the settings.
+
+
+3. add $this->initDataObjectSorter() to your code - e.g. to your
+Page_Controller::init function.
+
+4. review css and templates and see if you need to theme it
+(rather than using the "unthemed" default provided.
+
+5. add <% include DataObjectSorter %> to your template
+

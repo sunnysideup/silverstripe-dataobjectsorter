@@ -1,0 +1,9 @@
+body {background-color: #bbb; font-family: arial, verdana, helvetica;}
+h3 {color: maroon; text-align: center; width: 95%}
+fieldset {border: none; background-color: #aaa;}
+	fieldset label {font-weight: bold; color: #555; display: block; margin-top: 1em; margin-bottom: 0.2em; width: 95%}
+	fieldset input.text {width: 95%; padding: 0.7em; border: 0.3em solid transparent; -moz-border-radius: 5px; -webkit-border-radius: 5px;}
+		fieldset input.text:focus {border: 0.3em solid pink;}
+		fieldset textarea{height: 3em;}
+.Actions input {margin: 20px auto; font-size: 2.3em; background-color: green; display: block; color: white;}
+	.Actions input:hover {background-color: pink;}

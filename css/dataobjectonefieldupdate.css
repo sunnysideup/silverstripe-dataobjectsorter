@@ -1,0 +1,10 @@
+.DataObjectOneFieldUpdateFeedback {border: 1px dotted #333; background-color: #ccc; padding: 1em; margin: 1em; font-size: 0.8em}
+#DataObjectOneFieldUpdateUL {list-style: none;}
+	#DataObjectOneFieldUpdateUL li {list-style: none; border-bottom: 1px dotted #333; padding: 0.7em; margin-right: 2em;}
+		#DataObjectOneFieldUpdateUL li:hover {background-color: #778811;}
+		#DataObjectOneFieldUpdateUL li input, #DataObjectOneFieldUpdateUL li textarea {width: auto; border: 5px solid #000;}
+			#DataObjectOneFieldUpdateUL li input.checkbox {width: auto;}
+			#DataObjectOneFieldUpdateUL li input:focus, #DataObjectOneFieldUpdateUL li textarea:focus {border-color: red;}
+
+.loading {background-image: url(/dataobjectsorter/images/loading.gif); background-position: right top; background-repeat: no-repeat; background-color: #ccc;}
+	.loading input {background-color: #ccc;}
