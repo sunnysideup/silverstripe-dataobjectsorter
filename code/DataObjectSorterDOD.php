@@ -6,23 +6,19 @@
  *@package: dataobjectsorter
  **/
 
-class DataObjectSorterDOD extends DataObjectDecorator {
+class DataObjectSorterDOD extends DataExtension {
 
 	static function set_also_update_sort_field($b) {user_error("This method has been depreciated. You can remove this notice by removing DataObjectSorterDOD::set_also_update_sort_field from your _config file.", E_USER_NOTICE);}
 
 	static function set_do_not_add_alternative_sort_field($b) {user_error("This method has been depreciated. You can remove this notice by removing DataObjectSorterDOD::set_do_not_add_alternative_sort_field from your _config file. ", E_USER_NOTICE);}
 
-	function extraStatics(){
-		//this is not actually working because in dev/build, this statement is executed BEFORE the settting above is applied!
-		//maybe add field in another way????
-		return array(
-			'db' =>   array(
-				"Sort" => "Int"
-			)
-		);
-	}
+	static $db = array(
+		'Sort' => 'Int'
+	);
 
-
+	static $casting = array(
+		'SortTitle' => 'Varchar'
+	);
 
 	function dodataobjectsort() {
 		$i = 0;
@@ -64,15 +60,15 @@ class DataObjectSorterDOD extends DataObjectDecorator {
 	/**
 	 *legacy function
 	 **/
-
 	function dataObjectSorterPopupLink($filterField = '', $filterValue = '') {
 		return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText = "Sort ".$this->owner->plural_name());
 	}
 
-	function updateCMSFields(&$fields) {
+	public function updateCMSFields(FieldList $fields) {
 		$fields->removeFieldFromTab("Root.Main", "Sort");
 		$link = self::dataObjectSorterPopupLink();
 		$fields->addFieldToTab("Root.Sort", new LiteralField("DataObjectSorterPopupLink", $link));
+		return $fields;
 	}
 
 }

@@ -29,7 +29,7 @@ class DataObjectSorterController extends Controller{
 	 * @param String $titleField - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
 	 * @return String
 	 */
-	function popup_link($className, $filterField = "", $filterValue = "", $linkText = "sort this list", $titleField = "") {
+	public static function popup_link($className, $filterField = "", $filterValue = "", $linkText = "sort this list", $titleField = "") {
 		$where = "";
 		if($filterField) {
 			$singleton = singleton($className);
@@ -104,28 +104,27 @@ class DataObjectSorterController extends Controller{
 	 * @return Object - return dataobject set of items to be sorted
 	 */
 	public function Children() {
-		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
-		$class = Director::URLParam("ID");
+		$class = $this->request->param("ID");
 		if($class) {
 			if(class_exists($class)) {
 				$where = '';
-				$filterField = Convert::raw2sql(Director::URLParam("OtherID"));
-				$filterValue = Convert::raw2sql(Director::URLParam("ThirdID"));
-				$titleField = Convert::raw2sql(Director::URLParam("FourthID"));
+				$filterField = Convert::raw2sql($this->request->param("OtherID"));
+				$filterValue = Convert::raw2sql($this->request->param("ThirdID"));
+				$titleField = Convert::raw2sql($this->request->param("FourthID"));
 				if($filterField && $filterValue) {
 					$array = explode(",",$filterValue);
 					if(is_array($array) && count($array)) {
-						$where = "{$bt}$filterField{$bt} IN ($filterValue)";
+						$where = "\"$filterField\" IN ($filterValue)";
 					}
 					else {
-						$where = "{$bt}$filterField{$bt} = '$filterValue'";
+						$where = "\"$filterField\" = '$filterValue'";
 					}
 				}
 				elseif(is_numeric($filterField)) {
-					$where = "{$bt}ParentID{$bt} = '$filterField'";
+					$where = "\"ParentID\" = '$filterField'";
 				}
-				$sort = "{$bt}Sort{$bt} ASC";
-				$objects = DataObject::get($class, $where, $sort);
+				$sort = "\"Sort\" ASC";
+				$objects = $class::get();
 				if($objects && $objects->count()) {
 					foreach($objects as $obj) {
 						if($titleField) {
