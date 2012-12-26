@@ -65,7 +65,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 		Requirements::javascript("dataobjectsorter/javascript/dataobjectonefieldupdate.js");
 		$url = Director::absoluteURL("dataobjectonefieldupdate/updatefield/");
 		Requirements::customScript("DataObjectOneFieldUpdateURL = '".$url."'");
-		Requirements::themedCSS("dataobjectonefieldupdate");
+		Requirements::themedCSS("dataobjectonefieldupdate", "dataobjectsorter");
 
 	}
 

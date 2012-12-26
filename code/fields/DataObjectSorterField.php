@@ -16,7 +16,7 @@ class DataObjectSorterField extends LiteralField{
 		//Requirements::block(THIRDPARTY_DIR."/jquery/jquery.js");
 		//Requirements::javascript(Director::protocol()."ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js");
 		Requirements::javascript("dataobjectsorter/javascript/jquery-ui-1.7.2.custom.min.js");
-		Requirements::themedCSS("dataobjectsorter");
+		Requirements::themedCSS("dataobjectsorter", "dataobjectsorter");
 		$objects = DataObject::get($ClassName);
 		$dos = new DataObjectSet();
 		$dos->Children = $objects;

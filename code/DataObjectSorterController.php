@@ -176,7 +176,7 @@ class DataObjectSorterController extends Controller{
 		Requirements::javascript(Director::protocol()."ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js");
 		Requirements::javascript("dataobjectsorter/javascript/jquery-ui-1.9.1.custom.min.js");
 		Requirements::javascript("dataobjectsorter/javascript/dataobjectsorter.js");
-		Requirements::themedCSS("dataobjectsorter");
+		Requirements::themedCSS("dataobjectsorter", "dataobjectsorter");
 		Requirements::customScript('var DataObjectSorterURL = "'.Director::absoluteURL("dataobjectsorter/dodataobjectsort/".$className."/").'";', 'initDataObjectSorter');
 	}
 
