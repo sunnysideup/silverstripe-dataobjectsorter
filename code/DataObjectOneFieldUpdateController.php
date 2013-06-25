@@ -186,7 +186,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 	}
 
 	protected function SecureFieldToBeUpdated() {
-		$field = Director::URLParam("OtherID");
+		$field = $this->getRequest()->param("OtherID");
 		if($table = $this->SecureTableToBeUpdated()) {
 			if($tableObject = DataObject::get_one($table)) {
 				if($tableObject->hasField($field)) {
@@ -206,7 +206,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 	}
 
 	protected function SecureTableToBeUpdated() {
-		$table = Director::URLParam("ID");
+		$table = $this->getRequest()->param("ID");
 		if(class_exists($table)) {
 			return $table;
 		}

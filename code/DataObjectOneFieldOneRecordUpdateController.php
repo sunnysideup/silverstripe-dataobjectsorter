@@ -56,13 +56,13 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 		$form = new Form(
 			$controller = $this,
 			$name = "OneFieldForm",
-			$fields = new FieldSet(
+			$fields = new FieldList(
 				$FormField,
 				new HiddenField("Table", "Table", $table),
 				new HiddenField("Field", "Field", $field),
 				new HiddenField("Record", "Record", $record)
 			),
-			$actions = new FieldSet(new FormAction("save", "save and close"))
+			$actions = new FieldList(new FormAction("save", "save and close"))
 		);
 		return $form;
 	}
@@ -102,7 +102,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 		if(isset($_POST["Field"])) {
 			return addslashes($_POST["Field"]);
 		}
-		$field = Director::URLParam("OtherID");
+		$field = $this->getRequest()->param("OtherID");
 		if($table = $this->SecureTableToBeUpdated()) {
 			if($tableObject = DataObject::get_one($table)) {
 				if($tableObject->hasField($field)) {
@@ -126,7 +126,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 			$table = addslashes($_POST["Table"]);
 		}
 		else {
-			$table = Director::URLParam("ID");
+			$table = $this->getRequest()->param("ID");
 		}
 		if(class_exists($table)) {
 			return $table;

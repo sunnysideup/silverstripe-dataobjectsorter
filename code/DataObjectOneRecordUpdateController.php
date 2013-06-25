@@ -51,7 +51,7 @@ class DataObjectOneRecordUpdateController extends Controller{
 		if(!$formFields) {
 			user_error("Form Fields could not be Found", E_USER_ERROR);
 		}
-		$fields = new FieldSet(
+		$fields = new FieldList(
 			new HiddenField("Table", "Table", $table),
 			new HiddenField("Record", "Record", $record)
 		);
@@ -63,7 +63,7 @@ class DataObjectOneRecordUpdateController extends Controller{
 			$controller = $this,
 			$name = "OneRecordForm",
 			$fields,
-			$actions = new FieldSet(new FormAction("save", "save and close"))
+			$actions = new FieldList(new FormAction("save", "save and close"))
 		);
 		$form->loadDataFrom($obj);
 		return $form;
@@ -103,7 +103,7 @@ class DataObjectOneRecordUpdateController extends Controller{
 			$table = addslashes($_POST["Table"]);
 		}
 		else {
-			$table = Director::URLParam("ID");
+			$table = $this->getRequest()->param("ID");
 		}
 		if(class_exists($table)) {
 			return $table;
@@ -118,7 +118,7 @@ class DataObjectOneRecordUpdateController extends Controller{
 			$recordID = $_POST["Record"];
 		}
 		else {
-			$recordID = Director::URLParam("OtherID");
+			$recordID = $this->getRequest()->param("OtherID");
 		}
 		return intval($recordID);
 	}

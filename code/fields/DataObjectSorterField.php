@@ -18,9 +18,9 @@ class DataObjectSorterField extends LiteralField{
 		Requirements::javascript("dataobjectsorter/javascript/jquery-ui-1.7.2.custom.min.js");
 		Requirements::themedCSS("dataobjectsorter", "dataobjectsorter");
 		$objects = DataObject::get($ClassName);
-		$dos = new DataObjectSet();
+		$arrayList = new ArrayList();
 		$dos->Children = $objects;
-		$content = $this->customise($dos)->renderWith("DataObjectSorterField");
+		$content = $this->customise($arrayList)->renderWith("DataObjectSorterField");
 		parent::__construct($name, $content);
 	}
 
