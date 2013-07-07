@@ -82,7 +82,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 			$newValue = $request->getVar("value");
 			if($memberID = Member::currentUserID() ) {
 				if(class_exists($table) && $id && ($newValue || $newValue == 0)) {
-					if($obj = DataObject::get_by_id($table, $id)) {
+					if($obj = $table::get()->byID($id)) {
 						if($obj->hasField($field)) {
 							$obj->$field = $newValue;
 							if($obj instanceOf SiteTree) {
@@ -152,17 +152,12 @@ class DataObjectOneFieldUpdateController extends Controller{
 			if(isset($_GET["debug"])) {
 				print_r("SELECT * FROM $table $where SORT BY $sort LIMIT $start, ".self::get_page_size());
 			}
-			$objects = DataObject::get(
-				$table,
-				$where,
-				$sort,
-				$join = '',
-				$limit = "$start, ".self::get_page_size()
-			);
-			if($objects) {
+			$objects = $table::get()->where($where)->sort($sort)->limit(self::get_page_size(), $start);
+			if($objects->count()) {
 				foreach($objects as $obj) {
 					$obj->FormField = $obj->dbObject($field)->scaffoldFormField();
 					$obj->FormField->setName($obj->ClassName."/".$obj->ID);
+					//3.0TODO Check that I work vvv.
 					$obj->FormField->addExtraClass("updateField");
 					$obj->FieldToBeUpdatedValue = $obj->$field;
 					$obj->FormField->setValue($obj->$field);
@@ -188,7 +183,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 	protected function SecureFieldToBeUpdated() {
 		$field = $this->getRequest()->param("OtherID");
 		if($table = $this->SecureTableToBeUpdated()) {
-			if($tableObject = DataObject::get_one($table)) {
+			if($tableObject = $table::get()->First()) {
 				if($tableObject->hasField($field)) {
 					return $field;
 				}

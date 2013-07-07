@@ -30,7 +30,7 @@ class DataObjectSorterDOD extends DataExtension {
 			if(isset ($_REQUEST["dos"])) {
 				foreach ($_REQUEST['dos'] as $position => $id) {
 					$id = intval($id);
-					$object = DataObject::get_by_id($baseDataClass, $id);
+					$object = $baseDataClass::get()->byID($id);
 					//we add one because position 0 is not good.
 					$position = intval($position)+1;
 					if($object && $object->canEdit()) {

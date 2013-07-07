@@ -41,7 +41,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 		$table = $this->SecureTableToBeUpdated();
 		$field = $this->SecureFieldToBeUpdated();
 		$record = $this->SecureRecordToBeUpdated();
-		$obj = DataObject::get_by_id($table, $record);
+		$obj = $table::get()->byID($record);
 		if(!$obj) {
 			user_error("record could not be found!", E_USER_ERROR);
 		}
@@ -71,7 +71,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 		$table = $this->SecureTableToBeUpdated();
 		$field = $this->SecureFieldToBeUpdated();
 		$record = $this->SecureRecordToBeUpdated();
-		$obj = DataObject::get_by_id($table, $record);
+		$obj = $table::get()->byID($record);
 		$obj->$field = $data[$field];
 		$obj->write();
 		return '
@@ -104,7 +104,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 		}
 		$field = $this->getRequest()->param("OtherID");
 		if($table = $this->SecureTableToBeUpdated()) {
-			if($tableObject = DataObject::get_one($table)) {
+			if($tableObject = $table::get()->First()) {
 				if($tableObject->hasField($field)) {
 					return $field;
 				}

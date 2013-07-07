@@ -40,7 +40,7 @@ class DataObjectOneRecordUpdateController extends Controller{
 	function onerecordform() {
 		$table = $this->SecureTableToBeUpdated();
 		$record = $this->SecureRecordToBeUpdated();
-		$obj = DataObject::get_by_id($table, $record);
+		$obj = $table::get()->byID($record);
 		if(!$obj) {
 			user_error("record could not be found!", E_USER_ERROR);
 		}
@@ -72,7 +72,7 @@ class DataObjectOneRecordUpdateController extends Controller{
 	function save($data, $form) {
 		$table = $this->SecureTableToBeUpdated();
 		$record = $this->SecureRecordToBeUpdated();
-		$obj = DataObject::get_by_id($table, $record);
+		$obj = $table::get()->byID($record);
 		$form->saveInto($obj);
 		$obj->write();
 		return '

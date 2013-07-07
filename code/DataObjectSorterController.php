@@ -37,7 +37,7 @@ class DataObjectSorterController extends Controller{
 				$where = "\"$filterField\" = '$filterValue'";
 			}
 		}
-		$obj = DataObject::get_one($className, $where);
+		$obj = $className::get()->filter($where)->First();
 		if($obj && $obj->canEdit()) {
 			$link = 'dataobjectsorter/sort/'.$className."/";
 			if($filterField) {
@@ -87,7 +87,7 @@ class DataObjectSorterController extends Controller{
 		$class = $request->param("ID");
 		if($class) {
 			if(class_exists($class)) {
-				$obj = DataObject::get_one($class);
+				$obj = $class::get()->First();
 				return $obj->dodataobjectsort();
 			}
 			else {
