@@ -17,7 +17,7 @@
 //DataObjectOneFieldUpdateController::set_page_size(10)
 //===================---------------- END dataobjectsorter MODULE ----------------===================
 
-Director::addRules(90, array(
+Director::addRules(100, array(
 	//sorter
 	'dataobjectsorter/$Action/$ID/$OtherID/$ThirdID/$FourthID' => 'DataObjectSorterController',
 
