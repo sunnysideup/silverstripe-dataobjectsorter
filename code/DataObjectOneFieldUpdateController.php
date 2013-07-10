@@ -132,7 +132,6 @@ class DataObjectOneFieldUpdateController extends Controller{
 
 	//used in template
 	public function DataObjectsToBeUpdated() {
-		$bt = defined('DB::USE_ANSI_SQL') ? "\"" : "`";
 		if(!self::$objects) {
 			$table = $this->SecureTableToBeUpdated();
 			$field = $this->SecureFieldToBeUpdated();
