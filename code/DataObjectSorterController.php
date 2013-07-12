@@ -60,7 +60,7 @@ class DataObjectSorterController extends Controller{
 	 * standard SS variable
 	 *
 	 */
-	static $allowed_actions = array("sort", "startsort", "dodataobjectsort" );
+	private static $allowed_actions = array("sort", "startsort", "dodataobjectsort" );
 
 
 	/**

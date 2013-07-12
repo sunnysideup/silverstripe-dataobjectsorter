@@ -20,7 +20,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 		}
 	}
 
-	static $allowed_actions = array("onefieldform", "show", "save");
+	private static $allowed_actions = array("onefieldform", "show", "save");
 
 	function init() {
 		// Only administrators can run this method

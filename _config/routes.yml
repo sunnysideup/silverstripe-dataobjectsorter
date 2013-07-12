@@ -1,0 +1,10 @@
+---
+Name: dataobjectsorterroutes
+After: framework/routes#coreroutes
+---
+Director:
+  rules:
+    'dataobjectsorter//$Action/$ID/$OtherID/$ThirdID/$FourthID' : 'DataObjectSorterController'
+    'dataobjectonefieldupdate//$Action/$ID/$OtherID/$ThirdID' : 'DataObjectOneFieldUpdateController'
+    'dataobjectonefieldonerecordupdate//$Action/$ID/$OtherID/$ThirdID' : 'DataObjectOneFieldOneRecordUpdateController'
+    'dataobjectonerecordupdate//$Action/$ID/$OtherID/$ThirdID' : 'DataObjectOneRecordUpdateController'

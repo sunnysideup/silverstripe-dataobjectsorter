@@ -17,17 +17,11 @@
 
 class DataObjectOneFieldUpdateController extends Controller{
 
-	protected static $page_size = 50;
-		static function set_page_size($v) {self::$page_size = $v;}
-		static function get_page_size() {return self::$page_size;}
+	private static $page_size = 50;
 
-	protected static $field = null;
-		static function set_field($v) {self::$field = $v;}
-		static function get_field() {return self::$field;}
+	private static $field = null;
 
-	protected static $objects = null;
-		static function set_objects($v) {self::$objects = $v;}
-		static function get_objects() {return self::$objects;}
+	private static $objects = null;
 
 
 	public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = '') {
@@ -49,7 +43,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 		}
 	}
 
-	static $allowed_actions = array("updatefield", "show");
+	private static $allowed_actions = array("updatefield", "show");
 
 	function init() {
 		// Only administrators can run this method
@@ -149,9 +143,9 @@ class DataObjectOneFieldUpdateController extends Controller{
 			}
 
 			if(isset($_GET["debug"])) {
-				print_r("SELECT * FROM $table $where SORT BY $sort LIMIT $start, ".self::get_page_size());
+				print_r("SELECT * FROM $table $where SORT BY $sort LIMIT $start, ". Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
 			}
-			$objects = $table::get()->where($where)->sort($sort)->limit(self::get_page_size(), $start);
+			$objects = $table::get()->where($where)->sort($sort)->limit(Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"), $start);
 			if($objects->count()) {
 				foreach($objects as $obj) {
 					$obj->FormField = $obj->dbObject($field)->scaffoldFormField();
