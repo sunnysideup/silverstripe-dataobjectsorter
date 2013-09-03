@@ -8,10 +8,6 @@
 
 class DataObjectSorterDOD extends DataExtension {
 
-	static function set_also_update_sort_field($b) {user_error("This method has been deprecated. You can remove this notice by removing DataObjectSorterDOD::set_also_update_sort_field from your _config file.", E_USER_NOTICE);}
-
-	static function set_do_not_add_alternative_sort_field($b) {user_error("This method has been deprecated. You can remove this notice by removing DataObjectSorterDOD::set_do_not_add_alternative_sort_field from your _config file. ", E_USER_NOTICE);}
-
 	private static $db = array(
 		'Sort' => 'Int'
 	);
