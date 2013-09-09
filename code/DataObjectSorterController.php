@@ -181,4 +181,14 @@ class DataObjectSorterController extends Controller{
 	}
 
 
+
+	public function Link($action = null) {
+		$link = "dataobjectsorter/";
+		if($action) {
+			$link .= "$action/";
+		}
+		return $link;
+	}
+
+
 }

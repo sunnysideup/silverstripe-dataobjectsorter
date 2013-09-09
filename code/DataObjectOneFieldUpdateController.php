@@ -207,6 +207,12 @@ class DataObjectOneFieldUpdateController extends Controller{
 		return singleton($this->SecureTableToBeUpdated())->plural_name();
 	}
 
-
+	public function Link($action = null) {
+		$link = "dataobjectonefieldupdate/";
+		if($action) {
+			$link .= "$action/";
+		}
+		return $link;
+	}
 
 }

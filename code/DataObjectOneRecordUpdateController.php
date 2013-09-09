@@ -89,8 +89,12 @@ class DataObjectOneRecordUpdateController extends Controller{
 		return singleton($this->SecureTableToBeUpdated())->plural_name();
 	}
 
-	public function Link() {
-		return "dataobjectonerecordupdate/";
+	public function Link($action = null) {
+		$link = "dataobjectonerecordupdate/";
+		if($action) {
+			$link .= "$action/";
+		}
+		return $link;
 	}
 
 	protected function getFormFields($obj) {
