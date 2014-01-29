@@ -42,13 +42,21 @@ class DataObjectSorterDOD extends DataExtension {
 								$object->write();
 							}
 						}
+						else {
+
+						}
 					}
 					else {
 						return _t("DataObjectSorter.NOACCESS", "You do not have access rights to make these changes.");
 					}
-
 				}
 			}
+			else {
+				return _t("DataObjectSorter.ERROR2", "Error 2");
+			}
+		}
+		else {
+			return _t("DataObjectSorter.ERROR1", "Error 1");
 		}
 		return _t("DataObjectSorter.UPDATEDRECORDS", "Updated record(s)");
 	}

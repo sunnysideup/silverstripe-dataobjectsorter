@@ -180,7 +180,10 @@ class DataObjectSorterController extends Controller{
 		Requirements::customScript('var DataObjectSorterURL = "'.Director::absoluteURL("dataobjectsorter/dodataobjectsort/".$className."/").'";', 'initDataObjectSorter');
 	}
 
-
+	public function index(){
+		$action = $this->request->param("Action");
+		return $this->$action($this->request);
+	}
 
 	public function Link($action = null) {
 		$link = "dataobjectsorter/";
