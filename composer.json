@@ -2,7 +2,7 @@
 	"name": "sunnysideup/dataobjectsorter",
 	"type": "silverstripe-module",
 	"description": "Silverstripe module with crud functionality: edit one field for one record, edit one record, edit one field for all records AND sort records... ",
-	"homepage": "http://www.silverstripe-webdevelopment.com",
+	"homepage": "https://github.com/sunnysideup/silverstripe-dataobjectsorter",
 	"keywords": ["dataobjectsorter", "silverstripe"],
 	"license": "Sunny Side Up (BSD-3-Clause and CUSTOM)",
 	"authors":[
@@ -16,5 +16,8 @@
 	"require":{
 		"silverstripe/framework": "~3.1",
 		"silverstripe/cms": "~3.1"
+	},
+	"extra": {
+		"installer-name": "dataobjectsorter"
 	}
 }
