@@ -1,27 +1,41 @@
 ###############################################
 Data Object Sorter
-Pre 0.1 proof of concept
 ###############################################
 
-Credits
------------------------------------------------
-Thanks a million to:
-http://www.wil-linssen.com/extending-the-jquery-sortable-with-ajax-mysql/
-for the inspiration
+This module basically helps you to create quick links
+to fast edit modes for records.  For example, in the CMS
+you can add a link: click here to edit the prices for all products
+in one go.  This link then creates a pop-up where you can edit all the
+prices without ever having to press save or reload a record.
+
+Similar, you can sort records and so on.
+
+Allows for sorting of records and
+editing of one field for all records
+and one record and similar functions.
+to create links.
 
 Developer
 -----------------------------------------------
 Nicolaas [at] sunnysideup.co.nz
 
+
 Requirements
 -----------------------------------------------
-SilverStripe 2.3.0 or greater.
+see composer.json
+
 
 Documentation
 -----------------------------------------------
-see http://silverstripe-webdevelopment.com/dataobjectsorter
+Please contact author for more details.
 
-to create links, please use:
+Any bug reports and/or feature requests will be
+looked at in detail
+
+We are also very happy to provide personalised support
+for this module in exchange for a small donation.
+
+Example usage:
 
 DataObjectOneFieldUpdateController::popup_link($ClassName, $FieldName)
 
@@ -37,26 +51,17 @@ $link = DataObjectOneFieldUpdateController::popup_link("SiteTree", "URLSegment",
 $fields->AddFieldToTab("Root.Content.Check", new LiteralField("metatitleFixes", "Check Page Titles...".$link));
 
 
-TO DO
------------------------------------------------
-# sort out URL for DataObject (SiteTree is sorted)
-# create form-field for in form OR in CMS (use LiteralField filled with HTML)
-# use more elegant SQL rather than raw insertion (e.g. DataObject::get())
-# save up all SQL statements and insert all in one time
-
-
-
-
 
 Installation Instructions
 -----------------------------------------------
 1. Find out how to add modules to SS and add module as per usual.
 
-2. copy configurations from this module's _config.php file
-into mysite/_config.php file and edit settings as required.
-NB. the idea is not to edit the module at all, but instead customise
-it from your mysite folder, so that you can upgrade the module without redoing the settings.
+2. Review configs and add entries to mysite/_config/config.yml
+(or similar) as necessary.
+In the _config/ folder of this module
+you should to find some examples of config options (if any).
 
+ADDING SORTER TO FRONT END:
 
 3. add $this->initDataObjectSorter() to your code - e.g. to your
 Page_Controller::init function.
@@ -65,4 +70,14 @@ Page_Controller::init function.
 (rather than using the "unthemed" default provided.
 
 5. add <% include DataObjectSorter %> to your template
+
+There are a ton of other options for adding this module that still need
+to be listed here. Also see documentation above.
+
+
+Credits
+-----------------------------------------------
+Thanks a million to:
+http://www.wil-linssen.com/extending-the-jquery-sortable-with-ajax-mysql/
+for the inspiration
 
