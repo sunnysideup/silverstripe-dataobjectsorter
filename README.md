@@ -1,6 +1,4 @@
-###############################################
-Data Object Sorter
-###############################################
+Data Object Sorter================================================================================
 
 This module basically helps you to create quick links
 to fast edit modes for records.  For example, in the CMS
