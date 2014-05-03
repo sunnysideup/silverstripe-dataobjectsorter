@@ -33,20 +33,27 @@ looked at in detail
 We are also very happy to provide personalised support
 for this module in exchange for a small donation.
 
-Example usage:
 
-DataObjectOneFieldUpdateController::popup_link($ClassName, $FieldName)
+*** EXAMPLE ***
 
-OR
 
-$MySortableDataObject->dataObjectSorterPopupLink($filterFieldOrID = "", $id = 0, $listName = "list");
-for $filterFieldOrID, you will use the ParentID ID value OR another field name
-where $ID then is the "should be equal to" value.
+```php
+if(class_exists("DataObjectSorterController")) {
+	$fields->addFieldToTab("Root.Position", new LiteralField("AdvertisementsSorter", DataObjectSorterController::popup_link("Advertisement", $filterField = "", $filterValue = "", $linkText = "sort ".Advertisement::$plural_name, $titleField = "FullTitle")));
+else {
+	$fields->addFieldToTab("Root.Position", new NumericField($name = "Sort", "Sort index number (the lower the number, the earlier it shows up"));
+}
 
-** example:
+Edit one field for all records
+
+
+```php
 
 $link = DataObjectOneFieldUpdateController::popup_link("SiteTree", "URLSegment", $where = "MetaTitle IS NULL OR MetaTitle = ''", $sort = '');
 $fields->AddFieldToTab("Root.Content.Check", new LiteralField("metatitleFixes", "Check Page Titles...".$link));
+
+```
+
 
 
 

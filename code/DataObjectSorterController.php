@@ -10,6 +10,7 @@
 
 class DataObjectSorterController extends Controller{
 
+	private static $sort_field = "";
 
 	/**
 	 * returns a link for sorting objects. You can use this in the CMS like this....
@@ -32,8 +33,8 @@ class DataObjectSorterController extends Controller{
 	public static function popup_link($className, $filterField = "", $filterValue = "", $linkText = "sort this list", $titleField = "") {
 		$where = "";
 		if($filterField) {
-			$singleton = singleton($className);
-			if($singleton->hasDatabaseField($filterField)) {
+			$singletonObj = singleton($className);
+			if($singletonObj->hasDatabaseField($filterField)) {
 				$where = "\"$filterField\" = '$filterValue'";
 			}
 		}
@@ -111,21 +112,23 @@ class DataObjectSorterController extends Controller{
 				$filterField = Convert::raw2sql($this->request->param("OtherID"));
 				$filterValue = Convert::raw2sql($this->request->param("ThirdID"));
 				$titleField = Convert::raw2sql($this->request->param("FourthID"));
+				$objects = $class::get();
 				if($filterField && $filterValue) {
 					$array = explode(",",$filterValue);
 					if(is_array($array) && count($array)) {
-						$where = "\"$filterField\" IN ($filterValue)";
+						$objects = $objects->filter($filterField, $filterValue);
 					}
 					else {
-						$where = "\"$filterField\" = '$filterValue'";
+						$objects = $objects->filter(array($filterField => $filterValue));
 					}
 				}
 				elseif(is_numeric($filterField)) {
-					$where = "\"ParentID\" = '$filterField'";
+					$objects = $objects->filter(array("ParentID" => $filterField));
 				}
-				$sort = "\"Sort\" ASC";
-				$objects = $class::get();
-				if($objects && $objects->count()) {
+				$singletonObj = singleton($class);
+				$sortField = $singletonObj->SortFieldForDataObjectSorter();
+				$objects = $objects->sort($sortField, "ASC");
+				if($objects->count()) {
 					foreach($objects as $obj) {
 						if($titleField) {
 							$method = "get".$titleField;
@@ -145,9 +148,6 @@ class DataObjectSorterController extends Controller{
 						else {
 							$obj->SortTitle = $obj->getTitle();
 						}
-					}
-					if(!$obj->hasField("Sort") && !$obj->hasField("AlternativeSortNumber")) {
-						user_error("No field Sort or AlternativeSortNumber was found on data object: ".$class, E_USER_WARNING);
 					}
 					self::add_requirements($class);
 					return $objects;

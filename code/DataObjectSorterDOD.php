@@ -8,6 +8,8 @@
 
 class DataObjectSorterDOD extends DataExtension {
 
+	private static $sort_field = "";
+
 	private static $db = array(
 		'Sort' => 'Int'
 	);
@@ -20,7 +22,7 @@ class DataObjectSorterDOD extends DataExtension {
 		$i = 0;
 		$extraSet = '';
 		$extraWhere = '';
-		$field = "Sort";
+		$sortField = $this->SortFieldForDataObjectSorter();
 		$baseDataClass = ClassInfo::baseDataClass($this->owner->ClassName);
 		if($baseDataClass) {
 			if(isset ($_REQUEST["dos"])) {
@@ -30,10 +32,10 @@ class DataObjectSorterDOD extends DataExtension {
 					//we add one because position 0 is not good.
 					$position = intval($position)+1;
 					if($object && $object->canEdit()) {
-						if($object->$field != $position) {
-							$object->$field = $position;
+						if($object->$sortField != $position) {
+							$object->$sortField = $position;
 							//hack for site tree
-							if("SiteTree" == $baseDataClass) {
+							if($object instanceof SiteTree) {
 								$object->writeToStage('Stage');
 								$object->Publish('Stage', 'Live');
 								$object->Status = "Published";
@@ -61,20 +63,39 @@ class DataObjectSorterDOD extends DataExtension {
 		return _t("DataObjectSorter.UPDATEDRECORDS", "Updated record(s)");
 	}
 
-	/**
-	 *legacy function
-	 **/
-	function dataObjectSorterPopupLink($filterField = '', $filterValue = '') {
-		return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText = "Sort ".$this->owner->plural_name());
-	}
-
 	public function updateCMSFields(FieldList $fields) {
-		$fields->removeFieldFromTab("Root.Main", "Sort");
+		$fields->removeFieldFromTab("Root.Main", $this->SortFieldForDataObjectSorter());
 		$link = self::dataObjectSorterPopupLink();
 		$fields->addFieldToTab("Root.Sort", new LiteralField("DataObjectSorterPopupLink", $link));
 		return $fields;
 	}
 
+	/**
+	 * simplified method
+	 * @return HTML
+	 **/
+	function dataObjectSorterPopupLink($filterField = '', $filterValue = '') {
+		return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText = "Sort ".$this->owner->plural_name());
+	}
+
+
+	public function SortFieldForDataObjectSorter() {
+		$sortField = Config::inst()->get("DataObjectSorterDOD", "sort_field");
+		$field = "Sort";
+		if($sortField && $this->owner->hasField($sortField)) {
+			$field = $sortField;
+		}
+		elseif($this->owner->hasField("AlternativeSortNumber")) {
+			$field = "AlternativeSortNumber";
+		}
+		elseif($this->owner->hasField("Sort")) {
+			$field = "Sort";
+		}
+		else {
+			user_error("No field Sort or AlternativeSortNumber (or $sortField) was found on data object: ".$class, E_USER_WARNING);
+		}
+		return $field;
+	}
 }
 
 
