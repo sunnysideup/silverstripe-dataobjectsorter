@@ -146,6 +146,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 				print_r("SELECT * FROM $table $where SORT BY $sort LIMIT $start, ". Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
 			}
 			$objects = $table::get()->where($where)->sort($sort)->limit(Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"), $start);
+			$arrayList = new ArrayList();
 			if($objects->count()) {
 				foreach($objects as $obj) {
 					$obj->FormField = $obj->dbObject($field)->scaffoldFormField();
@@ -154,13 +155,14 @@ class DataObjectOneFieldUpdateController extends Controller{
 					$obj->FormField->addExtraClass("updateField");
 					$obj->FieldToBeUpdatedValue = $obj->$field;
 					$obj->FormField->setValue($obj->$field);
+					$arrayList->push(new ArrayData(array("FormField" => $obj->FormField, "Title" => $obj->Title)));
 				}
 				if(!$obj->canEdit()) {
 					Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
 					return;
 				}
 			}
-			self::$objects = $objects;
+			self::$objects = $arrayList;
 		}
 
 		return self::$objects;
