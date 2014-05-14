@@ -23,6 +23,8 @@ class DataObjectOneFieldUpdateController extends Controller{
 
 	private static $objects = null;
 
+	private static $objects_without_field = null;
+
 
 	public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = '') {
 		$obj = singleton($ClassName);
@@ -139,13 +141,15 @@ class DataObjectOneFieldUpdateController extends Controller{
 			}
 			$start = 0;
 			if(isset($this->requestParams["start"])) {
-				$start = $this->requestParams["start"];
+				$start = intval($this->requestParams["start"]);
 			}
 
 			if(isset($_GET["debug"])) {
 				print_r("SELECT * FROM $table $where SORT BY $sort LIMIT $start, ". Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
 			}
-			$objects = $table::get()->where($where)->sort($sort)->limit(Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"), $start);
+
+			$objects = new PaginatedList($table::get()->where($where)->sort($sort), $this->request);
+			$objects->setPageLength(Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
 			$arrayList = new ArrayList();
 			if($objects->count()) {
 				foreach($objects as $obj) {
@@ -163,9 +167,15 @@ class DataObjectOneFieldUpdateController extends Controller{
 				}
 			}
 			self::$objects = $arrayList;
+			self::$objects_without_field = $objects;
 		}
 
 		return self::$objects;
+	}
+
+	function PaginatedListItems() {
+		$this->DataObjectsToBeUpdated();
+		return self::$objects_without_field;
 	}
 
 	protected function getFormField($obj, $fieldName) {
