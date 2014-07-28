@@ -10,6 +10,12 @@
 
 class DataObjectSorterController extends Controller{
 
+	/**
+	 * standard SS variable
+	 *
+	 */
+	private static $allowed_actions = array("sort", "startsort", "dodataobjectsort" );
+
 	private static $sort_field = "";
 
 	/**
@@ -55,13 +61,6 @@ class DataObjectSorterController extends Controller{
 			<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$className.$filterField.$filterValue.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
 		}
 	}
-
-
-	/**
-	 * standard SS variable
-	 *
-	 */
-	private static $allowed_actions = array("sort", "startsort", "dodataobjectsort" );
 
 
 	/**
@@ -114,13 +113,8 @@ class DataObjectSorterController extends Controller{
 				$titleField = Convert::raw2sql($this->request->param("FourthID"));
 				$objects = $class::get();
 				if($filterField && $filterValue) {
-					$array = explode(",",$filterValue);
-					if(is_array($array) && count($array)) {
-						$objects = $objects->filter($filterField, $filterValue);
-					}
-					else {
-						$objects = $objects->filter(array($filterField => $filterValue));
-					}
+					$filterValue = explode(",",$filterValue);
+					$objects = $objects->filter(array($filterField => $filterValue));
 				}
 				elseif(is_numeric($filterField)) {
 					$objects = $objects->filter(array("ParentID" => $filterField));
