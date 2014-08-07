@@ -66,8 +66,10 @@ class DataObjectSorterDOD extends DataExtension {
 
 	public function updateCMSFields(FieldList $fields) {
 		$fields->removeFieldFromTab("Root.Main", $this->SortFieldForDataObjectSorter());
-		$link = self::dataObjectSorterPopupLink();
-		$fields->addFieldToTab("Root.Sort", new LiteralField("DataObjectSorterPopupLink", $link));
+		if(!$this->owner instanceof SiteTree) {
+			$link = self::dataObjectSorterPopupLink();
+			$fields->addFieldToTab("Root.Sort", new LiteralField("DataObjectSorterPopupLink", $link));
+		}
 		return $fields;
 	}
 
