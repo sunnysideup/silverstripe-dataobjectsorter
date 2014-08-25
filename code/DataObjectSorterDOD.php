@@ -39,7 +39,6 @@ class DataObjectSorterDOD extends DataExtension {
 								$object->writeToStage('Stage');
 								$object->Publish('Stage', 'Live');
 								$object->Status = "Published";
-								debug::log("Sorting $object->MenuTitle to $position on $sortField");
 							}
 							else {
 								$object->write();
