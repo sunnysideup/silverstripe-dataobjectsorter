@@ -44,7 +44,11 @@ class DataObjectSorterController extends Controller{
 				$where = "\"$filterField\" = '$filterValue'";
 			}
 		}
-		$obj = $className::get()->where($where)->First();
+		$objects = $className::get();
+		if($where) {
+			$objects = $objects->where($where);
+		}
+		$obj = $objects->first();
 		if($obj && $obj->canEdit()) {
 			$link = 'dataobjectsorter/sort/'.$className."/";
 			if($filterField) {
@@ -59,6 +63,9 @@ class DataObjectSorterController extends Controller{
 			$link = Director::baseURL().$link;
 			return '
 			<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$className.$filterField.$filterValue.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
+		}
+		else {
+			return "Can not sort this list";
 		}
 	}
 
