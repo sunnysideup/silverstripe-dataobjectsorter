@@ -88,10 +88,10 @@ class DataObjectOneFieldUpdateController extends Controller{
 							else {
 								$obj->write();
 							}
-							if(method_exists($obj, "Title")) {
+							if($obj->hasMethod("Title")) {
 								$title = $obj->Title();
 							}
-							elseif(method_exists($obj, "getTitle")) {
+							elseif($obj->hasMethod("getTitle")) {
 								$title = $obj->getTitle();
 							}
 							elseif($title = $obj->Title) {
