@@ -38,7 +38,6 @@ class DataObjectSorterDOD extends DataExtension {
 							if($object instanceof SiteTree) {
 								$object->writeToStage('Stage');
 								$object->Publish('Stage', 'Live');
-								$object->Status = "Published";
 							}
 							else {
 								$object->write();
