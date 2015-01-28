@@ -1,4 +1,5 @@
-Data Object Sorter================================================================================
+Data Object Sorter
+================================================================================
 
 This module basically helps you to create quick links
 to fast edit modes for records.  For example, in the CMS
@@ -39,9 +40,27 @@ for this module in exchange for a small donation.
 
 ```php
 if(class_exists("DataObjectSorterController")) {
-	$fields->addFieldToTab("Root.Position", new LiteralField("AdvertisementsSorter", DataObjectSorterController::popup_link("Advertisement", $filterField = "", $filterValue = "", $linkText = "sort ".Advertisement::$plural_name, $titleField = "FullTitle")));
+	$fields->addFieldToTab(
+		"Root.Position",
+		new LiteralField(
+			"AdvertisementsSorter",
+			DataObjectSorterController::popup_link(
+				"Advertisement",
+				$filterField = "",
+				$filterValue = "",
+				$linkText = "sort ".MyObject::$plural_name,
+				$titleField = "FullTitle"
+			)
+		)
+	);
 else {
-	$fields->addFieldToTab("Root.Position", new NumericField($name = "Sort", "Sort index number (the lower the number, the earlier it shows up"));
+	$fields->addFieldToTab(
+		"Root.Position",
+		new NumericField(
+			$name = "Sort",
+			"Sort index number (the lower the number, the earlier it shows up)"
+		)
+	);
 }
 
 Edit one field for all records
@@ -49,8 +68,16 @@ Edit one field for all records
 
 ```php
 
-$link = DataObjectOneFieldUpdateController::popup_link("SiteTree", "URLSegment", $where = "MetaTitle IS NULL OR MetaTitle = ''", $sort = '');
-$fields->AddFieldToTab("Root.Content.Check", new LiteralField("metatitleFixes", "Check Page Titles...".$link));
+$link = DataObjectOneFieldUpdateController::popup_link(
+	"SiteTree",
+	"URLSegment",
+	$where = "MetaTitle IS NULL OR MetaTitle = ''",
+	$sort = ''
+);
+$fields->AddFieldToTab(
+	"Root.Content.Check",
+	new LiteralField("MyFixes", "Check Page Titles...".$link)
+);
 
 ```
 
