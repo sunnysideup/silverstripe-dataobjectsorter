@@ -1,5 +1,5 @@
 ####################################
-# START DATA OBJECT SORTER
+# DATA OBJECT SORTER
 ####################################
 
 SiteTree:
@@ -14,5 +14,4 @@ DataObjectOneFieldUpdateController:
   page_size: 10
 
 ####################################
-# END DATA OBJECT SORTER
 ####################################
