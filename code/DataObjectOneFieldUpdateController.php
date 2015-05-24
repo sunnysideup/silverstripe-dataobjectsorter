@@ -133,11 +133,11 @@ class DataObjectOneFieldUpdateController extends Controller{
 			$field = $this->SecureFieldToBeUpdated();
 			$where = '';
 			if(isset($this->requestParams["where"]) && $this->requestParams["where"]) {
-				$where = Convert::raw2sql(urldecode($this->requestParams["where"]));
+				$where = urldecode($this->requestParams["where"]);
 			}
 			$sort = '';
 			if(isset($this->requestParams["sort"]) && $this->requestParams["sort"]) {
-				$sort = Convert::raw2sql(urldecode($this->requestParams["sort"]));
+				$sort = urldecode($this->requestParams["sort"]);
 			}
 			$start = 0;
 			if(isset($this->requestParams["start"])) {
