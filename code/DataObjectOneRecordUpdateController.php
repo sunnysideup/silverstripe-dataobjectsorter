@@ -9,6 +9,8 @@
 class DataObjectOneRecordUpdateController extends Controller{
 
 	public static function popup_link($className, $recordID, $linkText = '') {
+		Requirements::javascript("dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js");
+		Requirements::javascript("dataobjectsorter/javascript/dataobjectmodalpopup.js");
 		if(!$linkText) {
 			$linkText = 'click here to edit';
 		}
@@ -16,7 +18,7 @@ class DataObjectOneRecordUpdateController extends Controller{
 		if($obj->canEdit()) {
 			$link = '/dataobjectonerecordupdate/show/'.$className."/".$recordID;
 			return '
-				<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$className.$recordID.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
+				<a href="'.$link.'" class="modalPopUp" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$className.$recordID.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
 		}
 	}
 
