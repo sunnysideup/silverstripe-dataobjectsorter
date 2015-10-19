@@ -27,6 +27,8 @@ class DataObjectOneFieldUpdateController extends Controller{
 
 
 	public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = '') {
+		Requirements::javascript("dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js");
+		Requirements::javascript("dataobjectsorter/javascript/dataobjectmodalpopup.js");
 		$obj = singleton($ClassName);
 		$params = array();
 		if($where) {
@@ -41,7 +43,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 				$linkText = 'click here to edit';
 			}
 			return '
-				<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
+				<a href="'.$link.'" class="modalPopUp" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
 		}
 	}
 

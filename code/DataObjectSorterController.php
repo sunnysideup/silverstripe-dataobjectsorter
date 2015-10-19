@@ -37,6 +37,8 @@ class DataObjectSorterController extends Controller{
 	 * @return String
 	 */
 	public static function popup_link($className, $filterField = "", $filterValue = "", $linkText = "sort this list", $titleField = "") {
+		Requirements::javascript("dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js");
+		Requirements::javascript("dataobjectsorter/javascript/dataobjectmodalpopup.js");
 		$where = "";
 		if($filterField) {
 			$singletonObj = singleton($className);
@@ -62,7 +64,7 @@ class DataObjectSorterController extends Controller{
 			}
 			$link = Director::baseURL().$link;
 			return '
-			<a href="'.$link.'" onclick="window.open(\''.$link.'\', \'sortlistFor'.$className.$filterField.$filterValue.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
+			<a href="'.$link.'" class="modalPopUp" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$className.$filterField.$filterValue.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
 		}
 	}
 
