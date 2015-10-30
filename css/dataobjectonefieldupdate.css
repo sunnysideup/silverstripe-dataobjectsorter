@@ -1,8 +1,9 @@
-.DataObjectOneFieldUpdateFeedback {border: 1px dotted #333; background-color: #ccc; padding: 1em; margin: 1em; font-size: 0.8em}
+.DataObjectOneFieldUpdateFeedback {border: 1px solid #333; background-color: #fff; border-radius: 3px; padding: 1em; margin: 1em; font-size: 0.8em}
 #DataObjectOneFieldUpdateUL {list-style: none;}
 	#DataObjectOneFieldUpdateUL li {list-style: none; border-bottom: 1px dotted #333; padding: 0.7em; margin-right: 2em;}
-		#DataObjectOneFieldUpdateUL li:hover {background-color: #778811;}
-		#DataObjectOneFieldUpdateUL li input, #DataObjectOneFieldUpdateUL li textarea {width: auto; border: 5px solid #000;}
+		#DataObjectOneFieldUpdateUL li:hover {background-color: #ddd; border-radius: 3px;}
+		#DataObjectOneFieldUpdateUL li input { height: 32px; }
+		#DataObjectOneFieldUpdateUL li input, #DataObjectOneFieldUpdateUL li textarea {width: auto; border: 1px solid #111!important; border-radius: 3px;}
 			#DataObjectOneFieldUpdateUL li input.checkbox {width: auto;}
 			#DataObjectOneFieldUpdateUL li input:focus, #DataObjectOneFieldUpdateUL li textarea:focus {border-color: red;}
 

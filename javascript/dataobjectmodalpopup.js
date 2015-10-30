@@ -27,10 +27,10 @@ var DataObjectModalPopUp = {
 						closeHTML:"",
 						containerCss:{
 							backgroundColor:"#ccc", 
-							borderColor:"#000", 
 							width:popupWidth,
 							height:popupHeight, 
-							padding:0
+							padding:0,
+							borderRadius: 5
 						},
 						overlayClose:true
 					}
