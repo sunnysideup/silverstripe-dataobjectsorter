@@ -25,8 +25,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 
 	private static $objects_without_field = null;
 
-
-	public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = '') {
+	public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = '', $titleField = "Title") {
 		Requirements::javascript("dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js");
 		Requirements::javascript("dataobjectsorter/javascript/dataobjectmodalpopup.js");
 		Requirements::themedCSS("dataobjectmodalpopup", "dataobjectsorter");
@@ -37,6 +36,9 @@ class DataObjectOneFieldUpdateController extends Controller{
 		}
 		if($sort) {
 			$params["sort"] = "sort=".urlencode($sort);
+		}
+		if($titleField){
+			$params["titlefield"] = "titlefield=".urlencode($titleField);
 		}
 		if($obj->canEdit()) {
 			$link = '/dataobjectonefieldupdate/show/'.$ClassName."/".$FieldName.'/?'.implode("&amp;", $params);
@@ -142,6 +144,10 @@ class DataObjectOneFieldUpdateController extends Controller{
 			if(isset($this->requestParams["sort"]) && $this->requestParams["sort"]) {
 				$sort = urldecode($this->requestParams["sort"]);
 			}
+			$titleField = 'Title';
+			if(isset($this->requestParams["titlefield"]) && $this->requestParams["titlefield"]) {
+				$titleField = urldecode($this->requestParams["titlefield"]);
+			}
 			$start = 0;
 			if(isset($this->requestParams["start"])) {
 				$start = intval($this->requestParams["start"]);
@@ -157,6 +163,11 @@ class DataObjectOneFieldUpdateController extends Controller{
 			$objects->setPageLength(Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
 			$arrayList = new ArrayList();
 			if($objects->count()) {
+				$testObject = $objects->first();
+				if(!$testObject->canEdit()) {
+					Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
+					return;
+				}
 				foreach($objects as $obj) {
 					$obj->FormField = $obj->dbObject($field)->scaffoldFormField();
 					$obj->FormField->setName($obj->ClassName."/".$obj->ID);
@@ -164,11 +175,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 					$obj->FormField->addExtraClass("updateField");
 					$obj->FieldToBeUpdatedValue = $obj->$field;
 					$obj->FormField->setValue($obj->$field);
-					$arrayList->push(new ArrayData(array("FormField" => $obj->FormField, "Title" => $obj->Title)));
-				}
-				if(!$obj->canEdit()) {
-					Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
-					return;
+					$arrayList->push(new ArrayData(array("FormField" => $obj->FormField, "MyTitle" => $obj->$titleField())));
 				}
 			}
 			self::$objects = $arrayList;
