@@ -1,16 +1,13 @@
 .DataObjectOneFieldUpdateFeedback {
+	box-sizing: border-box;
+	position: fixed;
+	width: 100%;
 	border-bottom: 1px solid #333;
 	border-radius: 3px 3px 0 0;
 	background-color: #eee;
 	margin: -0.6em;
 	padding: 2em;
-	font-size: 0.8em
-}
-
-.DataObjectOneFieldUpdateFeedback:first-of-type{
-	box-sizing: border-box;
-	position: fixed;
-	width: 100%;
+	font-size: 0.8em;
 }
 
 #tokenEffortForm {

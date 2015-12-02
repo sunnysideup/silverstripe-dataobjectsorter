@@ -27,7 +27,6 @@
 	<% end_loop %>
 	</ul>
 </form>
-<h1 class="DataObjectOneFieldUpdateFeedback">please update fields above ($SecureFieldToBeUpdated in $SecureTableToBeUpdated) - NB: there is no undo!</h1>
 <% include DataObjectsToBeUpdatedPagination %>
 <% else %>
 <p>No records can be found.</p>
