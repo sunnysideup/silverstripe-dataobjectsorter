@@ -1,5 +1,5 @@
 .DataObjectOneFieldUpdateFeedback {border: 1px solid #333; background-color: #fff; border-radius: 3px; padding: 1em; margin: 1em; font-size: 0.8em}
-#DataObjectOneFieldUpdateUL {list-style: none;}
+#DataObjectOneFieldUpdateUL {list-style: none; padding: 0;}
 	#DataObjectOneFieldUpdateUL li {list-style: none; border-bottom: 1px dotted #333; padding: 0.7em; margin-right: 2em;}
 		#DataObjectOneFieldUpdateUL li:hover {background-color: #ddd; border-radius: 3px;}
 		#DataObjectOneFieldUpdateUL li input { height: 32px; }
@@ -9,3 +9,10 @@
 
 .loading {background-image: url(/dataobjectsorter/images/loading.gif); background-position: right top; background-repeat: no-repeat; background-color: #ccc;}
 	.loading input {background-color: #ccc;}
+
+#FilterAndApplyToAllInputs { padding: 0 15px; }
+
+#FilterAndApplyToAllInputs label {
+	width: 400px;
+	display: inline-block;
+}

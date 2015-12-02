@@ -33,6 +33,7 @@ var DataObjectOneFieldUpdate = {
 		jQuery(this.inputSelector).each(
 			function(i) {
 				var typeClass = jQuery(this).attr("type");
+				console.debug(typeClass);
 				if("checkbox" == typeClass) {
 					jQuery(this).change(
 						function() {
@@ -48,6 +49,8 @@ var DataObjectOneFieldUpdate = {
 				jQuery(this).addClass(typeClass);
 			}
 		);
+		inputType = jQuery("#DataObjectOneFieldUpdateUL li input").first().attr("type");
+		jQuery("<input type='" + inputType + "' />").attr({ name: "ApplyToAll", id: "ApplyToAll"}).insertAfter("label[for='ApplyToAll']");
 	},
 
 	init: function () {
@@ -97,7 +100,40 @@ var DataObjectOneFieldUpdate = {
 				}
 			}
 		).css("border", "2px solid blue");
-	}
 
+		jQuery('#TextMatchFilter').on(
+			'input',
+			function(event){
+				event.preventDefault();
+				var filterValue = jQuery("#TextMatchFilter").val().toLowerCase();
+				jQuery("#DataObjectOneFieldUpdateUL li label").each(
+					function( index, value ) {
+						var currentLabel = jQuery(this);
+						var labelText = currentLabel.text().toLowerCase();
+						if (labelText.indexOf(filterValue) >= 0){
+							currentLabel.closest("li").show().addClass("displayed");
+						}
+						else{
+							currentLabel.closest("li").hide().removeClass("displayed");
+						}
+					}
+				);
+			}
+		);
+
+		jQuery('#ApplyToAllButton').on(
+			'click',
+			function(event){
+				event.preventDefault();
+				var applyToAllValue = jQuery("#ApplyToAll").val();
+				jQuery("#DataObjectOneFieldUpdateUL li.displayed input").each(
+					function( index, value ) {
+						var currentInput = jQuery(this);
+						currentInput.val(applyToAllValue);
+					}
+				);
+			}
+		);
+	}
 
 }

@@ -19,8 +19,8 @@ var DataObjectModalPopUp = {
 			function(event){
 				event.preventDefault();
 				var src = jQuery(this).attr("href");
-				var popupWidth = jQuery(this).attr("data-width");
-				var popupHeight = jQuery(this).attr("data-height");
+				var popupWidth = (jQuery(window).width() / 10) * 9;
+				var popupHeight = (jQuery(window).height() / 10)  * 9;
 				jQuery.modal(
 					'<iframe src="' + src + '" height="' + popupHeight + '" width="' + popupWidth + '" style="border:0">',
 					{
@@ -34,7 +34,7 @@ var DataObjectModalPopUp = {
 						},
 						overlayClose:true
 					}
-			);
+				);
 			}
 		);
 	}
