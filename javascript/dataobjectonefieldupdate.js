@@ -50,7 +50,8 @@ var DataObjectOneFieldUpdate = {
 			}
 		);
 		inputType = jQuery("#DataObjectOneFieldUpdateUL li input").first().attr("type");
-		jQuery("<input type='" + inputType + "' />").attr({ name: "ApplyToAll", id: "ApplyToAll"}).insertAfter("label[for='ApplyToAll']");
+		inputValue = jQuery("#DataObjectOneFieldUpdateUL li input").first().val();
+		jQuery("<input type='" + inputType + "' />").attr({ value: inputValue, name: "ApplyToAll", id: "ApplyToAll"}).insertAfter("label[for='ApplyToAll']");
 	},
 
 	init: function () {
