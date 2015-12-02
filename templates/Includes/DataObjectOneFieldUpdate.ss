@@ -22,7 +22,7 @@
 			<span>
 				$FormField
 			</span>
-			<label for="input{$ID}">$Title</label>
+			<label for="input{$ID}">$MyTitle</label>
 		</li>
 	<% end_loop %>
 	</ul>
