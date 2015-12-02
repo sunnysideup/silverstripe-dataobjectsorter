@@ -111,10 +111,10 @@ var DataObjectOneFieldUpdate = {
 						var currentLabel = jQuery(this);
 						var labelText = currentLabel.text().toLowerCase();
 						if (labelText.indexOf(filterValue) >= 0){
-							currentLabel.closest("li").show().addClass("displayed");
+							currentLabel.closest("li").show();
 						}
 						else{
-							currentLabel.closest("li").hide().removeClass("displayed");
+							currentLabel.closest("li").hide();
 						}
 					}
 				);
@@ -126,7 +126,7 @@ var DataObjectOneFieldUpdate = {
 			function(event){
 				event.preventDefault();
 				var applyToAllValue = jQuery("#ApplyToAll").val();
-				jQuery("#DataObjectOneFieldUpdateUL li.displayed input").each(
+				jQuery("#DataObjectOneFieldUpdateUL li:visible input").each(
 					function( index, value ) {
 						var currentInput = jQuery(this);
 						currentInput.val(applyToAllValue);
