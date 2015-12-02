@@ -128,9 +128,10 @@ var DataObjectOneFieldUpdate = {
 				event.preventDefault();
 				var applyToAllValue = jQuery("#ApplyToAll").val();
 				jQuery("#DataObjectOneFieldUpdateUL li:visible input").each(
-					function( index, value ) {
-						var currentInput = jQuery(this);
+					function( index, el ) {
+						var currentInput = jQuery(el);
 						currentInput.val(applyToAllValue);
+						currentInput.change();
 					}
 				);
 			}
