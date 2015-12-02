@@ -29,7 +29,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 	public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = '') {
 		Requirements::javascript("dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js");
 		Requirements::javascript("dataobjectsorter/javascript/dataobjectmodalpopup.js");
-		Requirements::customCSS("#simplemodal-overlay {background-color: #000!important;}");
+		Requirements::themedCSS("dataobjectmodalpopup", "dataobjectsorter");
 		$obj = singleton($ClassName);
 		$params = array();
 		if($where) {

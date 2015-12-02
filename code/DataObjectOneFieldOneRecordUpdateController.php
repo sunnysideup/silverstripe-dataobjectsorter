@@ -11,6 +11,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
 	public static function popup_link($ClassName, $FieldName, $recordID, $linkText = '') {
 		Requirements::javascript("dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js");
 		Requirements::javascript("dataobjectsorter/javascript/dataobjectmodalpopup.js");
+		Requirements::themedCSS("dataobjectmodalpopup", "dataobjectsorter");
 		if(!$linkText) {
 			$linkText = 'click here to edit';
 		}

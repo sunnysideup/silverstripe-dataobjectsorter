@@ -1,0 +1,19 @@
+#simplemodal-overlay {background-color: #000!important;}
+
+.simplemodal-close {
+	cursor: pointer;
+	position: absolute;
+	right: 0px;
+	padding: 5px;
+	color: rgba(0, 0, 0, 1);
+	font-size: 32px;
+}
+
+.simplemodal-close:hover {
+	color: rgba(255, 0, 0, 0.5);
+}
+
+.simplemodal-wrap {
+	box-sizing: border-box;
+	padding-top: 20px;
+}

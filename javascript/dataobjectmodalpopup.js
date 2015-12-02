@@ -24,7 +24,7 @@ var DataObjectModalPopUp = {
 				jQuery.modal(
 					'<iframe src="' + src + '" height="' + popupHeight + '" width="' + popupWidth + '" style="border:0">',
 					{
-						closeHTML:"",
+						closeHTML:"<span>X</span>",
 						containerCss:{
 							backgroundColor:"#ccc", 
 							width:popupWidth,

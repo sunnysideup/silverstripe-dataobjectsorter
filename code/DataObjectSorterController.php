@@ -39,6 +39,7 @@ class DataObjectSorterController extends Controller{
 	public static function popup_link($className, $filterField = "", $filterValue = "", $linkText = "sort this list", $titleField = "") {
 		Requirements::javascript("dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js");
 		Requirements::javascript("dataobjectsorter/javascript/dataobjectmodalpopup.js");
+		Requirements::themedCSS("dataobjectmodalpopup", "dataobjectsorter");
 		$where = "";
 		if($filterField) {
 			$singletonObj = singleton($className);
