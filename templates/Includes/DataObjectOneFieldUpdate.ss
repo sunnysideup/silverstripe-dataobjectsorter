@@ -19,10 +19,10 @@
 	<ul id="DataObjectOneFieldUpdateUL">
 	<% loop DataObjectsToBeUpdated %>
 		<li>
+			<label for="input{$ID}">$Title</label>
 			<span>
 				$FormField
 			</span>
-			<label for="input{$ID}">$Title</label>
 		</li>
 	<% end_loop %>
 	</ul>

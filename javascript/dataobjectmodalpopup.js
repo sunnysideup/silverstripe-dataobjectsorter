@@ -26,7 +26,7 @@ var DataObjectModalPopUp = {
 					{
 						closeHTML:"<span>X</span>",
 						containerCss:{
-							backgroundColor:"#ccc", 
+							backgroundColor:"#FFF", 
 							width:popupWidth,
 							height:popupHeight, 
 							padding:0,

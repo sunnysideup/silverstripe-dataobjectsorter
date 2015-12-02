@@ -3,18 +3,23 @@
 .simplemodal-close {
 	cursor: pointer;
 	position: absolute;
-	right: 0px;
+	top: 10px;
+	right: 25px;
 	padding: 5px;
-	color: rgba(0, 0, 0, 1);
-	font-size: 32px;
+	color: #aaa;
+	font-size: 20px;
 }
 
 .simplemodal-close:hover {
-	color: rgba(255, 0, 0, 0.5);
+	color: #919191;
+}
+
+.simplemodal-container {
+	border-radius: 3px!important;
 }
 
 .simplemodal-wrap {
+	overflow: hidden!important;
 	box-sizing: border-box;
-	padding: 20px 0;
 }
 
