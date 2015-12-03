@@ -3,7 +3,7 @@
 .simplemodal-close {
 	cursor: pointer;
 	position: absolute;
-	top: 10px;
+	top: 17px;
 	right: 25px;
 	padding: 5px;
 	color: #aaa;
@@ -11,7 +11,7 @@
 }
 
 .simplemodal-close:hover {
-	color: #919191;
+	color: #000;
 }
 
 .simplemodal-container {

@@ -2,27 +2,68 @@
 	box-sizing: border-box;
 	position: fixed;
 	width: 100%;
-	border-bottom: 1px solid #333;
 	border-radius: 3px 3px 0 0;
 	background-color: #eee;
 	margin: -0.6em;
-	padding: 2em;
-	font-size: 0.8em;
+	padding: 1.5em 0.7em;
+	font-size: 16px;
+}
+
+#FilterAndApplyToAllInputs {
+	position: fixed;
+	top: 64px;
+	width: 100%;
+	margin: 0 -0.5em;
+	background-color: #EEE;
+	border-bottom: 1px solid #333;
+}
+
+#FilterAndApplyToAllInputs div {
+	float:left;
+	box-sizing: border-box;
+	width: 50%;
+	padding: 0.7em;
+}
+
+#ApplyToAllButton {
+	clear: both;
+	float: right;
+	margin-top: 5px;
+	padding: 5px 10px;
+	background: #3498db;
+	border-radius: 7px;
+	color: #fff;
+	font-size: 12px;
+	text-decoration: none;
+}
+
+#ApplyToAllButton:hover {
+	background: #3cb0fd;
+	text-decoration: none;
 }
 
 #tokenEffortForm {
-	padding-top: 80px;
+	padding-top: 130px;
 }
 
 #DataObjectOneFieldUpdateUL {list-style: none; padding: 0;}
-	#DataObjectOneFieldUpdateUL li { height: auto; overflow: auto; list-style: none; border-bottom: 1px dotted #333; margin: 0 -0.5em; padding: 0.7em; }
+	#DataObjectOneFieldUpdateUL li { height: auto; overflow: auto; list-style: none; border-bottom: 1px solid #ddd; margin: 0 -0.5em; padding: 0.7em; }
 		#DataObjectOneFieldUpdateUL li:hover {background-color: #ddd; border-radius: 3px;}
-		#DataObjectOneFieldUpdateUL li input { float: right;  height: 32px; }
-		#DataObjectOneFieldUpdateUL li input, #DataObjectOneFieldUpdateUL li textarea {width: auto; border: 1px solid #111!important; border-radius: 3px;}
+		#DataObjectOneFieldUpdateUL li input { float: right;  height: 32px; padding: 0 5px; }
+		#DataObjectOneFieldUpdateUL li input, #DataObjectOneFieldUpdateUL li textarea {width: auto; border: 1px solid #999!important; border-radius: 3px;}
 			#DataObjectOneFieldUpdateUL li input.checkbox {width: auto;}
-			#DataObjectOneFieldUpdateUL li input:focus, #DataObjectOneFieldUpdateUL li textarea:focus {border-color: red;}
+
+#FilterAndApplyToAllInputs input:focus,
+#DataObjectOneFieldUpdateUL li input:focus,
+#DataObjectOneFieldUpdateUL li textarea:focus{
+	outline: none;
+	box-shadow: 0 0 5px #3cb0fd!important;
+	border: 1px solid #3cb0fd!important;
+}
 
 #FilterAndApplyToAllInputs label {
+	display: inline-block;
+	padding: 6px 0;
 	font-weight: bold;
 }
 
@@ -30,25 +71,10 @@
 	float: right;
 	width: auto;
 	height: 32px;
-	border: 1px solid #111 !important;
+	border: 1px solid #999!important;
 	border-radius: 3px;
+	padding: 0 5px;
 }
 
 .loading {background-image: url(/dataobjectsorter/images/loading.gif); background-position: right top; background-repeat: no-repeat; background-color: #ccc;}
 	.loading input {background-color: #ccc;}
-
-#FilterAndApplyToAllInputs {
-	margin: 0 -0.5em; 
-}
-
-#FilterAndApplyToAllInputs div {
-	height: auto;
-	overflow: auto;
-	padding: 0.7em;
-	border-bottom: 1px dotted #333;
-}
-
-#ApplyToAllButton {
-	clear: both;
-	float: right;
-}
