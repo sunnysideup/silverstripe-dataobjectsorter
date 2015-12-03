@@ -117,9 +117,16 @@ var DataObjectOneFieldUpdate = {
 				var filterValue = jQuery("#TextMatchFilter").val().toLowerCase();
 				jQuery("#DataObjectOneFieldUpdateUL li label").each(
 					function( index, value ) {
+						var match = true;
 						var currentLabel = jQuery(this);
 						var labelText = currentLabel.text().toLowerCase();
-						if (labelText.indexOf(filterValue) >= 0){
+						var filterValueArray = filterValue.split(" ");
+						for(var i = 0, len = filterValueArray.length; i < len; i++) {
+							if(labelText.indexOf(filterValueArray[i]) == -1){
+								match = false;
+							}
+						}
+						if (match){
 							currentLabel.closest("li").show();
 						}
 						else{
