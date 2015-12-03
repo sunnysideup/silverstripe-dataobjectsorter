@@ -5,7 +5,7 @@
 <h1 class="DataObjectOneFieldUpdateFeedback">please update fields below (<em>$SecureFieldToBeUpdated</em> in <em>$HumanReadableTableName</em>) - NB: there is no undo!</h1>
 <div id="FilterAndApplyToAllInputs">
 	<div> 
-		<label for="TextMatchFilter">Filter fields for the following text:</label>
+		<label for="TextMatchFilter">Filter:</label>
 		<input type="text" id="TextMatchFilter" name="TextMatchFilter"/>
 	</div>
 	<div>

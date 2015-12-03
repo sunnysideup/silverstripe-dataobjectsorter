@@ -19,7 +19,7 @@ var DataObjectOneFieldUpdate = {
 
 	ulSelector: "#DataObjectOneFieldUpdateUL",
 
-	inputSelector: "#DataObjectOneFieldUpdateUL input.updateField, #DataObjectOneFieldUpdateUL textarea.updateField",
+	inputSelector: "#DataObjectOneFieldUpdateUL input.updateField, #DataObjectOneFieldUpdateUL textarea.updateField, , #DataObjectOneFieldUpdateUL select.updateField",
 
 	feedbackSelector: ".DataObjectOneFieldUpdateFeedback",
 
@@ -49,9 +49,17 @@ var DataObjectOneFieldUpdate = {
 				jQuery(this).addClass(typeClass);
 			}
 		);
-		inputType = jQuery("#DataObjectOneFieldUpdateUL li input").first().attr("type");
-		inputValue = jQuery("#DataObjectOneFieldUpdateUL li input").first().val();
-		jQuery("<input type='" + inputType + "' />").attr({ value: inputValue, name: "ApplyToAll", id: "ApplyToAll"}).insertAfter("label[for='ApplyToAll']");
+		var elementType = jQuery("#DataObjectOneFieldUpdateUL li span .updateField").first().prop('nodeName');
+		if(elementType == "SELECT"){
+			var selectID = jQuery("#DataObjectOneFieldUpdateUL li span .updateField").first().attr('id');
+			jQuery('select#' + selectID).clone().attr({name: "ApplyToAll", id: 'ApplyToAll'}).insertAfter("#ApplyToAllButton");
+		}
+		else {
+			var inputType = jQuery("#DataObjectOneFieldUpdateUL li input").first().attr("type");
+			var inputValue = jQuery("#DataObjectOneFieldUpdateUL li input").first().val();
+			jQuery("<input type='" + inputType + "' />").attr({ value: inputValue, name: "ApplyToAll", id: "ApplyToAll"}).insertAfter("#ApplyToAllButton");
+		}
+		
 	},
 
 	init: function () {
@@ -127,13 +135,25 @@ var DataObjectOneFieldUpdate = {
 			function(event){
 				event.preventDefault();
 				var applyToAllValue = jQuery("#ApplyToAll").val();
-				jQuery("#DataObjectOneFieldUpdateUL li:visible input").each(
-					function( index, el ) {
-						var currentInput = jQuery(el);
-						currentInput.val(applyToAllValue);
-						currentInput.change();
-					}
-				);
+				var elementType = jQuery("#ApplyToAll").prop('nodeName');
+				if(elementType == "SELECT"){
+					jQuery("#DataObjectOneFieldUpdateUL li:visible select").each(
+						function( index, el ) {
+							var currentInput = jQuery(el);
+							currentInput.val(applyToAllValue);
+							currentInput.change();
+						}
+					);
+				}
+				else {
+					jQuery("#DataObjectOneFieldUpdateUL li:visible input").each(
+						function( index, el ) {
+							var currentInput = jQuery(el);
+							currentInput.val(applyToAllValue);
+							currentInput.change();
+						}
+					);
+				}
 			}
 		);
 	}
