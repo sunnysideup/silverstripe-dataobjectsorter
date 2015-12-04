@@ -1,0 +1,13 @@
+####################################
+# DATA OBJECT SORTER
+####################################
+
+LeftAndMain:
+  extra_requirements_javascript:
+    - framework/thirdparty/jquery/jquery.js
+    - dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js
+    - dataobjectsorter/javascript/dataobjectmodalpopup.js
+    - ecommerce_product_variation/javascript/DeleteEcommerceVariations.js
+  extra_requirements_themedCss:
+    - dataobjectmodalpopup
+

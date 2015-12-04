@@ -1,11 +1,12 @@
 <?php
+
 /**
- *@author nicolaas [at] sunnysideup.co.nz
- *@description: allows you to sort dataobjects, you need to provide them in this way: http://www.mysite.com/dataobjectsorter/[dataobjectname]/
+ * @author nicolaas [at] sunnysideup.co.nz
+ * @description: allows you to sort dataobjects, you need to provide them in this way: http://www.mysite.com/dataobjectsorter/[dataobjectname]/
  *
  *
  *
- *@package: dataobjectsorter
+ * @package: dataobjectsorter
  **/
 
 class DataObjectSorterController extends Controller{
@@ -15,8 +16,6 @@ class DataObjectSorterController extends Controller{
 	 *
 	 */
 	private static $allowed_actions = array("sort", "startsort", "dodataobjectsort" );
-
-	private static $sort_field = "";
 
 	/**
 	 * returns a link for sorting objects. You can use this in the CMS like this....
@@ -34,7 +33,8 @@ class DataObjectSorterController extends Controller{
 	 * @param String $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
 	 * @param String $linkText - text to show on the link
 	 * @param String $titleField - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
-	 * @return String
+	 *
+	 * @return String - html
 	 */
 	public static function popup_link($className, $filterField = "", $filterValue = "", $linkText = "sort this list", $titleField = "") {
 		Requirements::javascript("dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js");
@@ -150,7 +150,7 @@ class DataObjectSorterController extends Controller{
 							$obj->SortTitle = $obj->getTitle();
 						}
 					}
-					self::add_requirements($class);
+					$this->addRequirements($class);
 					return $objects;
 				}
 				else {
@@ -167,10 +167,11 @@ class DataObjectSorterController extends Controller{
 	}
 
 	/**
-	 * adds
-	 * @param String $className - name of the class being sorted
+	 * adds functionality for actual sorting...
+	 * 
+	 * @param string $className - name of the class being sorted
 	 */
-	function add_requirements($className) {
+	protected function addRequirements($className) {
 		//Requirements::javascript(THIRDPARTY_DIR."/jquery/jquery.js");
 		Requirements::block(THIRDPARTY_DIR."/jquery/jquery.js");
 		//Requirements::javascript(Director::protocol()."ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js");
