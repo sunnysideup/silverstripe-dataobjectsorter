@@ -1,4 +1,4 @@
-/**
+	/**
 *@author nicolaas[at]sunnysideup . co . nz
 *
 **/
@@ -33,7 +33,6 @@ var DataObjectOneFieldUpdate = {
 		jQuery(this.inputSelector).each(
 			function(i) {
 				var typeClass = jQuery(this).attr("type");
-				console.debug(typeClass);
 				if("checkbox" == typeClass) {
 					jQuery(this).change(
 						function() {
@@ -153,10 +152,26 @@ var DataObjectOneFieldUpdate = {
 					);
 				}
 				else {
+					elementType = jQuery("#ApplyToAll").attr('type');
+					if(elementType == "checkbox"){
+						if(jQuery('#ApplyToAll').attr("checked")) {
+							applyToAllValue = 1;
+						}
+						else {
+							applyToAllValue = 0;
+						}
+					}
+					console.debug(applyToAllValue);
 					jQuery("#DataObjectOneFieldUpdateUL li:visible input").each(
 						function( index, el ) {
 							var currentInput = jQuery(el);
 							currentInput.val(applyToAllValue);
+							if(jQuery('#ApplyToAll').attr("checked")) {
+								currentInput.prop('checked', true);
+							}
+							else{
+								currentInput.prop('checked', false);
+							}
 							currentInput.change();
 						}
 					);
