@@ -12,7 +12,6 @@
 	</div>
 </div>
 
-<% include DataObjectsToBeUpdatedPagination %>
 
 <form id="tokenEffortForm" action="#" method="get">
 	<input type="hidden" name="field" id="DataObjectOneFieldUpdateFieldName" value="$SecureFieldToBeUpdated" />
