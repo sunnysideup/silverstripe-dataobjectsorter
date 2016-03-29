@@ -78,6 +78,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 	function updatefield($request = null) {
 		if(Permission::check("CMS_ACCESS_CMSMain")) {
 			$updateMessage = "";
+			$updateCount = 0;
 			$table = $request->param("ID");
 			$field = $request->param("OtherID");
 			$ids = explode(",",$request->getVar("id"));
@@ -112,6 +113,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 										else {
 											$title = $obj->ID;
 										}
+										$updateCount++;
 										$updateMessage .= "Record updated: <i class=\"fieldTitle\">$field</i>  for <i class=\"recordTitle\">".$title ."</i> updated to <i class=\"newValue\">".$newValue."</i><br />";
 									}
 								}
@@ -124,7 +126,12 @@ class DataObjectOneFieldUpdateController extends Controller{
 							}
 						}
 					}
-					return $updateMessage;
+					if(count($ids) > 1) {
+						return "$updateCount records Updated";
+					}
+					else {
+						return $updateMessage;
+					}
 				}
 				else {
 					user_error("data object specified: '$table' or id count: '".count($ids)."' or newValue: '$newValue' is not valid", E_USER_ERROR);
