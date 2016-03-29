@@ -1,19 +1,19 @@
 <% if DataObjectsToBeUpdated %>
 
-<% include DataObjectsToBeUpdatedPagination %>
-
 <h1 class="DataObjectOneFieldUpdateFeedback">please update fields below (<em>$SecureFieldToBeUpdated</em> in <em>$HumanReadableTableName</em>) - NB: there is no undo!</h1>
 <div id="FilterAndApplyToAllInputs">
-	<div> 
+	<div>
 		<label for="TextMatchFilter">Filter:</label>
 		<input type="text" id="TextMatchFilter" name="TextMatchFilter"/>
 	</div>
 	<div>
-		<label for="ApplyToAll">Apply the following value to all displayed fields:</label>
+		<label for="ApplyToAll">Apply the following value to all visible fields:</label>
 		<a href="#" id="ApplyToAllButton">APPLY TO ALL</a>
 	</div>
 </div>
-	
+
+<% include DataObjectsToBeUpdatedPagination %>
+
 <form id="tokenEffortForm" action="#" method="get">
 	<input type="hidden" name="field" id="DataObjectOneFieldUpdateFieldName" value="$SecureFieldToBeUpdated" />
 	<ul id="DataObjectOneFieldUpdateUL">

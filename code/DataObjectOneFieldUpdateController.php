@@ -17,7 +17,7 @@
 
 class DataObjectOneFieldUpdateController extends Controller{
 
-	private static $page_size = 50;
+	private static $page_size = 10;
 
 	private static $field = null;
 
