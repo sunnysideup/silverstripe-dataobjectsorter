@@ -175,7 +175,17 @@ class DataObjectOneFieldUpdateController extends Controller{
 					$obj->FormField->addExtraClass("updateField");
 					$obj->FieldToBeUpdatedValue = $obj->$field;
 					$obj->FormField->setValue($obj->$field);
-					$arrayList->push(new ArrayData(array("FormField" => $obj->FormField, "MyTitle" => $obj->$titleField())));
+					if($obj->hasMethod($titleField)) {
+						$title = $obj->$titleField();
+					}
+					elseif($obj->hasMethod("get".$titleField)) {
+						$titleField = "get".$titleField;
+						$title = $obj->$titleField();
+					}
+					else {
+						$title = $obj->$titleField;
+					}
+					$arrayList->push(new ArrayData(array("FormField" => $obj->FormField, "MyTitle" => $title)));
 				}
 			}
 			self::$objects = $arrayList;
