@@ -15,6 +15,7 @@
 
 <form id="tokenEffortForm" action="#" method="get">
 	<input type="hidden" name="field" id="DataObjectOneFieldUpdateFieldName" value="$SecureFieldToBeUpdated" />
+	<input type="hidden" name="field" id="DataObjectOneFieldUpdateTableName" value="$SecureTableToBeUpdated" />
 	<ul id="DataObjectOneFieldUpdateUL">
 	<% loop DataObjectsToBeUpdated %>
 		<li>

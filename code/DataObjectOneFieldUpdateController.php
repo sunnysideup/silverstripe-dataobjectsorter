@@ -77,49 +77,57 @@ class DataObjectOneFieldUpdateController extends Controller{
 
 	function updatefield($request = null) {
 		if(Permission::check("CMS_ACCESS_CMSMain")) {
+			$updateMessage = "";
 			$table = $request->param("ID");
 			$field = $request->param("OtherID");
-			$id = intval($request->getVar("id"));
+			$ids = explode(",",$request->getVar("id"));
 			$newValue = $request->getVar("value");
 			if($memberID = Member::currentUserID() ) {
-				if(class_exists($table) && $id && ($newValue || $newValue == 0)) {
-					if($obj = $table::get()->byID($id)) {
-						if($obj->hasField($field)) {
-							$obj->$field = $newValue;
-							if($obj instanceOf SiteTree) {
-								$obj->writeToStage("Stage");
-								$obj->publish("Stage", "Live");
+				if(class_exists($table) && count($ids) > 0 && ($newValue || $newValue == 0)) {
+					foreach($ids as $id) {
+						if(intval($id)) {
+							if($obj = $table::get()->byID($id)) {
+								if($obj->hasField($field)) {
+									if($obj->canEdit()) {
+										$obj->$field = $newValue;
+										if($obj instanceOf SiteTree) {
+											$obj->writeToStage("Stage");
+											$obj->publish("Stage", "Live");
+										}
+										else {
+											$obj->write();
+										}
+										if($obj->hasMethod("Title")) {
+											$title = $obj->Title();
+										}
+										elseif($obj->hasMethod("getTitle")) {
+											$title = $obj->getTitle();
+										}
+										elseif($title = $obj->Title) {
+											//do nothing
+										}
+										elseif($title = $obj->Name) {
+											//do nothing
+										}
+										else {
+											$title = $obj->ID;
+										}
+										$updateMessage .= "Record updated: <i class=\"fieldTitle\">$field</i>  for <i class=\"recordTitle\">".$title ."</i> updated to <i class=\"newValue\">".$newValue."</i><br />";
+									}
+								}
+								else {
+									user_error("field does not exist", E_USER_ERROR);
+								}
 							}
 							else {
-								$obj->write();
+								user_error("could not find record: $table, $id ", E_USER_ERROR);
 							}
-							if($obj->hasMethod("Title")) {
-								$title = $obj->Title();
-							}
-							elseif($obj->hasMethod("getTitle")) {
-								$title = $obj->getTitle();
-							}
-							elseif($title = $obj->Title) {
-								//do nothing
-							}
-							elseif($title = $obj->Name) {
-								//do nothing
-							}
-							else {
-								$title = $obj->ID;
-							}
-							return "Record updated: <i class=\"fieldTitle\">$field</i>  for <i class=\"recordTitle\">".$title ."</i> updated to <i class=\"newValue\">".$newValue."</i>";
-						}
-						else {
-							user_error("field does not exist", E_USER_ERROR);
 						}
 					}
-					else {
-						user_error("could not find record: $table, $id ", E_USER_ERROR);
-					}
+					return $updateMessage;
 				}
 				else {
-					user_error("data object specified: $table or id: $id or newValue: $newValue is not valid", E_USER_ERROR);
+					user_error("data object specified: '$table' or id count: '".count($ids)."' or newValue: '$newValue' is not valid", E_USER_ERROR);
 				}
 			}
 			else {
