@@ -126,7 +126,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 							}
 						}
 					}
-					if(count($ids) > 1) {
+					if(count($updateCount) > 1) {
 						return "$updateCount records Updated";
 					}
 					else {
