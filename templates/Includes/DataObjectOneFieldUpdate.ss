@@ -18,7 +18,7 @@
 	<input type="hidden" name="field" id="DataObjectOneFieldUpdateTableName" value="$SecureTableToBeUpdated" />
 	<ul id="DataObjectOneFieldUpdateUL">
 	<% loop DataObjectsToBeUpdated %>
-		<li>
+		<li class="fieldHolder">
 			<span>
 				$FormField
 			</span>

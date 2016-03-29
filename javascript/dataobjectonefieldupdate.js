@@ -84,10 +84,10 @@ var DataObjectOneFieldUpdate = {
 				var value = idAndValue.value
 				var ids = new Array();
 				ids.push(id);
-				jQuery(el).addClass("runningUpdate");
+				jQuery(el).closest("li.fieldHolder").addClass("runningUpdate");
 				if(parseInt(id)) {
 					if(DataObjectOneFieldUpdate.fieldName) {
-						jQuery(el).parent("span").parent("li").addClass("loading");
+						jQuery(el).closest("li.fieldHolder").addClass("loading");
 						jQuery(DataObjectOneFieldUpdate.feedbackSelector).html(DataObjectOneFieldUpdate.loadingText);
 						DataObjectOneFieldUpdate.updateServer(ids, value, el);
 					}
@@ -99,7 +99,7 @@ var DataObjectOneFieldUpdate = {
 					jQuery(DataObjectOneFieldUpdate.feedbackSelector).html("ERROR: could not find record to update");
 				}
 			}
-		).addClass("readyForAction");
+		).closest("li.fieldHolder").addClass("readyForAction");
 	},
 
 	setupFilter: function(){
@@ -223,9 +223,17 @@ var DataObjectOneFieldUpdate = {
 			url,
 			{},
 			function(data) {
-				jQuery(elementSelector).addClass("updated");
-				jQuery(DataObjectOneFieldUpdate.feedbackSelector).html(data)
-				jQuery(".loading").removeClass("loading");
+				jQuery(DataObjectOneFieldUpdate.feedbackSelector).html(data);
+				jQuery(elementSelector).closest("li.fieldHolder").addClass("updated");
+				jQuery(elementSelector).closest("li.fieldHolder").removeClass("loading");
+				jQuery(elementSelector).closest("li.fieldHolder").removeClass("runningUpdate");
+				window.setTimeout(
+					function(){
+						jQuery(elementSelector).closest("li.fieldHolder").removeClass("updated");
+						jQuery(DataObjectOneFieldUpdate.feedbackSelector).html("");
+					},
+					2000
+				);
 			}
 		);
 	}
