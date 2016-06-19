@@ -10,3 +10,9 @@
 <% else  %>
 <p>There are no objects to sort. Please close this window.</p>
 <% end_if  %>
+
+
+
+<% include DataObjectSorterBaseCSSRequirements %>
+<% include DataObjectSorterBaseJSRequirements %>
+<script="dataobjectsorter/javascript/jquery-ui-1.7.2.custom.min.js"></script>

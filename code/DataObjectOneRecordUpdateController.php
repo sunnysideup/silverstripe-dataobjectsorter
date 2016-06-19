@@ -9,9 +9,6 @@
 class DataObjectOneRecordUpdateController extends Controller{
 
 	public static function popup_link($className, $recordID, $linkText = '') {
-		Requirements::javascript("dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js");
-		Requirements::javascript("dataobjectsorter/javascript/dataobjectmodalpopup.js");
-		Requirements::themedCSS("dataobjectmodalpopup", "dataobjectsorter");
 		if(!$linkText) {
 			$linkText = 'click here to edit';
 		}
@@ -31,13 +28,8 @@ class DataObjectOneRecordUpdateController extends Controller{
 		if(!Permission::check("CMS_ACCESS_CMSMain")) {
 			Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
 		}
-		Requirements::javascript(THIRDPARTY_DIR."/jquery/jquery.js");
-		//Requirements::block(THIRDPARTY_DIR."/jquery/jquery.js");
-		//Requirements::javascript(Director::protocol()."ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js");
-		Requirements::javascript("dataobjectsorter/javascript/dataobjectonerecordupdate.js");
 		$url = Director::absoluteURL("dataobjectonerecordupdate/updaterecord/");
 		Requirements::customScript("DataObjectOneRecordUpdateURL = '".$url."'");
-		Requirements::themedCSS("dataobjectonerecordupdate", "dataobjectsorter");
 	}
 
 	function onerecordform() {

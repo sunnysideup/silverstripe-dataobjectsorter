@@ -4,8 +4,12 @@
 	<title>Edit $Title</title>
 	<% base_tag %>
 	$MetaTags
+    <% include DataObjectSorterBaseCSSRequirements %>   
 </head>
 <body class="typography">
 	<% include DataObjectSorter %>
+    <% include DataObjectSorterBaseJSRequirements %>
+    <script src="/dataobjectsorter/javascript/jquery-ui-1.9.1.custom.min.js"></script>
+    <script src="/dataobjectsorter/javascript/dataobjectsorter.js"></script>
 </body>
 </html>

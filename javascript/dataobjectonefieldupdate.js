@@ -208,7 +208,7 @@ if(
             var id = nameArray[1];
             var value = jQuery(el).val();
             if(jQuery(el).attr("type") == "checkbox") {
-                if(jQuery(this).is(":checked")) {
+                if(jQuery(el).attr("checked")) {
                     value = 1;
                 }
                 else {
