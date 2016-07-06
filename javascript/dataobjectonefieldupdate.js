@@ -85,6 +85,7 @@ var DataObjectOneFieldUpdate = {
 				var ids = new Array();
 				ids.push(id);
 				jQuery(el).closest("li.fieldHolder").addClass("runningUpdate");
+				jQuery(DataObjectOneFieldUpdate.feedbackSelector).html("Running new update");
 				if(parseInt(id)) {
 					if(DataObjectOneFieldUpdate.fieldName) {
 						jQuery(el).closest("li.fieldHolder").addClass("loading");
