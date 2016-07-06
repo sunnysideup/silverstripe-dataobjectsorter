@@ -37,9 +37,6 @@ class DataObjectSorterController extends Controller{
 	 * @return String - html
 	 */
 	public static function popup_link($className, $filterField = "", $filterValue = "", $linkText = "sort this list", $titleField = "") {
-		Requirements::javascript("dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js");
-		Requirements::javascript("dataobjectsorter/javascript/dataobjectmodalpopup.js");
-		Requirements::themedCSS("dataobjectmodalpopup", "dataobjectsorter");
 		$where = "";
 		if($filterField) {
 			$singletonObj = singleton($className);
@@ -172,13 +169,6 @@ class DataObjectSorterController extends Controller{
 	 * @param string $className - name of the class being sorted
 	 */
 	protected function addRequirements($className) {
-		//Requirements::javascript(THIRDPARTY_DIR."/jquery/jquery.js");
-		Requirements::block(THIRDPARTY_DIR."/jquery/jquery.js");
-		//Requirements::javascript(Director::protocol()."ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js");
-		Requirements::javascript(Director::protocol()."ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js");
-		Requirements::javascript("dataobjectsorter/javascript/jquery-ui-1.9.1.custom.min.js");
-		Requirements::javascript("dataobjectsorter/javascript/dataobjectsorter.js");
-		Requirements::themedCSS("dataobjectsorter", "dataobjectsorter");
 		Requirements::customScript('var DataObjectSorterURL = "'.Director::absoluteURL("dataobjectsorter/dodataobjectsort/".$className."/").'";', 'initDataObjectSorter');
 	}
 

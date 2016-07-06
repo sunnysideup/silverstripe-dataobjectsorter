@@ -15,7 +15,7 @@
 
 <form id="tokenEffortForm" action="#" method="get">
 	<input type="hidden" name="field" id="DataObjectOneFieldUpdateFieldName" value="$SecureFieldToBeUpdated" />
-	<input type="hidden" name="field" id="DataObjectOneFieldUpdateTableName" value="$SecureTableToBeUpdated" />
+	<input type="hidden" name="table" id="DataObjectOneFieldUpdateTableName" value="$SecureTableToBeUpdated" />
 	<ul id="DataObjectOneFieldUpdateUL">
 	<% loop DataObjectsToBeUpdated %>
 		<li class="fieldHolder">
@@ -31,7 +31,6 @@
 <% else %>
 <p>No records can be found.</p>
 <% end_if %>
-
 
 
 
