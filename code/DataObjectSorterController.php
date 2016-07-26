@@ -37,6 +37,7 @@ class DataObjectSorterController extends Controller{
      * @return String - html
      */
     public static function popup_link($className, $filterField = "", $filterValue = "", $linkText = "sort this list", $titleField = "") {
+        DataObjectSorterRequirements::popup_link_requirements();
         $where = "";
         if($filterField) {
             $singletonObj = singleton($className);
@@ -66,6 +67,10 @@ class DataObjectSorterController extends Controller{
         }
     }
 
+    function init(){
+        parent::init();
+        DataObjectSorterRequirements::popup_requirements('sorter');
+    }
 
     /**
      * the standard action...

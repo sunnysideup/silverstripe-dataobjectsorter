@@ -4,12 +4,8 @@
     <title>Edit $Title</title>
     <% base_tag %>
     $MetaTags
-    <% include DataObjectSorterBaseCSSRequirements %>
-    <link rel="stylesheet" type="text/css" href="/dataobjectsorter/css/dataobjectonefieldupdate.css" />
 </head>
 <body class="typography">
     <% include DataObjectOneFieldUpdate %>
-    <% include DataObjectSorterBaseJSRequirements %>
-    <script src="/dataobjectsorter/javascript/dataobjectonefieldupdate.js"></script>
 </body>
 </html>
