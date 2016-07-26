@@ -12,9 +12,7 @@ class DataObjectSorterField extends LiteralField{
     protected $content;
 
     function __construct($name, $ClassName) {
-        DataObjectSortRequirements::popup_link_requirements
-        Requirements::themedCSS('dataobjectsorter');
-
+        DataObjectSorterRequirements::popup_link_requirements();
         $objects = $ClassName::get();
         $arrayList = new ArrayList();
         $dos->Children = $objects;
