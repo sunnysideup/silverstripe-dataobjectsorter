@@ -51,9 +51,10 @@ class DataObjectOneFieldUpdateController extends Controller{
     private static $allowed_actions = array("updatefield", "show");
 
     function init() {
-        // Only administrators can run this method
-
+        //must set this first ...
+        Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
         parent::init();
+        // Only administrators can run this method
         if(!Permission::check("CMS_ACCESS_CMSMain")) {
             Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
             return;

@@ -16,6 +16,12 @@ class DataObjectSorterRequirements extends Object {
      * @var boolean
      */
     private static $popup_requirements_have_been_added = false;
+    /**
+     * set to TRUE to add your own Requirements
+     *
+     * @var boolean
+     */
+    private static $run_through_theme = false;
 
     public static function popup_link_requirements()
     {

@@ -4,7 +4,7 @@
 **/
 ;
 if(
-    (document.getElementById("DataObjectOneFieldUpdateUL") !== null && typeof document.getElementById("DataObjectOneFieldUpdateUL") !== "undefined")
+    (document.getElementById("DataObjectOneFieldUpdateUL") !== null && typeof document.getElementById("DataObjectOneFieldUpdateUL") !== "undefined") 
 ) {
 
     (function($){
