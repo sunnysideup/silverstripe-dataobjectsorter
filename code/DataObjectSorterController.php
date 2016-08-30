@@ -94,6 +94,7 @@ class DataObjectSorterController extends Controller{
      * runs the actual sorting...
      */
     function dodataobjectsort($request) {
+        Versioned::set_reading_mode('');
         $class = $request->param("ID");
         if($class) {
             if(class_exists($class)) {

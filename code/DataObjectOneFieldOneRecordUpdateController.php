@@ -35,6 +35,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
     }
 
     function onefieldform() {
+        Versioned::set_reading_mode('');
         $table = $this->SecureTableToBeUpdated();
         $field = $this->SecureFieldToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();

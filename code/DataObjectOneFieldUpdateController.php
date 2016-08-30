@@ -45,6 +45,8 @@ class DataObjectOneFieldUpdateController extends Controller{
             }
             return '
                 <a href="'.$link.'" class="modalPopUp" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
+        } else {
+            return 'can not edit '.$ClassName;
         }
     }
 
@@ -71,6 +73,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 
     function updatefield($request = null) {
         if(Permission::check("CMS_ACCESS_CMSMain")) {
+            Versioned::set_reading_mode('');
             $updateMessage = "";
             $updateCount = 0;
             $table = $request->param("ID");
@@ -142,6 +145,7 @@ class DataObjectOneFieldUpdateController extends Controller{
 
     //used in template
     public function DataObjectsToBeUpdated() {
+        Versioned::set_reading_mode('');
         if(!self::$objects) {
             $table = $this->SecureTableToBeUpdated();
             $field = $this->SecureFieldToBeUpdated();

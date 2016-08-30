@@ -39,6 +39,7 @@ class DataObjectOneRecordUpdateController extends Controller{
     }
 
     function onerecordform() {
+        Versioned::set_reading_mode('');
         $table = $this->SecureTableToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $table::get()->byID($record);
