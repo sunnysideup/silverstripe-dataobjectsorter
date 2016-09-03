@@ -4,7 +4,7 @@
 **/
 ;
 if(
-    (document.getElementById("DataObjectOneFieldUpdateUL") !== null && typeof document.getElementById("DataObjectOneFieldUpdateUL") !== "undefined") 
+    (document.getElementById("DataObjectOneFieldUpdateUL") !== null && typeof document.getElementById("DataObjectOneFieldUpdateUL") !== "undefined")
 ) {
 
     (function($){
@@ -235,7 +235,10 @@ if(
                     window.setTimeout(
                         function(){
                             jQuery(elementSelector).closest("li.fieldHolder").removeClass("updated");
-                            jQuery(DataObjectOneFieldUpdate.feedbackSelector).html("");
+                            jQuery(DataObjectOneFieldUpdate.feedbackSelector).fadeOut(
+                                'slow',
+                                function() {jQuery(DataObjectOneFieldUpdate.feedbackSelector).html('');}
+                            );
                         },
                         2000
                     );

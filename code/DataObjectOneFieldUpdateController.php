@@ -88,7 +88,7 @@ class DataObjectOneFieldUpdateController extends Controller{
                                 if($obj->hasField($field)) {
                                     if($obj->canEdit()) {
                                         $obj->$field = $newValue;
-                                        if($obj instanceOf SiteTree) {
+                                        if($obj instanceof SiteTree) {
                                             $obj->writeToStage("Stage");
                                             $obj->publish("Stage", "Live");
                                         }
@@ -110,8 +110,15 @@ class DataObjectOneFieldUpdateController extends Controller{
                                         else {
                                             $title = $obj->ID;
                                         }
+                                        $dbField = $obj->stat('db');
+                                        $newValueObject = $obj->dbObject($field);
+                                        if($newValueObject->hasMethod('Nice')) {
+                                            $newValueFancy = $newValueObject->Nice();
+                                        } else {
+                                            $newValueFancy = $newValueObject->Raw();
+                                        }
                                         $updateCount++;
-                                        $updateMessage .= "Record updated: <i class=\"fieldTitle\">$field</i>  for <i class=\"recordTitle\">".$title ."</i> updated to <i class=\"newValue\">".$newValue."</i><br />";
+                                        $updateMessage .= "Record updated: <i class=\"fieldTitle\">$field</i>  for <i class=\"recordTitle\">".$title ."</i> updated to <i class=\"newValue\">".$newValueFancy."</i><br />";
                                     }
                                 }
                                 else {
