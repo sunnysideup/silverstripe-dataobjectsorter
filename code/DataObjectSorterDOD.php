@@ -13,7 +13,7 @@ class DataObjectSorterDOD extends DataExtension {
      *
      * @var string
      */
-    private static $sort_field = "";
+    private static $sort_field = "Sort";
 
     /**
      * standard SS variable
@@ -33,17 +33,18 @@ class DataObjectSorterDOD extends DataExtension {
 
     /**
      * action sort
+     * @param array $data
      * @return string
      */
-    function dodataobjectsort() {
+    function dodataobjectsort($data) {
         $i = 0;
         $extraSet = '';
         $extraWhere = '';
         $sortField = $this->SortFieldForDataObjectSorter();
         $baseDataClass = ClassInfo::baseDataClass($this->owner->ClassName);
         if($baseDataClass) {
-            if(isset ($_REQUEST["dos"])) {
-                foreach ($_REQUEST['dos'] as $position => $id) {
+            if(is_array($data) && count($data)) {
+                foreach ($data as $position => $id) {
                     $id = intval($id);
                     $object = $baseDataClass::get()->byID($id);
                     //we add one because position 0 is not good.
@@ -121,16 +122,16 @@ class DataObjectSorterDOD extends DataExtension {
     public function SortFieldForDataObjectSorter() {
         $sortField = Config::inst()->get("DataObjectSorterDOD", "sort_field");
         $field = "Sort";
-        if($sortField && $this->owner->hasField($sortField)) {
+        if($sortField && $this->owner->hasDatabaseField($sortField)) {
             $field = $sortField;
         }
-        elseif($this->owner->hasField("AlternativeSortNumber")) {
+        elseif($this->owner->hasDatabaseField("AlternativeSortNumber")) {
             $field = "AlternativeSortNumber";
         }
-        elseif($this->owner->hasField("Sort")) {
+        elseif($this->owner->hasDatabaseField("Sort")) {
             $field = "Sort";
         }
-        elseif($this->owner->hasField("SortNumber")) {
+        elseif($this->owner->hasDatabaseField("SortNumber")) {
             $field = "SortNumber";
         }
         else {

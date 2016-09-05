@@ -6,32 +6,65 @@
  *
  **/
 
-class DataObjectOneFieldOneRecordUpdateController extends Controller{
+class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClass
+{
 
-    public static function popup_link($ClassName, $FieldName, $recordID, $linkText = '') {
+    /**
+     *
+     * make sure to also change in routes if you change this link
+     * @var string
+     */
+    private static $url_segment = 'dataobjectonefieldonerecordupdate';
+
+    /**
+     * get a link
+     * @param  string $ClassName
+     * @param  string $FieldName
+     * @param  string $recordID
+     *
+     * @return string
+     */
+    public static function popup_link_only($ClassName, $FieldName, $recordID)
+    {
         DataObjectSorterRequirements::popup_link_requirements();
-        if(!$linkText) {
-            $linkText = 'click here to edit';
-        }
-        $obj = singleton($ClassName);
-        if($obj->canEdit()) {
-            $link = '/dataobjectonefieldonerecordupdate/show/'.$ClassName."/".$FieldName."/?id=".$recordID;
+        return Injector::inst()->get('DataObjectOneFieldOneRecordUpdateController')
+            ->Link('show/'.$ClassName."/".$FieldName).'?id='.$recordID;
+    }
+
+    /**
+     * get a link
+     * @param  string $ClassName
+     * @param  string $FieldName
+     * @param  string $recordID
+     * @param  string $linkText
+     * @return string
+     */
+    public static function popup_link($ClassName, $FieldName, $recordID, $linkText = 'click here to edit') {
+        if($link = self::popup_link_only($ClassName, $FieldName, $recordID)) {
             return '
                 <a href="'.$link.'" class="modalPopUp" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.$recordID.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
         }
     }
 
-    private static $allowed_actions = array("onefieldform", "show", "save");
+    private static $allowed_actions = array(
+        "onefieldform" => 'CMS_ACCESS_CMSMain',
+        "show" => 'CMS_ACCESS_CMSMain',
+        "save" => 'CMS_ACCESS_CMSMain'
+    );
 
     function init() {
+        //must set this first ...
+        Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
         // Only administrators can run this method
         parent::init();
-        if(!Permission::check("CMS_ACCESS_CMSMain")) {
-            Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
-        }
         DataObjectSorterRequirements::popup_requirements('onefieldonerecord');
-        $url = Director::absoluteURL("dataobjectonefieldonerecordupdate/updatefield/");
-        Requirements::customScript("DataObjectOneFieldOneRecordUpdateURL = '".$url."'");
+        $url = Director::absoluteURL(
+            Injector::inst()->get('DataObjectOneFieldOneRecordUpdateController')->Link('updatefield')
+        );
+        Requirements::customScript(
+            "var DataObjectOneFieldOneRecordUpdateURL = '".$url."'",
+            'DataObjectOneFieldOneRecordUpdateURL'
+        );
     }
 
     function onefieldform() {
@@ -40,11 +73,11 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
         $field = $this->SecureFieldToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $table::get()->byID($record);
-        if(!$obj) {
+        if( ! $obj) {
             user_error("record could not be found!", E_USER_ERROR);
         }
-        if(!$obj->canEdit()) {
-            Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
+        if( ! $obj->canEdit()) {
+            return $this->permissionFailureStandard();
         }
         $FormField = $this->getFormField($obj, $field);
         if(!$FormField) {
@@ -62,6 +95,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
             ),
             $actions = new FieldList(new FormAction("save", "save and close"))
         );
+
         return $form;
     }
 
@@ -70,6 +104,9 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
         $field = $this->SecureFieldToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $table::get()->byID($record);
+        if( ! $obj->canEdit()) {
+            return $this->permissionFailureStandard();
+        }
         $obj->$field = $data[$field];
         $obj->write();
         return '
@@ -77,79 +114,7 @@ class DataObjectOneFieldOneRecordUpdateController extends Controller{
             <script type="text/javascript">self.close();</script>';
     }
 
-    function show() {
-        return array();
-    }
 
-
-    public function HumanReadableTableName() {
-        return singleton($this->SecureTableToBeUpdated())->plural_name();
-    }
-
-
-    public function Link($action = null) {
-        $link = "dataobjectonefieldonerecordupdate/";
-        if($action) {
-            $link .= "$action/";
-        }
-        return $link;
-    }
-
-    protected function getFormField($obj, $fieldName) {
-        return $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
-    }
-
-
-
-    protected function SecureFieldToBeUpdated() {
-        if(isset($_POST["Field"])) {
-            return addslashes($_POST["Field"]);
-        }
-        $field = $this->getRequest()->param("OtherID");
-        if($table = $this->SecureTableToBeUpdated()) {
-            if($tableObject = $table::get()->First()) {
-                if($tableObject->hasField($field)) {
-                    return $field;
-                }
-                else {
-                    user_error("$field does not exist on $table", E_USER_ERROR);
-                }
-            }
-            else {
-                user_error("there are no records in $table", E_USER_ERROR);
-            }
-        }
-        else {
-            user_error("there is no table specified", E_USER_ERROR);
-        }
-    }
-
-    protected function SecureTableToBeUpdated() {
-        if(isset($_POST["Table"])) {
-            $table = addslashes($_POST["Table"]);
-        }
-        else {
-            $table = $this->getRequest()->param("ID");
-        }
-        if(class_exists($table)) {
-            return $table;
-        }
-        else {
-            user_error("could not find record: $table", E_USER_ERROR);
-        }
-    }
-
-
-    protected function SecureRecordToBeUpdated() {
-        if(isset($_POST["Record"])) {
-            return intval($_POST["Record"]);
-        }
-        if(isset( $_GET["id"])) {
-            $record = $_GET["id"];
-            return intval($record);
-        }
-        return 0;
-    }
 
 
 }

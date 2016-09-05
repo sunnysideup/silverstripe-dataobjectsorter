@@ -15,19 +15,36 @@
  *
  **/
 
-class DataObjectOneFieldUpdateController extends Controller{
+class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
+{
+    /**
+     *
+     * make sure to also change in routes if you change this link
+     * @var string
+     */
+    private static $url_segment = 'dataobjectonefieldupdate';
 
     private static $page_size = 50;
 
     private static $field = null;
 
-    private static $objects = null;
+    private static $_objects = null;
 
-    private static $objects_without_field = null;
+    private static $_objects_without_field = null;
 
-    public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = '', $titleField = "Title") {
+    /**
+     *
+     * @param  string $ClassName
+     * @param  string $FieldName
+     * @param  string $where
+     * @param  string $sort
+     * @param  string $titleField
+     *
+     * @return string
+     */
+    public static function popup_link_only($ClassName, $FieldName, $where = '', $sort = '', $titleField = "Title")
+    {
         DataObjectSorterRequirements::popup_link_requirements();
-        $obj = singleton($ClassName);
         $params = array();
         if($where) {
             $params["where"] = "where=".urlencode($where);
@@ -38,122 +55,133 @@ class DataObjectOneFieldUpdateController extends Controller{
         if($titleField){
             $params["titlefield"] = "titlefield=".urlencode($titleField);
         }
-        if($obj->canEdit()) {
-            $link = '/dataobjectonefieldupdate/show/'.$ClassName."/".$FieldName.'/?'.implode("&amp;", $params);
-            if(!$linkText) {
-                $linkText = 'click here to edit';
-            }
+        return Injector::inst()->get('DataObjectOneFieldUpdateController')
+            ->Link('show/'.$ClassName."/".$FieldName).'?'.implode("&amp;", $params);
+
+    }
+
+    /**
+     *
+     * @param  string $ClassName
+     * @param  string $FieldName
+     * @param  string $where
+     * @param  string $sort
+     * @param  string $linkText
+     * @param  string $titleField
+     *
+     * @return string
+     */
+    public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = 'click here to edit', $titleField = "Title")
+    {
+        $link = self::popup_link_only($ClassName, $FieldName, $where = '', $sort = '', $titleField = "Title");
+        if($link) {
             return '
                 <a href="'.$link.'" class="modalPopUp" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
-        } else {
-            return 'can not edit '.$ClassName;
         }
     }
 
-    private static $allowed_actions = array("updatefield", "show");
+    private static $allowed_actions = array(
+        "updatefield" => 'CMS_ACCESS_CMSMain',
+        "show" => 'CMS_ACCESS_CMSMain'
+    );
 
     function init() {
         //must set this first ...
         Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
         parent::init();
-        // Only administrators can run this method
-        if(!Permission::check("CMS_ACCESS_CMSMain")) {
-            Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
-            return;
-        }
         DataObjectSorterRequirements::popup_requirements('onefield');
-        $url = Director::absoluteURL("dataobjectonefieldupdate/updatefield/");
-        Requirements::customScript("DataObjectOneFieldUpdateURL = '".$url."'");
-    }
-
-
-    function show() {
-        return array();
+        $url = Director::absoluteURL(
+            Injector::inst()->get('DataObjectOneFieldUpdateController')
+                ->Link('updatefield')
+        );
+        Requirements::customScript(
+            "var DataObjectOneFieldUpdateURL = '".$url."'",
+            'DataObjectOneFieldUpdateURL'
+        );
     }
 
     function updatefield($request = null) {
-        if(Permission::check("CMS_ACCESS_CMSMain")) {
-            Versioned::set_reading_mode('');
-            $updateMessage = "";
-            $updateCount = 0;
-            $table = $request->param("ID");
-            $field = $request->param("OtherID");
-            $ids = explode(",",$request->getVar("id"));
-            $newValue = $request->getVar("value");
-            if($memberID = Member::currentUserID() ) {
-                if(class_exists($table) && count($ids) > 0 && ($newValue || $newValue == 0)) {
-                    foreach($ids as $id) {
-                        if(intval($id)) {
-                            if($obj = $table::get()->byID($id)) {
-                                if($obj->hasField($field)) {
-                                    if($obj->canEdit()) {
-                                        $obj->$field = $newValue;
-                                        if($obj instanceof SiteTree) {
-                                            $obj->writeToStage("Stage");
-                                            $obj->publish("Stage", "Live");
-                                        }
-                                        else {
-                                            $obj->write();
-                                        }
-                                        if($obj->hasMethod("Title")) {
-                                            $title = $obj->Title();
-                                        }
-                                        elseif($obj->hasMethod("getTitle")) {
-                                            $title = $obj->getTitle();
-                                        }
-                                        elseif($title = $obj->Title) {
-                                            //do nothing
-                                        }
-                                        elseif($title = $obj->Name) {
-                                            //do nothing
-                                        }
-                                        else {
-                                            $title = $obj->ID;
-                                        }
-                                        $dbField = $obj->stat('db');
-                                        $newValueObject = $obj->dbObject($field);
-                                        if($newValueObject->hasMethod('Nice')) {
-                                            $newValueFancy = $newValueObject->Nice();
-                                        } else {
-                                            $newValueFancy = $newValueObject->Raw();
-                                        }
-                                        $updateCount++;
-                                        $updateMessage .= "Record updated: <i class=\"fieldTitle\">$field</i>  for <i class=\"recordTitle\">".$title ."</i> updated to <i class=\"newValue\">".$newValueFancy."</i><br />";
+        Versioned::set_reading_mode('');
+        $updateMessage = "";
+        $updateCount = 0;
+        $table = $request->param("ID");
+        $field = $request->param("OtherID");
+        $titleField = $request->getVar('titlefield');
+        $ids = explode(",",$request->getVar("id"));
+        $newValue = $request->getVar("value");
+        if($memberID = Member::currentUserID() ) {
+            if(class_exists($table) && count($ids) > 0 && ($newValue || $newValue == 0)) {
+                foreach($ids as $id) {
+                    if(intval($id)) {
+                        if($obj = $table::get()->byID($id)) {
+                            if($obj->hasDatabaseField($field)) {
+                                if($obj->canEdit()) {
+                                    $obj->$field = $newValue;
+                                    if($obj instanceof SiteTree) {
+                                        $obj->writeToStage("Stage");
+                                        $obj->publish("Stage", "Live");
                                     }
-                                }
-                                else {
-                                    user_error("field does not exist", E_USER_ERROR);
+                                    else {
+                                        $obj->write();
+                                    }
+                                    if($titleField && $obj->hasDatabaseField($titleField)) {
+                                        $title = $obj->$titleField;
+                                    }
+                                    elseif($obj->hasMethod("Title")) {
+                                        $title = $obj->Title();
+                                    }
+                                    elseif($obj->hasMethod("getTitle")) {
+                                        $title = $obj->getTitle();
+                                    }
+                                    elseif($title = $obj->Title) {
+                                        //do nothing
+                                    }
+                                    elseif($title = $obj->Name) {
+                                        //do nothing
+                                    }
+                                    else {
+                                        $title = $obj->ID;
+                                    }
+                                    $dbField = $obj->stat('db');
+                                    $newValueObject = $obj->dbObject($field);
+                                    if($newValueObject->hasMethod('Nice')) {
+                                        $newValueFancy = $newValueObject->Nice();
+                                    } else {
+                                        $newValueFancy = $newValueObject->Raw();
+                                    }
+                                    $updateCount++;
+                                    $updateMessage .= "Record updated: <i class=\"fieldTitle\">$field</i>  for <i class=\"recordTitle\">".$title ."</i> updated to <i class=\"newValue\">".$newValueFancy."</i><br />";
                                 }
                             }
                             else {
-                                user_error("could not find record: $table, $id ", E_USER_ERROR);
+                                user_error("field does not exist", E_USER_ERROR);
                             }
                         }
-                    }
-                    if($updateCount > 1) {
-                        return "$updateCount records Updated";
-                    }
-                    else {
-                        return $updateMessage;
+                        else {
+                            user_error("could not find record: $table, $id ", E_USER_ERROR);
+                        }
                     }
                 }
+                if($updateCount > 1) {
+                    return "$updateCount records Updated";
+                }
                 else {
-                    user_error("data object specified: '$table' or id count: '".count($ids)."' or newValue: '$newValue' is not valid", E_USER_ERROR);
+                    return $updateMessage;
                 }
             }
             else {
-                user_error("you need to be logged in to make the changes", E_USER_ERROR);
+                user_error("data object specified: '$table' or id count: '".count($ids)."' or newValue: '$newValue' is not valid", E_USER_ERROR);
             }
         }
         else {
-            user_error("sorry, you do not have access to this page", E_USER_ERROR);
+            user_error("you need to be logged in to make the changes", E_USER_ERROR);
         }
     }
 
     //used in template
     public function DataObjectsToBeUpdated() {
         Versioned::set_reading_mode('');
-        if(!self::$objects) {
+        if(!self::$_objects) {
             $table = $this->SecureTableToBeUpdated();
             $field = $this->SecureFieldToBeUpdated();
             $where = '';
@@ -179,94 +207,41 @@ class DataObjectOneFieldUpdateController extends Controller{
 
             $dataList = $table::get()->where($where)->sort($sort);
 
-            $objects = new PaginatedList($dataList, $this->request);
-            $objects->setPageLength(Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
+            $_objects = new PaginatedList($dataList, $this->request);
+            $_objects->setPageLength(Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
             $arrayList = new ArrayList();
-            if($objects->count()) {
-                $testObject = $objects->first();
-                if(!$testObject->canEdit()) {
-                    Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
-                    return;
-                }
-                foreach($objects as $obj) {
-                    $obj->FormField = $obj->dbObject($field)->scaffoldFormField();
-                    $obj->FormField->setName($obj->ClassName."/".$obj->ID);
-                    //3.0TODO Check that I work vvv.
-                    $obj->FormField->addExtraClass("updateField");
-                    $obj->FieldToBeUpdatedValue = $obj->$field;
-                    $obj->FormField->setValue($obj->$field);
-                    if($obj->hasMethod($titleField)) {
-                        $title = $obj->$titleField();
+            if($_objects->count()) {
+                foreach($_objects as $obj) {
+                    if( ! $obj->canEdit()) {
+                        continue;
+                    } else {
+                        $obj->FormField = $obj->dbObject($field)->scaffoldFormField();
+                        $obj->FormField->setName($obj->ClassName."/".$obj->ID);
+                        //3.0TODO Check that I work vvv.
+                        $obj->FormField->addExtraClass("updateField");
+                        $obj->FieldToBeUpdatedValue = $obj->$field;
+                        $obj->FormField->setValue($obj->$field);
+                        $title = $obj->getTitle();
+                        $arrayList->push(new ArrayData(array("FormField" => $obj->FormField, "MyTitle" => $title)));
                     }
-                    elseif($obj->hasMethod("get".$titleField)) {
-                        $titleField = "get".$titleField;
-                        $title = $obj->$titleField();
-                    }
-                    else {
-                        $title = $obj->$titleField;
-                    }
-                    $arrayList->push(new ArrayData(array("FormField" => $obj->FormField, "MyTitle" => $title)));
                 }
             }
-            self::$objects = $arrayList;
-            self::$objects_without_field = $objects;
+            self::$_objects = $arrayList;
+            self::$_objects_without_field = $_objects;
         }
 
-        return self::$objects;
+        return self::$_objects;
     }
 
+    /**
+     * retun a list of objects
+     * we need it like this for pagination....
+     * @return DataList
+     */
     function PaginatedListItems() {
         $this->DataObjectsToBeUpdated();
-        return self::$objects_without_field;
+        return self::$_objects_without_field;
     }
 
-    protected function getFormField($obj, $fieldName) {
-        if(!self::$field) {
-            self::$field  = $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
-        }
-        return self::$field;
-    }
-
-    protected function SecureFieldToBeUpdated() {
-        $field = $this->getRequest()->param("OtherID");
-        if($table = $this->SecureTableToBeUpdated()) {
-            if($tableObject = $table::get()->First()) {
-                if($tableObject->hasField($field)) {
-                    return $field;
-                }
-                else {
-                    user_error("$field does not exist on $table", E_USER_ERROR);
-                }
-            }
-            else {
-                user_error("there are no records in $table", E_USER_ERROR);
-            }
-        }
-        else {
-            user_error("there is no table specified", E_USER_ERROR);
-        }
-    }
-
-    protected function SecureTableToBeUpdated() {
-        $table = $this->getRequest()->param("ID");
-        if(class_exists($table)) {
-            return $table;
-        }
-        else {
-            user_error("could not find record: $table", E_USER_ERROR);
-        }
-    }
-
-    protected function HumanReadableTableName() {
-        return singleton($this->SecureTableToBeUpdated())->plural_name();
-    }
-
-    public function Link($action = null) {
-        $link = "dataobjectonefieldupdate/";
-        if($action) {
-            $link .= "$action/";
-        }
-        return $link;
-    }
 
 }
