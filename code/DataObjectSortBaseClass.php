@@ -19,14 +19,6 @@ class DataObjectSortBaseClass extends DataObjectSortBaseClass
         return array();
     }
 
-    public function Link($action = null) {
-        $link = "dataobjectonefieldonerecordupdate/";
-        if($action) {
-            $link .= "$action/";
-        }
-        return $link;
-    }
-
     /**
      *
      * @return string
