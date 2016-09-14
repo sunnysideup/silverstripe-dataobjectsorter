@@ -108,8 +108,19 @@ class DataObjectSortBaseClass
      *
      * @return string
      */
+    /*
     public function Link($action = null) {
         $link = Config::inst()->get($this->ClassName, 'url_segment');
+        if($action) {
+            $link .= "$action/";
+        }
+        return $link;
+    }
+    */
+
+
+    public function Link($action = null) {
+        $link = "dataobjectonefieldonerecordupdate/";
         if($action) {
             $link .= "$action/";
         }
