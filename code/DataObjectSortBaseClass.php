@@ -3,7 +3,7 @@
 
 
 
-class DataObjectSortBaseClass extends DataObjectSortBaseClass
+class DataObjectSortBaseClass
 {
 
 
