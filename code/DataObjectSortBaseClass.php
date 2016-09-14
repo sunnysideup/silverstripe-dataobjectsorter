@@ -118,7 +118,7 @@ class DataObjectSortBaseClass extends DataObjectSortBaseClass
 
     function permissionFailureStandard()
     {
-        return Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'))
+        return Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
     }
 
 }
