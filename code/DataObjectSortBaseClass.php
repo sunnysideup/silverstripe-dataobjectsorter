@@ -27,19 +27,6 @@ class DataObjectSortBaseClass extends DataObjectSortBaseClass
         return $link;
     }
 
-
-    /**
-     * [getFormField description]
-     * @param  DataObject $obj
-     * @param  string $fieldName
-     * @return FormField
-     */
-    protected function getFormField($obj, $fieldName) {
-        return $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
-    }
-
-
-
     /**
      *
      * @return string
