@@ -3,7 +3,7 @@
 
 
 
-class DataObjectSortBaseClass extends DataObjectSortBaseClass
+class DataObjectSortBaseClass extends Controller
 {
 
 
@@ -18,29 +18,6 @@ class DataObjectSortBaseClass extends DataObjectSortBaseClass
     function show() {
         return array();
     }
-
-    /**
-     *
-     * @return string
-     */
-    public function Link($action = null) {
-        $link = Config::inst()->get($this->class, 'url_segment');
-        if($action) {
-            $link .= "$action/";
-        }
-        return $link;
-    }
-
-    /**
-     * [getFormField description]
-     * @param  DataObject $obj
-     * @param  string $fieldName
-     * @return FormField
-     */
-    protected function getFormField($obj, $fieldName) {
-        return $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
-    }
-
 
 
     /**
@@ -128,7 +105,17 @@ class DataObjectSortBaseClass extends DataObjectSortBaseClass
         return singleton($this->SecureTableToBeUpdated())->plural_name();
     }
 
-
+    /**
+     *
+     * @return string
+     */
+    public function Link($action = null) {
+        $link = Config::inst()->get($this->ClassName, 'url_segment');
+        if($action) {
+            $link .= "$action/";
+        }
+        return $link;
+    }
 
     function permissionFailureStandard()
     {
