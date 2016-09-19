@@ -3,12 +3,39 @@
 
 
 
-class DataObjectSortBaseClass extends Controller
+class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
 
+
     private static $allowed_actions = array(
-        "show" => 'CMS_ACCESS_CMSMain'
+        "show" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION'
     );
+
+    /**
+     * Permission for user management.
+     *
+     * @var string
+     */
+    const CAN_DO_STUFF = 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION';
+
+    public function providePermissions() {
+        return array(
+            Blog::CAN_DO_STUFF => array(
+                'name' => _t(
+                    'DataObjectSortBaseClass.PERMISSION_MANAGE_USERS_DESCRIPTION',
+                    'Quick updates and edits'
+                ),
+                'help' => _t(
+                    'DataObjectSortBaseClass.PERMISSION_MANAGE_USERS_HELP',
+                    'Allows for certain data to be sorted, edited, etc... This is around quick edits'
+                ),
+                'category' => _t('DataObjectSortBaseClass.PERMISSIONS_CATEGORY', 'Miscellaneous'),
+                'sort' => 100
+            )
+        );
+
+    }
+
 
     function init() {
         // Only administrators can run this method

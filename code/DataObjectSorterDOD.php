@@ -7,12 +7,9 @@
  * @package: dataobjectsorter
  **/
 
-class DataObjectSorterDOD extends DataExtension {
+class DataObjectSorterDOD extends DataExtension
+{
 
-    private static $allowed_actions = array(
-        "show" => 'CMS_ACCESS_CMSMain',
-        "dodataobjectsort" => 'CMS_ACCESS_CMSMain'
-    );
 
     /**
      *

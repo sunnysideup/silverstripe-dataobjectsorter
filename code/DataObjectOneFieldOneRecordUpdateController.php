@@ -10,8 +10,9 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 {
 
     private static $allowed_actions = array(
-        "show" => 'CMS_ACCESS_CMSMain',
-        "save" => 'CMS_ACCESS_CMSMain'
+        "onefieldform" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+        "show" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+        "save" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION'
     );
 
     /**

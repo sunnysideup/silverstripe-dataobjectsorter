@@ -9,7 +9,17 @@
  * @package: dataobjectsorter
  **/
 
-class DataObjectSorterController extends Controller {
+class DataObjectSorterController extends Controller
+{
+
+    /**
+     * standard SS variable
+     *
+     */
+    private static $allowed_actions = array(
+        "sort" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+        "dodataobjectsort" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION'
+    );
 
     /**
      *
@@ -18,14 +28,6 @@ class DataObjectSorterController extends Controller {
      */
     private static $url_segment = 'dataobjectsorter';
 
-    /**
-     * standard SS variable
-     *
-     */
-    private static $allowed_actions = array(
-        "sort" => 'CMS_ACCESS_CMSMain',
-        "dodataobjectsort" => 'CMS_ACCESS_CMSMain'
-    );
 
     /**
      * returns a link for sorting objects. You can use this in the CMS like this....
