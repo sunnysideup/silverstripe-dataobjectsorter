@@ -6,6 +6,9 @@
 class DataObjectSortBaseClass extends Controller
 {
 
+    private static $allowed_actions = array(
+        "show" => 'CMS_ACCESS_CMSMain'
+    );
 
     function init() {
         // Only administrators can run this method
@@ -110,7 +113,7 @@ class DataObjectSortBaseClass extends Controller
      * @return string
      */
     public function Link($action = null) {
-        $link = Config::inst()->get($this->ClassName, 'url_segment');
+        $link = Config::inst()->get($this->class, 'url_segment').'/';
         if($action) {
             $link .= "$action/";
         }
