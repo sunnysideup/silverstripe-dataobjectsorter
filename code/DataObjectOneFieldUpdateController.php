@@ -17,6 +17,12 @@
 
 class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
 {
+
+    private static $allowed_actions = array(
+        "updatefield" => 'CMS_ACCESS_CMSMain',
+        "show" => 'CMS_ACCESS_CMSMain'
+    );
+
     /**
      *
      * make sure to also change in routes if you change this link
@@ -80,10 +86,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         }
     }
 
-    private static $allowed_actions = array(
-        "updatefield" => 'CMS_ACCESS_CMSMain',
-        "show" => 'CMS_ACCESS_CMSMain'
-    );
 
     function init() {
         //must set this first ...
