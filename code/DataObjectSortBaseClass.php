@@ -20,7 +20,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     public function providePermissions() {
         return array(
-            Blog::CAN_DO_STUFF => array(
+            DataObjectSortBaseClass::CAN_DO_STUFF => array(
                 'name' => _t(
                     'DataObjectSortBaseClass.PERMISSION_MANAGE_USERS_DESCRIPTION',
                     'Quick updates and edits'
