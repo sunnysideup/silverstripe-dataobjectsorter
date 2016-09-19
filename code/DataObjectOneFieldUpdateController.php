@@ -17,7 +17,6 @@
 
 class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
 {
-
     private static $allowed_actions = array(
         "updatefield" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
         "show" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION'
@@ -52,18 +51,17 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $params = array();
-        if($where) {
+        if ($where) {
             $params["where"] = "where=".urlencode($where);
         }
-        if($sort) {
+        if ($sort) {
             $params["sort"] = "sort=".urlencode($sort);
         }
-        if($titleField){
+        if ($titleField) {
             $params["titlefield"] = "titlefield=".urlencode($titleField);
         }
         return Injector::inst()->get('DataObjectOneFieldUpdateController')
             ->Link('show/'.$ClassName."/".$FieldName).'?'.implode("&amp;", $params);
-
     }
 
     /**
@@ -80,14 +78,15 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = 'click here to edit', $titleField = "Title")
     {
         $link = self::popup_link_only($ClassName, $FieldName, $where = '', $sort = '', $titleField = "Title");
-        if($link) {
+        if ($link) {
             return '
                 <a href="'.$link.'" class="modalPopUp" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
         }
     }
 
 
-    function init() {
+    public function init()
+    {
         //must set this first ...
         Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
         parent::init();
@@ -102,51 +101,46 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         );
     }
 
-    function updatefield($request = null) {
+    public function updatefield($request = null)
+    {
         Versioned::set_reading_mode('');
         $updateMessage = "";
         $updateCount = 0;
         $table = $request->param("ID");
         $field = $request->param("OtherID");
         $titleField = $request->getVar('titlefield');
-        $ids = explode(",",$request->getVar("id"));
+        $ids = explode(",", $request->getVar("id"));
         $newValue = $request->getVar("value");
-        if($memberID = Member::currentUserID() ) {
-            if(class_exists($table) && count($ids) > 0 && ($newValue || $newValue == 0)) {
-                foreach($ids as $id) {
-                    if(intval($id)) {
-                        if($obj = $table::get()->byID($id)) {
-                            if($obj->hasDatabaseField($field)) {
-                                if($obj->canEdit()) {
+        if ($memberID = Member::currentUserID()) {
+            if (class_exists($table) && count($ids) > 0 && ($newValue || $newValue == 0)) {
+                foreach ($ids as $id) {
+                    if (intval($id)) {
+                        if ($obj = $table::get()->byID($id)) {
+                            if ($obj->hasDatabaseField($field)) {
+                                if ($obj->canEdit()) {
                                     $obj->$field = $newValue;
-                                    if($obj instanceof SiteTree) {
+                                    if ($obj instanceof SiteTree) {
                                         $obj->writeToStage("Stage");
                                         $obj->publish("Stage", "Live");
-                                    }
-                                    else {
+                                    } else {
                                         $obj->write();
                                     }
-                                    if($titleField && $obj->hasDatabaseField($titleField)) {
+                                    if ($titleField && $obj->hasDatabaseField($titleField)) {
                                         $title = $obj->$titleField;
-                                    }
-                                    elseif($obj->hasMethod("Title")) {
+                                    } elseif ($obj->hasMethod("Title")) {
                                         $title = $obj->Title();
-                                    }
-                                    elseif($obj->hasMethod("getTitle")) {
+                                    } elseif ($obj->hasMethod("getTitle")) {
                                         $title = $obj->getTitle();
-                                    }
-                                    elseif($title = $obj->Title) {
+                                    } elseif ($title = $obj->Title) {
                                         //do nothing
-                                    }
-                                    elseif($title = $obj->Name) {
+                                    } elseif ($title = $obj->Name) {
                                         //do nothing
-                                    }
-                                    else {
+                                    } else {
                                         $title = $obj->ID;
                                     }
                                     $dbField = $obj->stat('db');
                                     $newValueObject = $obj->dbObject($field);
-                                    if($newValueObject->hasMethod('Nice')) {
+                                    if ($newValueObject->hasMethod('Nice')) {
                                         $newValueFancy = $newValueObject->Nice();
                                     } else {
                                         $newValueFancy = $newValueObject->Raw();
@@ -154,56 +148,52 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                     $updateCount++;
                                     $updateMessage .= "Record updated: <i class=\"fieldTitle\">$field</i>  for <i class=\"recordTitle\">".$title ."</i> updated to <i class=\"newValue\">".$newValueFancy."</i><br />";
                                 }
-                            }
-                            else {
+                            } else {
                                 user_error("field does not exist", E_USER_ERROR);
                             }
-                        }
-                        else {
+                        } else {
                             user_error("could not find record: $table, $id ", E_USER_ERROR);
                         }
                     }
                 }
-                if($updateCount > 1) {
+                if ($updateCount > 1) {
                     return "$updateCount records Updated";
-                }
-                else {
+                } else {
                     return $updateMessage;
                 }
-            }
-            else {
+            } else {
                 user_error("data object specified: '$table' or id count: '".count($ids)."' or newValue: '$newValue' is not valid", E_USER_ERROR);
             }
-        }
-        else {
+        } else {
             user_error("you need to be logged in to make the changes", E_USER_ERROR);
         }
     }
 
     //used in template
-    public function DataObjectsToBeUpdated() {
+    public function DataObjectsToBeUpdated()
+    {
         Versioned::set_reading_mode('');
-        if(!self::$_objects) {
+        if (!self::$_objects) {
             $table = $this->SecureTableToBeUpdated();
             $field = $this->SecureFieldToBeUpdated();
             $where = '';
-            if(isset($this->requestParams["where"]) && $this->requestParams["where"]) {
+            if (isset($this->requestParams["where"]) && $this->requestParams["where"]) {
                 $where = urldecode($this->requestParams["where"]);
             }
             $sort = '';
-            if(isset($this->requestParams["sort"]) && $this->requestParams["sort"]) {
+            if (isset($this->requestParams["sort"]) && $this->requestParams["sort"]) {
                 $sort = urldecode($this->requestParams["sort"]);
             }
             $titleField = 'Title';
-            if(isset($this->requestParams["titlefield"]) && $this->requestParams["titlefield"]) {
+            if (isset($this->requestParams["titlefield"]) && $this->requestParams["titlefield"]) {
                 $titleField = urldecode($this->requestParams["titlefield"]);
             }
             $start = 0;
-            if(isset($this->requestParams["start"])) {
+            if (isset($this->requestParams["start"])) {
                 $start = intval($this->requestParams["start"]);
             }
 
-            if(isset($_GET["debug"])) {
+            if (isset($_GET["debug"])) {
                 print_r("SELECT * FROM $table $where SORT BY $sort LIMIT $start, ". Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
             }
 
@@ -212,9 +202,9 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             $_objects = new PaginatedList($dataList, $this->request);
             $_objects->setPageLength(Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
             $arrayList = new ArrayList();
-            if($_objects->count()) {
-                foreach($_objects as $obj) {
-                    if( ! $obj->canEdit()) {
+            if ($_objects->count()) {
+                foreach ($_objects as $obj) {
+                    if (! $obj->canEdit()) {
                         continue;
                     } else {
                         $obj->FormField = $obj->dbObject($field)->scaffoldFormField();
@@ -240,10 +230,9 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
      * we need it like this for pagination....
      * @return DataList
      */
-    function PaginatedListItems() {
+    public function PaginatedListItems()
+    {
         $this->DataObjectsToBeUpdated();
         return self::$_objects_without_field;
     }
-
-
 }

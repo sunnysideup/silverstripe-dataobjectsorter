@@ -38,45 +38,41 @@ class DataObjectSorterDOD extends DataExtension
      * @param array $data
      * @return string
      */
-    function dodataobjectsort($data) {
+    public function dodataobjectsort($data)
+    {
         $i = 0;
         $extraSet = '';
         $extraWhere = '';
         $sortField = $this->SortFieldForDataObjectSorter();
         $baseDataClass = ClassInfo::baseDataClass($this->owner->ClassName);
-        if($baseDataClass) {
-            if(is_array($data) && count($data)) {
+        if ($baseDataClass) {
+            if (is_array($data) && count($data)) {
                 foreach ($data as $position => $id) {
                     $id = intval($id);
                     $object = $baseDataClass::get()->byID($id);
                     //we add one because position 0 is not good.
                     $position = intval($position)+1;
-                    if($object && $object->canEdit()) {
-                        if($object->$sortField != $position) {
+                    if ($object && $object->canEdit()) {
+                        if ($object->$sortField != $position) {
                             $object->$sortField = $position;
                             //hack for site tree
-                            if($object instanceof SiteTree) {
+                            if ($object instanceof SiteTree) {
                                 $object->writeToStage('Stage');
                                 $object->Publish('Stage', 'Live');
-                            }
-                            else {
+                            } else {
                                 $object->write();
                             }
-                        }
-                        else {
+                        } else {
                             //do nothing
                         }
-                    }
-                    else {
+                    } else {
                         return _t("DataObjectSorter.NOACCESS", "You do not have access rights to make these changes.");
                     }
                 }
-            }
-            else {
+            } else {
                 return _t("DataObjectSorter.ERROR2", "Error 2");
             }
-        }
-        else {
+        } else {
             return _t("DataObjectSorter.ERROR1", "Error 1");
         }
         return _t("DataObjectSorter.UPDATEDRECORDS", "Updated record(s)");
@@ -88,9 +84,10 @@ class DataObjectSorterDOD extends DataExtension
      * @param FieldList $fields
      * @return FieldList
      */
-    public function updateCMSFields(FieldList $fields) {
+    public function updateCMSFields(FieldList $fields)
+    {
         $fields->removeFieldFromTab("Root.Main", $this->SortFieldForDataObjectSorter());
-        if(!$this->owner instanceof SiteTree) {
+        if (!$this->owner instanceof SiteTree) {
             $link = $this->dataObjectSorterPopupLink();
             $fields->addFieldToTab("Root.Sort", new LiteralField("DataObjectSorterPopupLink", "<h2 class='dataObjectSorterDODLink'>".$link."</h2>"));
         }
@@ -106,11 +103,11 @@ class DataObjectSorterDOD extends DataExtension
      *
      * @return string HTML
      **/
-    function dataObjectSorterPopupLink($filterField = '', $filterValue = '', $alternativeTitle = '') {
-        if($alternativeTitle) {
+    public function dataObjectSorterPopupLink($filterField = '', $filterValue = '', $alternativeTitle = '')
+    {
+        if ($alternativeTitle) {
             $linkText = $alternativeTitle;
-        }
-        else {
+        } else {
             $linkText = "Sort ".$this->owner->plural_name();
         }
         return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText);
@@ -121,22 +118,19 @@ class DataObjectSorterDOD extends DataExtension
      *
      * @return string
      **/
-    public function SortFieldForDataObjectSorter() {
+    public function SortFieldForDataObjectSorter()
+    {
         $sortField = Config::inst()->get("DataObjectSorterDOD", "sort_field");
         $field = "Sort";
-        if($sortField && $this->owner->hasDatabaseField($sortField)) {
+        if ($sortField && $this->owner->hasDatabaseField($sortField)) {
             $field = $sortField;
-        }
-        elseif($this->owner->hasDatabaseField("AlternativeSortNumber")) {
+        } elseif ($this->owner->hasDatabaseField("AlternativeSortNumber")) {
             $field = "AlternativeSortNumber";
-        }
-        elseif($this->owner->hasDatabaseField("Sort")) {
+        } elseif ($this->owner->hasDatabaseField("Sort")) {
             $field = "Sort";
-        }
-        elseif($this->owner->hasDatabaseField("SortNumber")) {
+        } elseif ($this->owner->hasDatabaseField("SortNumber")) {
             $field = "SortNumber";
-        }
-        else {
+        } else {
             user_error("No field Sort or AlternativeSortNumber (or $sortField) was found on data object: ".$class, E_USER_WARNING);
         }
         return $field;

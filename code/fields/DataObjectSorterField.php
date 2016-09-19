@@ -4,14 +4,16 @@
  * @author: Nicolaas [at] sunnysideup.co.nz
  * @package: dataobjectsorter
  */
-class DataObjectSorterField extends LiteralField{
+class DataObjectSorterField extends LiteralField
+{
 
     /**
      * @var string $content
      */
     protected $content;
 
-    function __construct($name, $ClassName) {
+    public function __construct($name, $ClassName)
+    {
         DataObjectSorterRequirements::popup_link_requirements();
         $objects = $ClassName::get();
         $arrayList = new ArrayList();
@@ -19,5 +21,4 @@ class DataObjectSorterField extends LiteralField{
         $content = $this->customise($arrayList)->renderWith("DataObjectSorterField");
         parent::__construct($name, $content);
     }
-
 }

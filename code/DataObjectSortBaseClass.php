@@ -5,8 +5,6 @@
 
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
-
-
     private static $allowed_actions = array(
         "show" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION'
     );
@@ -18,7 +16,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      */
     const CAN_DO_STUFF = 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION';
 
-    public function providePermissions() {
+    public function providePermissions()
+    {
         return array(
             DataObjectSortBaseClass::CAN_DO_STUFF => array(
                 'name' => _t(
@@ -33,19 +32,20 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                 'sort' => 100
             )
         );
-
     }
 
 
-    function init() {
+    public function init()
+    {
         // Only administrators can run this method
         parent::init();
-        if( ! Permission::check("CMS_ACCESS_CMSMain")) {
+        if (! Permission::check("CMS_ACCESS_CMSMain")) {
             return $this->permissionFailureStandard();
         }
     }
 
-    function show() {
+    public function show()
+    {
         return array();
     }
 
@@ -54,25 +54,23 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      *
      * @return string
      */
-    protected function SecureFieldToBeUpdated() {
-        if(isset($_POST["Field"])) {
+    protected function SecureFieldToBeUpdated()
+    {
+        if (isset($_POST["Field"])) {
             return addslashes($_POST["Field"]);
         }
         $field = $this->getRequest()->param("OtherID");
-        if($table = $this->SecureTableToBeUpdated()) {
-            if($tableObject = $table::get()->First()) {
-                if($tableObject->hasDatabaseField($field)) {
+        if ($table = $this->SecureTableToBeUpdated()) {
+            if ($tableObject = $table::get()->First()) {
+                if ($tableObject->hasDatabaseField($field)) {
                     return $field;
-                }
-                else {
+                } else {
                     user_error("$field does not exist on $table", E_USER_ERROR);
                 }
-            }
-            else {
+            } else {
                 user_error("there are no records in $table", E_USER_ERROR);
             }
-        }
-        else {
+        } else {
             user_error("there is no table specified", E_USER_ERROR);
         }
     }
@@ -81,17 +79,16 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      *
      * @return string
      */
-    protected function SecureTableToBeUpdated() {
-        if(isset($_POST["Table"])) {
+    protected function SecureTableToBeUpdated()
+    {
+        if (isset($_POST["Table"])) {
             $table = addslashes($_POST["Table"]);
-        }
-        else {
+        } else {
             $table = $this->getRequest()->param("ID");
         }
-        if(class_exists($table)) {
+        if (class_exists($table)) {
             return $table;
-        }
-        else {
+        } else {
             user_error("could not find record: $table", E_USER_ERROR);
         }
     }
@@ -101,11 +98,12 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      *
      * @return int
      */
-    protected function SecureRecordToBeUpdated() {
-        if(isset($_POST["Record"])) {
+    protected function SecureRecordToBeUpdated()
+    {
+        if (isset($_POST["Record"])) {
             return intval($_POST["Record"]);
         }
-        if(isset( $_GET["id"])) {
+        if (isset($_GET["id"])) {
             $record = $_GET["id"];
             return intval($record);
         }
@@ -120,8 +118,9 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      * @param  string $fieldName     [description]
      * @return FormField
      */
-    protected function getFormField($obj, $fieldName) {
-        if(!self::$field) {
+    protected function getFormField($obj, $fieldName)
+    {
+        if (!self::$field) {
             self::$field  = $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
         }
         return self::$field;
@@ -131,7 +130,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      *
      * @return string
      */
-    protected function HumanReadableTableName() {
+    protected function HumanReadableTableName()
+    {
         return singleton($this->SecureTableToBeUpdated())->plural_name();
     }
 
@@ -139,17 +139,17 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      *
      * @return string
      */
-    public function Link($action = null) {
+    public function Link($action = null)
+    {
         $link = Config::inst()->get($this->class, 'url_segment').'/';
-        if($action) {
+        if ($action) {
             $link .= "$action/";
         }
         return $link;
     }
 
-    function permissionFailureStandard()
+    public function permissionFailureStandard()
     {
-        return Security::permissionFailure($this, _t('Security.PERMFAILURE',' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
+        return Security::permissionFailure($this, _t('Security.PERMFAILURE', ' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
     }
-
 }
