@@ -1,7 +1,8 @@
 <?php
 
 
-class DataObjectSorterRequirements extends Object {
+class DataObjectSorterRequirements extends Object
+{
 
     /**
      * set to TRUE to add your own Requirements
@@ -25,7 +26,7 @@ class DataObjectSorterRequirements extends Object {
 
     public static function popup_link_requirements()
     {
-        if( ! Config::inst()->get('DataObjectSorterRequirements', 'popup_link_requirements_have_been_added')) {
+        if (! Config::inst()->get('DataObjectSorterRequirements', 'popup_link_requirements_have_been_added')) {
             Config::inst()->update('DataObjectSorterRequirements', 'popup_link_requirements_have_been_added', true);
             Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
             Requirements::javascript('dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js');
@@ -42,8 +43,7 @@ class DataObjectSorterRequirements extends Object {
      */
     public static function popup_requirements($type)
     {
-        if( ! Config::inst()->get('DataObjectSorterRequirements', 'popup_requirements_have_been_added')) {
-
+        if (! Config::inst()->get('DataObjectSorterRequirements', 'popup_requirements_have_been_added')) {
             Config::inst()->update('DataObjectSorterRequirements', 'popup_requirements_have_been_added', true);
             Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
             Requirements::themedCSS('sorter', 'dataobjectsorter');
@@ -70,5 +70,4 @@ class DataObjectSorterRequirements extends Object {
             }
         }
     }
-
 }
