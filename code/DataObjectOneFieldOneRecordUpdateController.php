@@ -52,12 +52,6 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         }
     }
 
-    private static $allowed_actions = array(
-        "onefieldform" => 'CMS_ACCESS_CMSMain',
-        "show" => 'CMS_ACCESS_CMSMain',
-        "save" => 'CMS_ACCESS_CMSMain'
-    );
-
     function init() {
         //must set this first ...
         Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
