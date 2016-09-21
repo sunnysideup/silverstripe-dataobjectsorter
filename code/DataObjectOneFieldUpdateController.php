@@ -62,6 +62,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         }
         return Injector::inst()->get('DataObjectOneFieldUpdateController')
             ->Link('show/'.$ClassName."/".$FieldName).'?'.implode("&amp;", $params);
+
     }
 
     /**
@@ -77,7 +78,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
      */
     public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = 'click here to edit', $titleField = "Title")
     {
-        $link = self::popup_link_only($ClassName, $FieldName, $where = '', $sort = '', $titleField = "Title");
+        $link = self::popup_link_only($ClassName, $FieldName, $where, $sort, $titleField = "Title");
         if ($link) {
             return '
                 <a href="'.$link.'" class="modalPopUp" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
@@ -173,7 +174,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     public function DataObjectsToBeUpdated()
     {
         Versioned::set_reading_mode('');
-        if (!self::$_objects) {
+        if (self::$_objects === null) {
             $table = $this->SecureTableToBeUpdated();
             $field = $this->SecureFieldToBeUpdated();
             $where = '';
@@ -197,25 +198,29 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                 print_r("SELECT * FROM $table $where SORT BY $sort LIMIT $start, ". Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
             }
 
-            $dataList = $table::get()->where($where)->sort($sort);
-
+            $dataList = $table::get()->where($where)->sort($sort)->limit(1000);
+            $ids = array();
+            if ($dataList->count()) {
+                foreach ($dataList as $obj) {
+                    if ($obj->canEdit() && $obj->canView()) {
+                        $ids[$obj->ID] = $obj->ID;
+                    }
+                }
+            }
+            $dataList = $table::get()->filter(array('ID' => $ids))->sort($sort)->limit(1000);
             $_objects = new PaginatedList($dataList, $this->request);
             $_objects->setPageLength(Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
-            $arrayList = new ArrayList();
+            $arrayList = ArrayList::create();
             if ($_objects->count()) {
                 foreach ($_objects as $obj) {
-                    if (! $obj->canEdit()) {
-                        continue;
-                    } else {
-                        $obj->FormField = $obj->dbObject($field)->scaffoldFormField();
-                        $obj->FormField->setName($obj->ClassName."/".$obj->ID);
-                        //3.0TODO Check that I work vvv.
-                        $obj->FormField->addExtraClass("updateField");
-                        $obj->FieldToBeUpdatedValue = $obj->$field;
-                        $obj->FormField->setValue($obj->$field);
-                        $title = $obj->getTitle();
-                        $arrayList->push(new ArrayData(array("FormField" => $obj->FormField, "MyTitle" => $title)));
-                    }
+                    $obj->FormField = $obj->dbObject($field)->scaffoldFormField();
+                    $obj->FormField->setName($obj->ClassName."/".$obj->ID);
+                    //3.0TODO Check that I work vvv.
+                    $obj->FormField->addExtraClass("updateField");
+                    $obj->FieldToBeUpdatedValue = $obj->$field;
+                    $obj->FormField->setValue($obj->$field);
+                    $title = $obj->getTitle();
+                    $arrayList->push(new ArrayData(array("FormField" => $obj->FormField, "MyTitle" => $title)));
                 }
             }
             self::$_objects = $arrayList;
