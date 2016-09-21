@@ -39,7 +39,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         // Only administrators can run this method
         parent::init();
-        if (! Permission::check("CMS_ACCESS_CMSMain")) {
+        if (! Permission::check("DATA_OBJECT_SORT_AND_EDIT_PERMISSION")) {
             return $this->permissionFailureStandard();
         }
     }
