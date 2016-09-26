@@ -62,7 +62,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         }
         return Injector::inst()->get('DataObjectOneFieldUpdateController')
             ->Link('show/'.$ClassName."/".$FieldName).'?'.implode("&amp;", $params);
-
     }
 
     /**

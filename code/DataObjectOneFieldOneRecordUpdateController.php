@@ -8,7 +8,6 @@
 
 class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClass
 {
-
     private static $allowed_actions = array(
         "onefieldform" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
         "show" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
@@ -45,14 +44,16 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
      * @param  string $linkText
      * @return string
      */
-    public static function popup_link($ClassName, $FieldName, $recordID, $linkText = 'click here to edit') {
-        if($link = self::popup_link_only($ClassName, $FieldName, $recordID)) {
+    public static function popup_link($ClassName, $FieldName, $recordID, $linkText = 'click here to edit')
+    {
+        if ($link = self::popup_link_only($ClassName, $FieldName, $recordID)) {
             return '
                 <a href="'.$link.'" class="modalPopUp" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$ClassName.$FieldName.$recordID.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
         }
     }
 
-    function init() {
+    public function init()
+    {
         //must set this first ...
         Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
         // Only administrators can run this method
@@ -67,20 +68,21 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         );
     }
 
-    function onefieldform() {
+    public function onefieldform()
+    {
         Versioned::set_reading_mode('');
         $table = $this->SecureTableToBeUpdated();
         $field = $this->SecureFieldToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $table::get()->byID($record);
-        if( ! $obj) {
+        if (! $obj) {
             user_error("record could not be found!", E_USER_ERROR);
         }
-        if( ! $obj->canEdit()) {
+        if (! $obj->canEdit()) {
             return $this->permissionFailureStandard();
         }
         $FormField = $this->getFormField($obj, $field);
-        if(!$FormField) {
+        if (!$FormField) {
             user_error("Form Field could not be Found", E_USER_ERROR);
         }
         $FormField->setValue($obj->$field);
@@ -99,12 +101,13 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         return $form;
     }
 
-    function save($data, $form) {
+    public function save($data, $form)
+    {
         $table = $this->SecureTableToBeUpdated();
         $field = $this->SecureFieldToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $table::get()->byID($record);
-        if( ! $obj->canEdit()) {
+        if (! $obj->canEdit()) {
             return $this->permissionFailureStandard();
         }
         $obj->$field = $data[$field];
@@ -113,8 +116,4 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
             <p>Your changes have been saved, please <a href="#" onclick="self.close(); return false;">close window</a>.</p>
             <script type="text/javascript">self.close();</script>';
     }
-
-
-
-
 }

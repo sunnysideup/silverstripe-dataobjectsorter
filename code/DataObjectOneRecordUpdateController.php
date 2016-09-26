@@ -8,7 +8,6 @@
 
 class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 {
-
     private static $allowed_actions = array(
         "onerecordform" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
         "show" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
@@ -22,23 +21,26 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
      */
     private static $url_segment = 'dataobjectonerecordupdate';
 
-    public static function popup_link_only($className, $recordID) {
+    public static function popup_link_only($className, $recordID)
+    {
         DataObjectSorterRequirements::popup_link_requirements();
         return Injector::inst()->get('DataObjectOneRecordUpdateController')->Link('show/'.$className."/".$recordID);
     }
-    public static function popup_link($className, $recordID, $linkText = 'click here to edit') {
+    public static function popup_link($className, $recordID, $linkText = 'click here to edit')
+    {
         $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID);
-        if($link) {
+        if ($link) {
             return '
                 <a href="'.$link.'" class="modalPopUp" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$className.$recordID.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
         }
     }
 
-    function init() {
+    public function init()
+    {
         //must set this first.
         Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
         parent::init();
-        if( ! Director::is_ajax()) {
+        if (! Director::is_ajax()) {
             DataObjectSorterRequirements::popup_requirements('onerecord');
             $url = Director::absoluteURL(
                  Injector::inst()->get('DataObjectOneRecordUpdateController')->Link('onerecordform')
@@ -50,26 +52,27 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         }
     }
 
-    function onerecordform() {
+    public function onerecordform()
+    {
         Versioned::set_reading_mode('');
         $table = $this->SecureTableToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $table::get()->byID($record);
-        if(!$obj) {
+        if (!$obj) {
             user_error("record could not be found!", E_USER_ERROR);
         }
-        if( ! $obj->canEdit()) {
+        if (! $obj->canEdit()) {
             $this->permissionFailureStandard();
         }
         $formFields = $this->getFormFields($obj);
-        if(!$formFields) {
+        if (!$formFields) {
             user_error("Form Fields could not be Found", E_USER_ERROR);
         }
         $fields = new FieldList(
             new HiddenField("Table", "Table", $table),
             new HiddenField("Record", "Record", $record)
         );
-        foreach($formFields as $f) {
+        foreach ($formFields as $f) {
             $fields->push($f);
         }
 
@@ -83,11 +86,12 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         return $form;
     }
 
-    function save($data, $form) {
+    public function save($data, $form)
+    {
         $table = $this->SecureTableToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $table::get()->byID($record);
-        if($obj->canEdit()) {
+        if ($obj->canEdit()) {
             $form->saveInto($obj);
             $obj->write();
             return '
@@ -98,18 +102,15 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         }
     }
 
-    function show() {
+    public function show()
+    {
         $table = $this->SecureTableToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $table::get()->byID($record);
-        if($obj->canEdit()) {
+        if ($obj->canEdit()) {
             //..
         } else {
             return $this->permissionFailure();
         }
     }
-
-
-
-
 }
