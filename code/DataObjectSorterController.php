@@ -9,7 +9,7 @@
  * @package: dataobjectsorter
  **/
 
-class DataObjectSorterController extends Controller
+class DataObjectSorterController extends DataObjectSortBaseClass
 {
 
     /**

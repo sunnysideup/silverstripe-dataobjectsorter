@@ -110,6 +110,7 @@ class DataObjectSorterDOD extends DataExtension
         } else {
             $linkText = "Sort ".$this->owner->plural_name();
         }
+        
         return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText);
     }
 
