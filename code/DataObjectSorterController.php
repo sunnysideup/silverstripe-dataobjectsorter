@@ -18,7 +18,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     private static $allowed_actions = array(
         "sort" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
-        "dodataobjectsort" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION'
+        "dosort" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION'
     );
 
     /**
@@ -95,7 +95,11 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     {
         Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
         parent::init();
-        DataObjectSorterRequirements::popup_requirements('sorter');
+        if(Director::is_ajax()) {
+        } else {
+            DataObjectSorterRequirements::popup_requirements('sorter');
+        }
+
     }
 
     /**
@@ -112,7 +116,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     /**
      * runs the actual sorting...
      */
-    public function dodataobjectsort($request)
+    public function dosort($request)
     {
         Versioned::set_reading_mode('');
         $class = $request->param("ID");
@@ -202,7 +206,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     protected function addRequirements($className)
     {
         $url = Director::absoluteURL(
-            Injector::inst()->get('DataObjectSorterController')->Link('dodataobjectsort/'.$className)
+            Injector::inst()->get('DataObjectSorterController')->Link('dosort/'.$className)
         );
         Requirements::customScript(
             "var DataObjectSorterURL = '".$url."'",
