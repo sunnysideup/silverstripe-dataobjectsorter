@@ -26,7 +26,11 @@ class DataObjectSorterRequirements extends Object
 
     public static function popup_link_requirements()
     {
-        if (! Config::inst()->get('DataObjectSorterRequirements', 'popup_link_requirements_have_been_added')) {
+        $done = Config::inst()->get('DataObjectSorterRequirements', 'popup_link_requirements_have_been_added');
+        $isCMS = Config::inst()->get('SSViewer', 'theme_enabled') ? false : true;
+        if ($done || $isCMS) {
+            //do nothing
+        } else {
             Config::inst()->update('DataObjectSorterRequirements', 'popup_link_requirements_have_been_added', true);
             Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
             Requirements::javascript('dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js');
