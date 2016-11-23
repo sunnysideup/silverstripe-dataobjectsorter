@@ -95,11 +95,10 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     {
         Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
         parent::init();
-        if(Director::is_ajax()) {
+        if (Director::is_ajax()) {
         } else {
             DataObjectSorterRequirements::popup_requirements('sorter');
         }
-
     }
 
     /**
