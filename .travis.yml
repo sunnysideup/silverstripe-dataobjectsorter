@@ -31,7 +31,7 @@ before_script:
 #Execute tests
 script:
   # Execute tests with no coverage.  This is the fastest option
- - vendor/bin/phpunit google_address_field/tests/
+ - vendor/bin/phpunit dataobjectsorter/tests/
  #- php framework/cli-script.php dev/build
 
 
