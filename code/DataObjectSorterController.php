@@ -121,7 +121,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         $class = $request->param("ID");
         if ($class) {
             if (class_exists($class)) {
-                $obj = $class::get()->First();
+                $obj = DataObject::get_one($class);
                 return $obj->dodataobjectsort($request->requestVar('dos'));
             } else {
                 user_error("$class does not exist", E_USER_WARNING);

@@ -61,7 +61,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         }
         $field = $this->getRequest()->param("OtherID");
         if ($table = $this->SecureTableToBeUpdated()) {
-            if ($tableObject = $table::get()->First()) {
+            if ($tableObject = DataObject::get_one($table) {
                 if ($tableObject->hasDatabaseField($field)) {
                     return $field;
                 } else {
