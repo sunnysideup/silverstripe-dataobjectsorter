@@ -1,7 +1,7 @@
 #DataObjectSorterListInfo {border: 1px solid #bbb; border-radius: 5px; background-color: #ccc; padding: 1em; margin: 1em; font-size: 0.8em; margin-right: 50px;}
 #DataObjectSorterListInfo h1, p {margin: 0; padding: 0; text-align: center; font-size: 15px;}
- ul#DataObjectSorterList {margin: 0; padding: 0}
-#DataObjectSorterList li { list-style: none; margin: 1em; padding: 0!important; border: 1px solid #fff;}
+ul#DataObjectSorterList {margin: 0; padding: 0;}
+ul#DataObjectSorterList li { list-style: none; margin: 1em; padding: 0!important; border: 1px solid #fff;}
     #DataObjectSorterList div.sortHandle { cursor: move; background-color: silver; padding: 1em; border: 1px dotted green; }
     #DataObjectSorterList div.sortHandle:hover { background-color: #778811;}
     #DataObjectSorterList li.ui-sortable-helper {border: 1px solid red;}
