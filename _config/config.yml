@@ -1,8 +1,3 @@
 LeftAndMain:
-  extra_requirements_javascript:
-    - framework/thirdparty/jquery/jquery.js
-    - dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js
-    - dataobjectsorter/javascript/modalpopup.js
-  extra_requirements_themedCss:
-    modalpopup:
-        media: dataobjectsorter
+    extra_requirements_javascript: [framework/thirdparty/jquery/jquery.js, dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js, dataobjectsorter/javascript/modalpopup.js]
+    extra_requirements_themedCss: { modalpopup: { media: dataobjectsorter } }
