@@ -5,7 +5,6 @@
 
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
-
     private static $url_handlers = array(
         '$Action//$ID/$OtherID/$ThirdID/$FourthID/$FifthID' => 'handleAction',
     );
