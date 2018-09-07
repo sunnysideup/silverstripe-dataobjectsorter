@@ -16,7 +16,7 @@ var DataObjectModalPopUp = {
     init: function () {
         jQuery('body').on(
             'click',
-            'a.modalPopUp',
+            'a.modalPopUp, a.modal-popup',
             function(event){
                 event.preventDefault();
                 var src = jQuery(this).attr("href");
