@@ -54,7 +54,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 
     public function onerecordform()
     {
-        Versioned::set_reading_mode('');
+        Versioned::set_reading_mode('Stage.Stage');
         $table = $this->SecureTableToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $table::get()->byID($record);

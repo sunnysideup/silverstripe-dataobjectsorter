@@ -103,7 +103,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
 
     public function updatefield($request = null)
     {
-        Versioned::set_reading_mode('');
+        Versioned::set_reading_mode('Stage.Stage');
         $updateMessage = "";
         $updateCount = 0;
         $table = $request->param("ID");
@@ -172,7 +172,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     //used in template
     public function DataObjectsToBeUpdated()
     {
-        Versioned::set_reading_mode('');
+        Versioned::set_reading_mode('Stage.Stage');
         if (self::$_objects === null) {
             $table = $this->SecureTableToBeUpdated();
             $field = $this->SecureFieldToBeUpdated();

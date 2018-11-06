@@ -70,7 +70,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 
     public function onefieldform()
     {
-        Versioned::set_reading_mode('');
+        Versioned::set_reading_mode('Stage.Stage');
         $table = $this->SecureTableToBeUpdated();
         $field = $this->SecureFieldToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();

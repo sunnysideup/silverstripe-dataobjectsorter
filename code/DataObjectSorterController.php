@@ -117,7 +117,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     public function dosort($request)
     {
-        Versioned::set_reading_mode('');
+        Versioned::set_reading_mode('Stage.Stage');
         $class = $request->param("ID");
         if ($class) {
             if (class_exists($class)) {
