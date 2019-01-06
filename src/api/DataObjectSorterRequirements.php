@@ -1,7 +1,16 @@
 <?php
 
 
-class DataObjectSorterRequirements extends Object
+
+/**
+  * ### @@@@ START REPLACEMENT @@@@ ###
+  * WHY: upgrade to SS4
+  * OLD:  extends Object (ignore case)
+  * NEW:  extends ViewableData (COMPLEX)
+  * EXP: This used to extend Object, but object does not exist anymore. You can also manually add use Extensible, use Injectable, and use Configurable
+  * ### @@@@ STOP REPLACEMENT @@@@ ###
+  */
+class DataObjectSorterRequirements extends ViewableData
 {
 
     /**
@@ -32,7 +41,7 @@ class DataObjectSorterRequirements extends Object
             //do nothing
         } else {
             Config::inst()->update('DataObjectSorterRequirements', 'popup_link_requirements_have_been_added', true);
-            Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
+            Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             Requirements::javascript('dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js');
             Requirements::javascript('dataobjectsorter/javascript/modalpopup.js');
             Requirements::themedCSS('modalpopup', 'dataobjectsorter');
@@ -49,7 +58,7 @@ class DataObjectSorterRequirements extends Object
     {
         if (! Config::inst()->get('DataObjectSorterRequirements', 'popup_requirements_have_been_added')) {
             Config::inst()->update('DataObjectSorterRequirements', 'popup_requirements_have_been_added', true);
-            Requirements::javascript(THIRDPARTY_DIR . '/jquery/jquery.js');
+            Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             Requirements::themedCSS('sorter', 'dataobjectsorter');
             $type = strtolower($type);
             switch ($type) {

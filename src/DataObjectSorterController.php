@@ -2,7 +2,7 @@
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz
- * @description: allows you to sort dataobjects, you need to provide them in this way: http://www.mysite.com/dataobjectsorter/[dataobjectname]/
+ * @description: allows you to sort dataobjects, you need to provide them in this way: http://www.app.com/dataobjectsorter/[dataobjectname]/
  *
  *
  *
