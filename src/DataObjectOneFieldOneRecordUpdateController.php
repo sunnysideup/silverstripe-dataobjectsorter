@@ -1,4 +1,18 @@
 <?php
+
+namespace Sunnysideup\DataobjectSorter;
+
+use DataObjectSorterRequirements;
+use Injector;
+use Config;
+use Director;
+use Requirements;
+use Versioned;
+use Form;
+use FieldList;
+use HiddenField;
+use FormAction;
+
 /**
  *@author nicolaas [at] sunnysideup.co.nz
  *@package: dataobjectsorter

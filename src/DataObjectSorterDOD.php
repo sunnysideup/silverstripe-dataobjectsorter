@@ -1,5 +1,15 @@
 <?php
 
+namespace Sunnysideup\DataobjectSorter;
+
+use DataExtension;
+use ClassInfo;
+use SiteTree;
+use FieldList;
+use LiteralField;
+use Config;
+
+
 /**
  * @author nicolaas [at] sunnysideup.co.nz
  * @description: adds dataobject sorting functionality

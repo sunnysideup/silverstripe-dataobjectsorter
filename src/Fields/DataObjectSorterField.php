@@ -1,4 +1,11 @@
 <?php
+
+namespace Sunnysideup\DataobjectSorter\Fields;
+
+use LiteralField;
+use DataObjectSorterRequirements;
+use ArrayList;
+
 /**
  * @description: allows you to sort dataobjects
  * @author: Nicolaas [at] sunnysideup.co.nz

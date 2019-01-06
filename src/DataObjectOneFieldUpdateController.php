@@ -1,4 +1,19 @@
 <?php
+
+namespace Sunnysideup\DataobjectSorter;
+
+use DataObjectSorterRequirements;
+use Injector;
+use Config;
+use Director;
+use Requirements;
+use Versioned;
+use Member;
+use SiteTree;
+use PaginatedList;
+use ArrayList;
+use ArrayData;
+
 /**
  *@author nicolaas [at] sunnysideup.co.nz
  *@todo:

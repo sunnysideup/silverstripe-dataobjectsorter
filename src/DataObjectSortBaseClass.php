@@ -1,5 +1,15 @@
 <?php
 
+namespace Sunnysideup\DataobjectSorter;
+
+use Controller;
+use PermissionProvider;
+use Permission;
+use DataObject;
+use Config;
+use Security;
+
+
 
 
 

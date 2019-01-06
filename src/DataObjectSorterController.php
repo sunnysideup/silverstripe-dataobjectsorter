@@ -1,5 +1,17 @@
 <?php
 
+namespace Sunnysideup\DataobjectSorter;
+
+use DataObjectSorterRequirements;
+use Injector;
+use Config;
+use Director;
+use Versioned;
+use DataObject;
+use Convert;
+use Requirements;
+
+
 /**
  * @author nicolaas [at] sunnysideup.co.nz
  * @description: allows you to sort dataobjects, you need to provide them in this way: http://www.app.com/dataobjectsorter/[dataobjectname]/
