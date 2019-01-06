@@ -2,12 +2,20 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-use DataExtension;
-use ClassInfo;
-use SiteTree;
-use FieldList;
-use LiteralField;
-use Config;
+
+
+
+
+
+
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\LiteralField;
+use SilverStripe\Core\Config\Config;
+use Sunnysideup\DataobjectSorter\DataObjectSorterDOD;
+use SilverStripe\ORM\DataExtension;
+
 
 
 /**
@@ -140,7 +148,7 @@ class DataObjectSorterDOD extends DataExtension
      **/
     public function SortFieldForDataObjectSorter()
     {
-        $sortField = Config::inst()->get("DataObjectSorterDOD", "sort_field");
+        $sortField = Config::inst()->get(DataObjectSorterDOD::class, "sort_field");
         $field = "Sort";
         if ($sortField && $this->owner->hasDatabaseField($sortField)) {
             $field = $sortField;

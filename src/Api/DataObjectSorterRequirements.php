@@ -2,9 +2,15 @@
 
 namespace Sunnysideup\DataobjectSorter\Api;
 
-use ViewableData;
-use Config;
-use Requirements;
+
+
+
+use SilverStripe\Core\Config\Config;
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use SilverStripe\View\SSViewer;
+use SilverStripe\View\Requirements;
+use SilverStripe\View\ViewableData;
+
 
 
 
@@ -42,12 +48,12 @@ class DataObjectSorterRequirements extends ViewableData
 
     public static function popup_link_requirements()
     {
-        $done = Config::inst()->get('DataObjectSorterRequirements', 'popup_link_requirements_have_been_added');
-        $isCMS = Config::inst()->get('SSViewer', 'theme_enabled') ? false : true;
+        $done = Config::inst()->get(DataObjectSorterRequirements::class, 'popup_link_requirements_have_been_added');
+        $isCMS = Config::inst()->get(SSViewer::class, 'theme_enabled') ? false : true;
         if ($done || $isCMS) {
             //do nothing
         } else {
-            Config::inst()->update('DataObjectSorterRequirements', 'popup_link_requirements_have_been_added', true);
+            Config::inst()->update(DataObjectSorterRequirements::class, 'popup_link_requirements_have_been_added', true);
             Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             Requirements::javascript('sunnysideup/dataobjectsorter: dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js');
             Requirements::javascript('sunnysideup/dataobjectsorter: dataobjectsorter/javascript/modalpopup.js');
@@ -63,8 +69,8 @@ class DataObjectSorterRequirements extends ViewableData
      */
     public static function popup_requirements($type)
     {
-        if (! Config::inst()->get('DataObjectSorterRequirements', 'popup_requirements_have_been_added')) {
-            Config::inst()->update('DataObjectSorterRequirements', 'popup_requirements_have_been_added', true);
+        if (! Config::inst()->get(DataObjectSorterRequirements::class, 'popup_requirements_have_been_added')) {
+            Config::inst()->update(DataObjectSorterRequirements::class, 'popup_requirements_have_been_added', true);
             Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             Requirements::themedCSS('sunnysideup/dataobjectsorter: sorter', 'dataobjectsorter');
             $type = strtolower($type);

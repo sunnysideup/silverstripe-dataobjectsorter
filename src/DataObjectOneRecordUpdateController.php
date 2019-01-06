@@ -2,16 +2,29 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-use DataObjectSorterRequirements;
-use Injector;
-use Config;
-use Director;
-use Requirements;
-use Versioned;
-use FieldList;
-use HiddenField;
-use Form;
-use FormAction;
+
+
+
+
+
+
+
+
+
+
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use SilverStripe\Core\Injector\Injector;
+use Sunnysideup\DataobjectSorter\DataObjectOneRecordUpdateController;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\View\SSViewer;
+use SilverStripe\Control\Director;
+use SilverStripe\View\Requirements;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\Form;
+
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz
@@ -38,7 +51,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     public static function popup_link_only($className, $recordID)
     {
         DataObjectSorterRequirements::popup_link_requirements();
-        return Injector::inst()->get('DataObjectOneRecordUpdateController')->Link('show/'.$className."/".$recordID);
+        return Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('show/'.$className."/".$recordID);
     }
     public static function popup_link($className, $recordID, $linkText = 'click here to edit')
     {
@@ -52,12 +65,12 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     public function init()
     {
         //must set this first.
-        Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
+        Config::inst()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
         parent::init();
         if (! Director::is_ajax()) {
             DataObjectSorterRequirements::popup_requirements('onerecord');
             $url = Director::absoluteURL(
-                 Injector::inst()->get('DataObjectOneRecordUpdateController')->Link('onerecordform')
+                 Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('onerecordform')
             );
             Requirements::customScript(
                 "var DataObjectOneRecordUpdateURL = '".$url."'",

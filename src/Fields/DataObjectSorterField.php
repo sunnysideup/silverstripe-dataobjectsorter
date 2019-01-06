@@ -2,9 +2,14 @@
 
 namespace Sunnysideup\DataobjectSorter\Fields;
 
-use LiteralField;
-use DataObjectSorterRequirements;
-use ArrayList;
+
+
+
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use SilverStripe\ORM\ArrayList;
+use Sunnysideup\DataobjectSorter\Fields\DataObjectSorterField;
+use SilverStripe\Forms\LiteralField;
+
 
 /**
  * @description: allows you to sort dataobjects
@@ -25,7 +30,7 @@ class DataObjectSorterField extends LiteralField
         $objects = $ClassName::get();
         $arrayList = new ArrayList();
         $dos->Children = $objects;
-        $content = $this->customise($arrayList)->renderWith("DataObjectSorterField");
+        $content = $this->customise($arrayList)->renderWith(DataObjectSorterField::class);
         parent::__construct($name, $content);
     }
 }

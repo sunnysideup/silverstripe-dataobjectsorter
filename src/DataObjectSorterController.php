@@ -2,14 +2,25 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-use DataObjectSorterRequirements;
-use Injector;
-use Config;
-use Director;
-use Versioned;
-use DataObject;
-use Convert;
-use Requirements;
+
+
+
+
+
+
+
+
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use SilverStripe\Core\Injector\Injector;
+use Sunnysideup\DataobjectSorter\DataObjectSorterController;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\View\SSViewer;
+use SilverStripe\Control\Director;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Core\Convert;
+use SilverStripe\View\Requirements;
+
 
 
 /**
@@ -63,7 +74,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     public static function popup_link_only($className, $filterField = "", $filterValue = "", $titleField = "")
     {
         DataObjectSorterRequirements::popup_link_requirements();
-        $link = Injector::inst()->get('DataObjectSorterController')->Link('sort/'.$className);
+        $link = Injector::inst()->get(DataObjectSorterController::class)->Link('sort/'.$className);
         if ($filterField) {
             $link .= $filterField.'/';
         }
@@ -105,7 +116,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
 
     public function init()
     {
-        Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
+        Config::inst()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
         parent::init();
         if (Director::is_ajax()) {
         } else {
@@ -217,7 +228,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     protected function addRequirements($className)
     {
         $url = Director::absoluteURL(
-            Injector::inst()->get('DataObjectSorterController')->Link('dosort/'.$className)
+            Injector::inst()->get(DataObjectSorterController::class)->Link('dosort/'.$className)
         );
         Requirements::customScript(
             "var DataObjectSorterURL = '".$url."'",
