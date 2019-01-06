@@ -1,4 +1,31 @@
 <?php
+
+namespace Sunnysideup\DataobjectSorter;
+
+
+
+
+
+
+
+
+
+
+
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use SilverStripe\Core\Injector\Injector;
+use Sunnysideup\DataobjectSorter\DataObjectOneFieldOneRecordUpdateController;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\View\SSViewer;
+use SilverStripe\Control\Director;
+use SilverStripe\View\Requirements;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\Form;
+
+
 /**
  *@author nicolaas [at] sunnysideup.co.nz
  *@package: dataobjectsorter
@@ -32,7 +59,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     public static function popup_link_only($ClassName, $FieldName, $recordID)
     {
         DataObjectSorterRequirements::popup_link_requirements();
-        return Injector::inst()->get('DataObjectOneFieldOneRecordUpdateController')
+        return Injector::inst()->get(DataObjectOneFieldOneRecordUpdateController::class)
             ->Link('show/'.$ClassName."/".$FieldName).'?id='.$recordID;
     }
 
@@ -55,12 +82,12 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     public function init()
     {
         //must set this first ...
-        Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
+        Config::inst()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
         // Only administrators can run this method
         parent::init();
         DataObjectSorterRequirements::popup_requirements('onefieldonerecord');
         $url = Director::absoluteURL(
-            Injector::inst()->get('DataObjectOneFieldOneRecordUpdateController')->Link('updatefield')
+            Injector::inst()->get(DataObjectOneFieldOneRecordUpdateController::class)->Link('updatefield')
         );
         Requirements::customScript(
             "var DataObjectOneFieldOneRecordUpdateURL = '".$url."'",

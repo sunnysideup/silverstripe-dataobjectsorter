@@ -1,4 +1,33 @@
 <?php
+
+namespace Sunnysideup\DataobjectSorter;
+
+
+
+
+
+
+
+
+
+
+
+
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use SilverStripe\Core\Injector\Injector;
+use Sunnysideup\DataobjectSorter\DataObjectOneFieldUpdateController;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\View\SSViewer;
+use SilverStripe\Control\Director;
+use SilverStripe\View\Requirements;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\Security\Member;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\ORM\PaginatedList;
+use SilverStripe\ORM\ArrayList;
+use SilverStripe\View\ArrayData;
+
+
 /**
  *@author nicolaas [at] sunnysideup.co.nz
  *@todo:
@@ -60,7 +89,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         if ($titleField) {
             $params["titlefield"] = "titlefield=".urlencode($titleField);
         }
-        return Injector::inst()->get('DataObjectOneFieldUpdateController')
+        return Injector::inst()->get(DataObjectOneFieldUpdateController::class)
             ->Link('show/'.$ClassName."/".$FieldName).'?'.implode("&amp;", $params);
     }
 
@@ -88,11 +117,11 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     public function init()
     {
         //must set this first ...
-        Config::inst()->update('SSViewer', 'theme_enabled', Config::inst()->get('DataObjectSorterRequirements', 'run_through_theme'));
+        Config::inst()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
         parent::init();
         DataObjectSorterRequirements::popup_requirements('onefield');
         $url = Director::absoluteURL(
-            Injector::inst()->get('DataObjectOneFieldUpdateController')
+            Injector::inst()->get(DataObjectOneFieldUpdateController::class)
                 ->Link('updatefield')
         );
         Requirements::customScript(
@@ -194,7 +223,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             }
 
             if (isset($_GET["debug"])) {
-                print_r("SELECT * FROM $table $where SORT BY $sort LIMIT $start, ". Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
+                print_r("SELECT * FROM $table $where SORT BY $sort LIMIT $start, ". Config::inst()->get(DataObjectOneFieldUpdateController::class, "page_size"));
             }
             $dataList = $table::get()->where($where)->sort($sort)->limit(1000);
             $ids = array();
@@ -207,7 +236,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             }
             $dataList = $table::get()->filter(array('ID' => $ids))->sort($sort)->limit(1000);
             $_objects = new PaginatedList($dataList, $this->request);
-            $_objects->setPageLength(Config::inst()->get("DataObjectOneFieldUpdateController", "page_size"));
+            $_objects->setPageLength(Config::inst()->get(DataObjectOneFieldUpdateController::class, "page_size"));
             $arrayList = ArrayList::create();
             if ($_objects->count()) {
                 foreach ($_objects as $obj) {

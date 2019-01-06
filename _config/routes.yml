@@ -2,7 +2,7 @@
 Name: dataobjectsorterroutes
 After: framework/routes#coreroutes
 ---
-Director:
+SilverStripe\Control\Director:
   rules:
     'dataobjectsorter//$Action/$ID/$OtherID/$ThirdID/$FourthID/$FifthID/' : 'DataObjectSorterController'
     'dataobjectonefieldupdate//$Action/$ID/$OtherID/$ThirdID/' : 'DataObjectOneFieldUpdateController'
