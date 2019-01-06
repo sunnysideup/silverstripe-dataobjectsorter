@@ -1,6 +1,6 @@
 {
     "name": "sunnysideup/dataobjectsorter",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "description": "Silverstripe module with crud functionality: edit one field for one record, edit one record, edit one field for all records AND sort records... ",
     "keywords": [
         "Silverstripe-CMS",
