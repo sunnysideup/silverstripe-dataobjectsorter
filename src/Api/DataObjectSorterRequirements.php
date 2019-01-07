@@ -2,18 +2,11 @@
 
 namespace Sunnysideup\DataobjectSorter\Api;
 
-
-
-
 use SilverStripe\Core\Config\Config;
 use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 use SilverStripe\View\SSViewer;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\ViewableData;
-
-
-
-
 
 /**
   * ### @@@@ START REPLACEMENT @@@@ ###

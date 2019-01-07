@@ -2,12 +2,6 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-
-
-
-
-
-
 use SilverStripe\Core\ClassInfo;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Forms\FieldList;
@@ -15,8 +9,6 @@ use SilverStripe\Forms\LiteralField;
 use SilverStripe\Core\Config\Config;
 use Sunnysideup\DataobjectSorter\DataObjectSorterDOD;
 use SilverStripe\ORM\DataExtension;
-
-
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz

@@ -2,16 +2,6 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-
-
-
-
-
-
-
-
-
-
 use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 use SilverStripe\Core\Injector\Injector;
 use Sunnysideup\DataobjectSorter\DataObjectOneFieldOneRecordUpdateController;
@@ -24,7 +14,6 @@ use SilverStripe\Forms\HiddenField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\Form;
-
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz

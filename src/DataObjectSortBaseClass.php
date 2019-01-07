@@ -2,23 +2,12 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-
-
-
-
-
-
 use SilverStripe\Security\Permission;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Security\Security;
 use SilverStripe\Control\Controller;
 use SilverStripe\Security\PermissionProvider;
-
-
-
-
-
 
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {

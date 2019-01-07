@@ -2,14 +2,6 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-
-
-
-
-
-
-
-
 use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 use SilverStripe\Core\Injector\Injector;
 use Sunnysideup\DataobjectSorter\DataObjectSorterController;
@@ -20,8 +12,6 @@ use SilverStripe\Versioned\Versioned;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Core\Convert;
 use SilverStripe\View\Requirements;
-
-
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz

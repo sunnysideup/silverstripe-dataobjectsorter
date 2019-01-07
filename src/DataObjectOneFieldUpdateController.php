@@ -2,17 +2,6 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-
-
-
-
-
-
-
-
-
-
-
 use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 use SilverStripe\Core\Injector\Injector;
 use Sunnysideup\DataobjectSorter\DataObjectOneFieldUpdateController;
@@ -26,7 +15,6 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\PaginatedList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\View\ArrayData;
-
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz
