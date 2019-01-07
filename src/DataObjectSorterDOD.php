@@ -17,15 +17,6 @@ use SilverStripe\ORM\DataExtension;
  * @package: dataobjectsorter
  **/
 
-
-/**
-  * ### @@@@ START REPLACEMENT @@@@ ###
-  * WHY: upgrade to SS4
-  * OLD:  extends DataExtension (ignore case)
-  * NEW:  extends DataExtension (COMPLEX)
-  * EXP: Check for use of $this->anyVar and replace with $this->anyVar[$this->owner->ID] or consider turning the class into a trait
-  * ### @@@@ STOP REPLACEMENT @@@@ ###
-  */
 class DataObjectSorterDOD extends DataExtension
 {
 
@@ -129,7 +120,7 @@ class DataObjectSorterDOD extends DataExtension
         } else {
             $linkText = "Sort ".$this->owner->plural_name();
         }
-        
+
         return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText);
     }
 
