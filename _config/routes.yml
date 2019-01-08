@@ -4,7 +4,7 @@ After: framework/routes#coreroutes
 ---
 SilverStripe\Control\Director:
   rules:
-    'dataobjectsorter//$Action/$ID/$OtherID/$ThirdID/$FourthID/$FifthID/' : 'DataObjectSorterController'
-    'dataobjectonefieldupdate//$Action/$ID/$OtherID/$ThirdID/' : 'DataObjectOneFieldUpdateController'
-    'dataobjectonefieldonerecordupdate//$Action/$ID/$OtherID/$ThirdID/' : 'DataObjectOneFieldOneRecordUpdateController'
-    'dataobjectonerecordupdate//$Action/$ID/$OtherID/$ThirdID/' : 'DataObjectOneRecordUpdateController'
+    'dataobjectsorter//$Action/$ID/$OtherID/$ThirdID/$FourthID/$FifthID/' : 'Sunnysideup\DataobjectSorter\DataObjectSorterController'
+    'dataobjectonefieldupdate//$Action/$ID/$OtherID/$ThirdID/' : 'Sunnysideup\DataobjectSorter\DataObjectOneFieldUpdateController'
+    'dataobjectonefieldonerecordupdate//$Action/$ID/$OtherID/$ThirdID/' : 'Sunnysideup\DataobjectSorter\DataObjectOneFieldOneRecordUpdateController'
+    'dataobjectonerecordupdate//$Action/$ID/$OtherID/$ThirdID/' : 'Sunnysideup\DataobjectSorter\DataObjectOneRecordUpdateController'

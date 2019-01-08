@@ -2,15 +2,15 @@
 # DATA OBJECT SORTER
 ####################################
 
-SiteTree:
+SilverStripe\CMS\Model\SiteTree:
   extensions:
-    - DataObjectSorterDOD
+    - Sunnysideup\DataobjectSorter\DataObjectSorterDOD
 
 MyDataObject:
   extensions:
-    - DataObjectSorterDOD
+    - Sunnysideup\DataobjectSorter\DataObjectSorterDOD
 
-DataObjectOneFieldUpdateController:
+Sunnysideup\DataobjectSorter\DataObjectOneFieldUpdateController:
   page_size: 10
 
 ####################################
