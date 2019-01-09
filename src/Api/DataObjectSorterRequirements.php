@@ -40,9 +40,9 @@ class DataObjectSorterRequirements extends ViewableData
         } else {
             Config::inst()->update(DataObjectSorterRequirements::class, 'popup_link_requirements_have_been_added', true);
             Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
-            Requirements::javascript('sunnysideup/dataobjectsorter: dataobjectsorter/javascript/jquery.simplemodal-1.4.4.js');
-            Requirements::javascript('sunnysideup/dataobjectsorter: dataobjectsorter/javascript/modalpopup.js');
-            Requirements::themedCSS('sunnysideup/dataobjectsorter: modalpopup', 'dataobjectsorter');
+            Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/jquery.simplemodal-1.4.4.js');
+            Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/modalpopup.js');
+            Requirements::themedCSS('client/css/modalpopup');
         }
     }
 
@@ -57,24 +57,24 @@ class DataObjectSorterRequirements extends ViewableData
         if (! Config::inst()->get(DataObjectSorterRequirements::class, 'popup_requirements_have_been_added')) {
             Config::inst()->update(DataObjectSorterRequirements::class, 'popup_requirements_have_been_added', true);
             Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
-            Requirements::themedCSS('sunnysideup/dataobjectsorter: sorter', 'dataobjectsorter');
+            Requirements::themedCSS('client/css/sorter');
             $type = strtolower($type);
             switch ($type) {
                 case "onefieldonerecord":
-                    Requirements::themedCSS('sunnysideup/dataobjectsorter: onefieldonerecord', 'dataobjectsorter');
-                    Requirements::javascript('sunnysideup/dataobjectsorter: dataobjectsorter/javascript/onefieldonerecord.js');
+                    Requirements::themedCSS('client/css/onefieldonerecord');
+                    Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/onefieldonerecord.js');
                     break;
                 case "onefield":
-                    Requirements::themedCSS('sunnysideup/dataobjectsorter: onefield', 'dataobjectsorter');
-                    Requirements::javascript('sunnysideup/dataobjectsorter: dataobjectsorter/javascript/onefield.js');
+                    Requirements::themedCSS('client/css/onefield');
+                    Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/onefield.js');
                     break;
                 case "onerecord":
-                    Requirements::themedCSS('sunnysideup/dataobjectsorter: onerecord', 'dataobjectsorter');
-                    Requirements::javascript('sunnysideup/dataobjectsorter: dataobjectsorter/javascript/onerecord.js');
+                    Requirements::themedCSS('client/css/onerecord');
+                    Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/onerecord.js');
                     break;
                 case "sorter":
-                    Requirements::javascript('sunnysideup/dataobjectsorter: dataobjectsorter/javascript/jquery-ui-1.9.1.custom.min.js');
-                    Requirements::javascript('sunnysideup/dataobjectsorter: dataobjectsorter/javascript/sorter.js');
+                    Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/jquery-ui-1.9.1.custom.min.js');
+                    Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/sorter.js');
                     break;
                 default:
                     user_error("type $type is not a valid option");
