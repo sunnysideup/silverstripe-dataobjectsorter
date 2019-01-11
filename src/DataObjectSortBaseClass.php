@@ -56,7 +56,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     public function show()
     {
-        return array();
+        return $this->renderWith(ClassInfo::shortName($this));
     }
 
 
@@ -151,7 +151,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      */
     public function Link($action = null)
     {
-        $link = Config::inst()->get($this->class, 'url_segment').'/';
+        $link = $this->config()->get('url_segment').'/';
         if ($action) {
             $link .= "$action/";
         }

@@ -1,25 +1,46 @@
 #simplemodal-overlay {background-color: #000!important;}
 
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .simplemodal-close {
-	cursor: pointer;
-	position: absolute;
-	top: 17px;
-	right: 21px;
-	padding: 5px;
-	color: #aaa;
-	font-size: 20px;
+    cursor: pointer;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    padding: 5px;
+    color: #aaa;
+    font-size: 30px;
+    margin-top: -45px;
+    color: #fff;
 }
 
 .simplemodal-close:hover {
-	color: #000;
+    color: pink;
 }
 
 .simplemodal-container {
-	border-radius: 3px!important;
+    border-radius: 3px!important;
 }
 
 .simplemodal-wrap {
-	overflow: hidden!important;
-	box-sizing: border-box;
+    overflow: hidden!important;
+    box-sizing: border-box;
 }
-

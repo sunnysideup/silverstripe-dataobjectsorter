@@ -105,7 +105,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     public function init()
     {
         //must set this first ...
-        Config::inst()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
         parent::init();
         DataObjectSorterRequirements::popup_requirements('onefield');
         $url = Director::absoluteURL(

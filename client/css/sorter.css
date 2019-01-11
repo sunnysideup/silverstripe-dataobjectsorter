@@ -1,3 +1,28 @@
+
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 #DataObjectSorterListInfo {border: 1px solid #bbb; border-radius: 5px; background-color: #ccc; padding: 1em; margin: 1em; font-size: 0.8em; margin-right: 50px;}
 #DataObjectSorterListInfo h1, p {margin: 0; padding: 0; text-align: center; font-size: 15px;}
 ul#DataObjectSorterList {margin: 0; padding: 0;}
@@ -16,3 +41,5 @@ ul#DataObjectSorterList li { list-style: none; margin: 1em; padding: 0!important
 
 .loading {background-image: url(/dataobjectsorter/images/loading.gif); background-position: right top; background-repeat: no-repeat; background-color: #ccc;}
     .loading input {background-color: #ccc;}
+
+a:link, a:visited {color: #778811;}

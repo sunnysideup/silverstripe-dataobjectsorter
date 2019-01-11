@@ -5,6 +5,7 @@ namespace Sunnysideup\DataobjectSorter;
 use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 use SilverStripe\Core\Injector\Injector;
 use Sunnysideup\DataobjectSorter\DataObjectSorterController;
+use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\View\SSViewer;
 use SilverStripe\Control\Director;
@@ -64,17 +65,15 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     public static function popup_link_only($className, $filterField = "", $filterValue = "", $titleField = "")
     {
         DataObjectSorterRequirements::popup_link_requirements();
-        $link = Injector::inst()->get(DataObjectSorterController::class)->Link('sort/'.$className);
-        if ($filterField) {
-            $link .= $filterField.'/';
-        }
-        if ($filterValue) {
-            $link .= $filterValue.'/';
-        }
-        if ($titleField) {
-            $link .= $titleField.'/';
-        }
-        return $link;
+        $className = str_replace('\\', '-', $className);
+
+        return Controller::join_links(
+            Injector::inst()->get(DataObjectSorterController::class)->Link('sort'),
+            $className,
+            $filterField,
+            $filterValue,
+            $titleField
+        );
     }
     /**
      * returns a link for sorting objects. You can use this in the CMS like this....
@@ -106,7 +105,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
 
     public function init()
     {
-        Config::inst()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
         parent::init();
         if (Director::is_ajax()) {
         } else {
@@ -120,7 +119,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     public function sort()
     {
-        return array();
+        return $this->renderWith('DataObjectSorterController');
     }
 
 
@@ -133,8 +132,10 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         Versioned::set_reading_mode('Stage.Stage');
         $class = $request->param("ID");
         if ($class) {
+            $class = str_replace('-', '\\', $class);
             if (class_exists($class)) {
                 $obj = DataObject::get_one($class);
+
                 return $obj->dodataobjectsort($request->requestVar('dos'));
             } else {
                 user_error("$class does not exist", E_USER_WARNING);
@@ -155,6 +156,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         if (self::$_children_cache_for_sorting === null) {
             $class = $this->request->param("ID");
             if ($class) {
+                $class = str_replace('-', '\\', $class);
                 if (class_exists($class)) {
                     $where = '';
                     $filterField = Convert::raw2sql($this->request->param("OtherID"));
@@ -193,7 +195,9 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                                 $tobeExcludedArray[$obj->ID] = $obj->ID;
                             }
                         }
-                        $objects = $objects->exclude(array('ID' => $tobeExcludedArray));
+                        if(count($tobeExcludedArray)) {
+                            $objects = $objects->exclude(array('ID' => $tobeExcludedArray));
+                        }
                         $this->addRequirements($class);
                         self::$_children_cache_for_sorting = $objects;
                     } else {
@@ -217,6 +221,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     protected function addRequirements($className)
     {
+        $className = str_replace('\\', '-', $className);
         $url = Director::absoluteURL(
             Injector::inst()->get(DataObjectSorterController::class)->Link('dosort/'.$className)
         );

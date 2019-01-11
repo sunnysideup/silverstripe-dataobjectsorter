@@ -18,28 +18,47 @@ class DataObjectSorterRequirements extends ViewableData
      */
     private static $popup_link_requirements_have_been_added = false;
 
+    public static function get_popup_link_requirements_have_been_added()
+    {
+        return self::$popup_link_requirements_have_been_added;
+    }
+
+    public static function set_popup_link_requirements_have_been_added($bool)
+    {
+        self::$popup_link_requirements_have_been_added = $bool;
+
+        return true;
+    }
     /**
      * set to TRUE to add your own Requirements
      *
      * @var boolean
      */
     private static $popup_requirements_have_been_added = false;
-    /**
-     * set to TRUE to add your own Requirements
-     *
-     * @var boolean
-     */
+
+    public static function get_popup_requirements_have_been_added()
+    {
+        return self::$popup_requirements_have_been_added;
+    }
+
+    public static function set_popup_requirements_have_been_added($bool)
+    {
+        self::$popup_link_requirements_have_been_added = $bool;
+
+        return true;
+    }
+
     private static $run_through_theme = false;
 
     public static function popup_link_requirements()
     {
-        $done = Config::inst()->get(DataObjectSorterRequirements::class, 'popup_link_requirements_have_been_added');
+        $done = self::get_popup_link_requirements_have_been_added();
         $isCMS = Config::inst()->get(SSViewer::class, 'theme_enabled') ? false : true;
         if ($done || $isCMS) {
             //do nothing
         } else {
-            Config::inst()->update(DataObjectSorterRequirements::class, 'popup_link_requirements_have_been_added', true);
-            Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
+            self::set_popup_link_requirements_have_been_added(true);
+            // Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/jquery.simplemodal-1.4.4.js');
             Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/modalpopup.js');
             Requirements::themedCSS('client/css/modalpopup');
@@ -54,8 +73,8 @@ class DataObjectSorterRequirements extends ViewableData
      */
     public static function popup_requirements($type)
     {
-        if (! Config::inst()->get(DataObjectSorterRequirements::class, 'popup_requirements_have_been_added')) {
-            Config::inst()->update(DataObjectSorterRequirements::class, 'popup_requirements_have_been_added', true);
+        if (! self::get_popup_requirements_have_been_added()) {
+            self::set_popup_requirements_have_been_added(true);
             Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             Requirements::themedCSS('client/css/sorter');
             $type = strtolower($type);
