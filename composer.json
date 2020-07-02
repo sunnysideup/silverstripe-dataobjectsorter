@@ -31,5 +31,10 @@
         "expose": [
             "client"
         ]
+    },
+    "autoload": {
+        "psr-4": {
+            "Sunnysideup\\DataobjectSorter\\": "src/"
+        }
     }
 }
