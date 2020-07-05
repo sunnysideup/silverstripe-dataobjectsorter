@@ -19,6 +19,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         "show" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION'
     );
 
+    private static $field = '';
+
     /**
      * Permission for user management.
      *
@@ -126,7 +128,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      *
      * @param  DataObject $obj       [description]
      * @param  string $fieldName     [description]
-     * @return FormField
+     * @return \SilverStripe\Forms\FormField
      */
     protected function getFormField($obj, $fieldName)
     {

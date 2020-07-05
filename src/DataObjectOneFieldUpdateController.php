@@ -248,7 +248,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     /**
      * retun a list of objects
      * we need it like this for pagination....
-     * @return DataList
+     * @return \SilverStripe\ORM\DataList
      */
     public function PaginatedListItems()
     {

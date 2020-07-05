@@ -142,7 +142,7 @@ class DataObjectSorterDOD extends DataExtension
         } elseif ($this->owner->hasDatabaseField("SortNumber")) {
             $field = "SortNumber";
         } else {
-            user_error("No field Sort or AlternativeSortNumber (or $sortField) was found on data object: ".$class, E_USER_WARNING);
+            user_error("No field Sort or AlternativeSortNumber (or $sortField) was found on data object: ". $this->owner->ClassName, E_USER_WARNING);
         }
         return $field;
     }
