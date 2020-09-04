@@ -44,9 +44,6 @@ class DataObjectSorterDOD extends DataExtension
      */
     public function dodataobjectsort($data)
     {
-        $i = 0;
-        $extraSet = '';
-        $extraWhere = '';
         $sortField = $this->SortFieldForDataObjectSorter();
         $baseDataClass = ClassInfo::baseDataClass($this->owner->ClassName);
         if ($baseDataClass) {

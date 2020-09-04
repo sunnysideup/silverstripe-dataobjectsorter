@@ -61,7 +61,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
      *
      * @return string
      */
-    public static function popup_link_only($ClassName, $FieldName, $where = '', $sort = '', $titleField = 'Title')
+    public static function popup_link_only(string $ClassName, string $FieldName, ?string $where = '', ?string $sort = '', ?string $titleField = 'Title')
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $params = [];
@@ -123,7 +123,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $titleField = $request->getVar('titlefield');
         $ids = explode(',', $request->getVar('id'));
         $newValue = $request->getVar('value');
-        if ($memberID = Member::currentUserID()) {
+        if (Member::currentUserID()) {
             if (class_exists($table) && count($ids) > 0 && ($newValue || $newValue === 0)) {
                 foreach ($ids as $id) {
                     if (intval($id)) {
@@ -150,7 +150,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                     } else {
                                         $title = $obj->ID;
                                     }
-                                    $dbField = $obj->stat('db');
                                     $newValueObject = $obj->dbObject($field);
                                     if ($newValueObject->hasMethod('Nice')) {
                                         $newValueFancy = $newValueObject->Nice();
@@ -194,10 +193,10 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             if (isset($this->requestParams['sort']) && $this->requestParams['sort']) {
                 $sort = urldecode($this->requestParams['sort']);
             }
-            $titleField = 'Title';
-            if (isset($this->requestParams['titlefield']) && $this->requestParams['titlefield']) {
-                $titleField = urldecode($this->requestParams['titlefield']);
-            }
+            // $titleField = 'Title';
+            // if (isset($this->requestParams['titlefield']) && $this->requestParams['titlefield']) {
+            //     $titleField = urldecode($this->requestParams['titlefield']);
+            // }
             $start = 0;
             if (isset($this->requestParams['start'])) {
                 $start = intval($this->requestParams['start']);

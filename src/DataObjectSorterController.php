@@ -149,7 +149,6 @@ class DataObjectSorterController extends DataObjectSortBaseClass
             if ($class) {
                 $class = str_replace('-', '\\', $class);
                 if (class_exists($class)) {
-                    $where = '';
                     $filterField = Convert::raw2sql($this->request->param('OtherID'));
                     $filterValue = Convert::raw2sql($this->request->param('ThirdID'));
                     $titleField = Convert::raw2sql($this->request->param('FourthID'));
