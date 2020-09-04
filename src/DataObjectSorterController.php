@@ -2,46 +2,41 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
-use SilverStripe\Core\Injector\Injector;
-use Sunnysideup\DataobjectSorter\DataObjectSorterController;
 use SilverStripe\Control\Controller;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\View\SSViewer;
 use SilverStripe\Control\Director;
-use SilverStripe\Versioned\Versioned;
-use SilverStripe\ORM\DataObject;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Requirements;
+use SilverStripe\View\SSViewer;
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz
  * @description: allows you to sort dataobjects, you need to provide them in this way: http://www.app.com/dataobjectsorter/[dataobjectname]/
- *
- *
  *
  * @package: dataobjectsorter
  **/
 
 class DataObjectSorterController extends DataObjectSortBaseClass
 {
-
     /**
      * standard SS variable
-     *
      */
-    private static $allowed_actions = array(
-        "sort" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
-        "dosort" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION'
-    );
+    private static $allowed_actions = [
+        'sort' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+        'dosort' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+    ];
 
     /**
-     *
      * make sure to also change in routes if you change this link
      * @var string
      */
     private static $url_segment = 'dataobjectsorter';
 
+    private static $_children_cache_for_sorting = null;
 
     /**
      * returns a link for sorting objects. You can use this in the CMS like this....
@@ -54,15 +49,15 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      * }
      * </code>
      *
-     * @param String $className - DataObject Class Name you want to sort
-     * @param String | Int $filterField - Field you want to filter for OR ParentID number (i.e. you are sorting children of Parent with ID = $filterField)
-     * @param String $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
-     * @param String $linkText - text to show on the link
-     * @param String $titleField - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
+     * @param string $className - DataObject Class Name you want to sort
+     * @param string | Int $filterField - Field you want to filter for OR ParentID number (i.e. you are sorting children of Parent with ID = $filterField)
+     * @param string $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
+     * @param string $linkText - text to show on the link
+     * @param string $titleField - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
      *
-     * @return String - html
+     * @return string - html
      */
-    public static function popup_link_only($className, $filterField = "", $filterValue = "", $titleField = "")
+    public static function popup_link_only($className, $filterField = '', $filterValue = '', $titleField = '')
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $className = str_replace('\\', '-', $className);
@@ -75,6 +70,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
             $titleField
         );
     }
+
     /**
      * returns a link for sorting objects. You can use this in the CMS like this....
      * <code>
@@ -86,20 +82,20 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      * }
      * </code>
      *
-     * @param String $className - DataObject Class Name you want to sort
-     * @param String | Int $filterField - Field you want to filter for OR ParentID number (i.e. you are sorting children of Parent with ID = $filterField)
-     * @param String $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
-     * @param String $linkText - text to show on the link
-     * @param String $titleField - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
+     * @param string $className - DataObject Class Name you want to sort
+     * @param string | Int $filterField - Field you want to filter for OR ParentID number (i.e. you are sorting children of Parent with ID = $filterField)
+     * @param string $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
+     * @param string $linkText - text to show on the link
+     * @param string $titleField - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
      *
-     * @return String - html
+     * @return string - html
      */
-    public static function popup_link($className, $filterField = "", $filterValue = "", $linkText = "sort this list", $titleField = "")
+    public static function popup_link($className, $filterField = '', $filterValue = '', $linkText = 'sort this list', $titleField = '')
     {
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
         if ($link) {
             return '
-            <a href="'.$link.'" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$className.$filterField.$filterValue.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
+            <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . '\', \'sortlistFor' . $className . $filterField . $filterValue . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
         }
     }
 
@@ -122,70 +118,65 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         return $this->renderWith('DataObjectSorterController');
     }
 
-
-
     /**
      * runs the actual sorting...
      */
     public function dosort($request)
     {
         Versioned::set_reading_mode('Stage.Stage');
-        $class = $request->param("ID");
+        $class = $request->param('ID');
         if ($class) {
             $class = str_replace('-', '\\', $class);
             if (class_exists($class)) {
                 $obj = DataObject::get_one($class);
 
                 return $obj->dodataobjectsort($request->requestVar('dos'));
-            } else {
-                user_error("$class does not exist", E_USER_WARNING);
             }
+            user_error("${class} does not exist", E_USER_WARNING);
         } else {
-            user_error("Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.", E_USER_WARNING);
+            user_error('Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
         }
     }
 
-    private static $_children_cache_for_sorting = null;
-
     /**
      * runs the actual sorting...
-     * @return Object - return dataobject set of items to be sorted
+     * @return object - return dataobject set of items to be sorted
      */
     public function Children()
     {
         if (self::$_children_cache_for_sorting === null) {
-            $class = $this->request->param("ID");
+            $class = $this->request->param('ID');
             if ($class) {
                 $class = str_replace('-', '\\', $class);
                 if (class_exists($class)) {
                     $where = '';
-                    $filterField = Convert::raw2sql($this->request->param("OtherID"));
-                    $filterValue = Convert::raw2sql($this->request->param("ThirdID"));
-                    $titleField = Convert::raw2sql($this->request->param("FourthID"));
+                    $filterField = Convert::raw2sql($this->request->param('OtherID'));
+                    $filterValue = Convert::raw2sql($this->request->param('ThirdID'));
+                    $titleField = Convert::raw2sql($this->request->param('FourthID'));
                     $objects = $class::get();
                     if ($filterField && $filterValue) {
-                        $filterValue = explode(",", $filterValue);
-                        $objects = $objects->filter(array($filterField => $filterValue));
+                        $filterValue = explode(',', $filterValue);
+                        $objects = $objects->filter([$filterField => $filterValue]);
                     } elseif (is_numeric($filterField)) {
-                        $objects = $objects->filter(array("ParentID" => $filterField));
+                        $objects = $objects->filter(['ParentID' => $filterField]);
                     }
                     $singletonObj = singleton($class);
                     $sortField = $singletonObj->SortFieldForDataObjectSorter();
-                    $objects = $objects->sort($sortField, "ASC");
-                    $tobeExcludedArray = array();
+                    $objects = $objects->sort($sortField, 'ASC');
+                    $tobeExcludedArray = [];
                     if ($objects->count()) {
                         foreach ($objects as $obj) {
                             if ($obj->canEdit()) {
                                 if ($titleField) {
-                                    $method = "getSortTitle";
+                                    $method = 'getSortTitle';
                                     if ($obj->hasMethod($method)) {
-                                        $obj->SortTitle = $obj->$method();
+                                        $obj->SortTitle = $obj->{$method}();
                                     } else {
                                         $method = 'SortTitle';
                                         if ($obj->hasMethod($method)) {
-                                            $obj->SortTitle = $obj->$method();
+                                            $obj->SortTitle = $obj->{$method}();
                                         } elseif ($obj->hasDatabaseField($titleField)) {
-                                            $obj->SortTitle = $obj->$titleField;
+                                            $obj->SortTitle = $obj->{$titleField};
                                         }
                                     }
                                 } else {
@@ -195,8 +186,8 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                                 $tobeExcludedArray[$obj->ID] = $obj->ID;
                             }
                         }
-                        if(count($tobeExcludedArray)) {
-                            $objects = $objects->exclude(array('ID' => $tobeExcludedArray));
+                        if (count($tobeExcludedArray)) {
+                            $objects = $objects->exclude(['ID' => $tobeExcludedArray]);
                         }
                         $this->addRequirements($class);
                         self::$_children_cache_for_sorting = $objects;
@@ -204,13 +195,13 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                         return null;
                     }
                 } else {
-                    user_error("$class does not exist", E_USER_WARNING);
+                    user_error("${class} does not exist", E_USER_WARNING);
                 }
             } else {
-                user_error("Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.", E_USER_WARNING);
+                user_error('Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
             }
-        } else {
         }
+
         return self::$_children_cache_for_sorting;
     }
 
@@ -223,10 +214,10 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     {
         $className = str_replace('\\', '-', $className);
         $url = Director::absoluteURL(
-            Injector::inst()->get(DataObjectSorterController::class)->Link('dosort/'.$className)
+            Injector::inst()->get(DataObjectSorterController::class)->Link('dosort/' . $className)
         );
         Requirements::customScript(
-            "var DataObjectSorterURL = '".$url."'",
+            "var DataObjectSorterURL = '" . $url . "'",
             'DataObjectSorterURL'
         );
     }

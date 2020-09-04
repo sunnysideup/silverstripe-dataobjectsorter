@@ -2,12 +2,11 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-use SilverStripe\Core\ClassInfo;
 use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\Core\Config\Config;
-use Sunnysideup\DataobjectSorter\DataObjectSorterDOD;
 use SilverStripe\ORM\DataExtension;
 
 /**
@@ -19,29 +18,24 @@ use SilverStripe\ORM\DataExtension;
 
 class DataObjectSorterDOD extends DataExtension
 {
-
-
     /**
-     *
      * @var string
      */
-    private static $sort_field = "Sort";
+    private static $sort_field = 'Sort';
 
     /**
      * standard SS variable
-     *
      */
-    private static $db = array(
-        'Sort' => 'Int'
-    );
+    private static $db = [
+        'Sort' => 'Int',
+    ];
 
     /**
      * standard SS variable
-     *
      */
-    private static $casting = array(
-        'SortTitle' => 'Varchar'
-    );
+    private static $casting = [
+        'SortTitle' => 'Varchar',
+    ];
 
     /**
      * action sort
@@ -61,10 +55,10 @@ class DataObjectSorterDOD extends DataExtension
                     $id = intval($id);
                     $object = $baseDataClass::get()->byID($id);
                     //we add one because position 0 is not good.
-                    $position = intval($position)+1;
+                    $position = intval($position) + 1;
                     if ($object && $object->canEdit()) {
-                        if ($object->$sortField != $position) {
-                            $object->$sortField = $position;
+                        if ($position !== $object->{$sortField}) {
+                            $object->{$sortField} = $position;
                             //hack for site tree
                             if ($object instanceof SiteTree) {
                                 $object->writeToStage('Stage');
@@ -72,34 +66,32 @@ class DataObjectSorterDOD extends DataExtension
                             } else {
                                 $object->write();
                             }
-                        } else {
-                            //do nothing
                         }
+                        //do nothing
                     } else {
-                        return _t("DataObjectSorter.NOACCESS", "You do not have access rights to make these changes.");
+                        return _t('DataObjectSorter.NOACCESS', 'You do not have access rights to make these changes.');
                     }
                 }
             } else {
-                return _t("DataObjectSorter.ERROR2", "Error 2");
+                return _t('DataObjectSorter.ERROR2', 'Error 2');
             }
         } else {
-            return _t("DataObjectSorter.ERROR1", "Error 1");
+            return _t('DataObjectSorter.ERROR1', 'Error 1');
         }
-        return _t("DataObjectSorter.UPDATEDRECORDS", "Updated record(s)");
+        return _t('DataObjectSorter.UPDATEDRECORDS', 'Updated record(s)');
     }
 
     /**
-     *
      * standard SS method
      * @param FieldList $fields
      * @return FieldList
      */
     public function updateCMSFields(FieldList $fields)
     {
-        $fields->removeFieldFromTab("Root.Main", $this->SortFieldForDataObjectSorter());
+        $fields->removeFieldFromTab('Root.Main', $this->SortFieldForDataObjectSorter());
         if (! $this->owner instanceof SiteTree) {
             $link = $this->dataObjectSorterPopupLink();
-            $fields->addFieldToTab("Root.Sort", new LiteralField("DataObjectSorterPopupLink", "<h2 class='dataObjectSorterDODLink'>".$link."</h2>"));
+            $fields->addFieldToTab('Root.Sort', new LiteralField('DataObjectSorterPopupLink', "<h2 class='dataObjectSorterDODLink'>" . $link . '</h2>'));
         }
         return $fields;
     }
@@ -118,7 +110,7 @@ class DataObjectSorterDOD extends DataExtension
         if ($alternativeTitle) {
             $linkText = $alternativeTitle;
         } else {
-            $linkText = "Sort ".$this->owner->plural_name();
+            $linkText = 'Sort ' . $this->owner->plural_name();
         }
 
         return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText);
@@ -131,18 +123,18 @@ class DataObjectSorterDOD extends DataExtension
      **/
     public function SortFieldForDataObjectSorter()
     {
-        $sortField = Config::inst()->get(DataObjectSorterDOD::class, "sort_field");
-        $field = "Sort";
+        $sortField = Config::inst()->get(DataObjectSorterDOD::class, 'sort_field');
+        $field = 'Sort';
         if ($sortField && $this->owner->hasDatabaseField($sortField)) {
             $field = $sortField;
-        } elseif ($this->owner->hasDatabaseField("AlternativeSortNumber")) {
-            $field = "AlternativeSortNumber";
-        } elseif ($this->owner->hasDatabaseField("Sort")) {
-            $field = "Sort";
-        } elseif ($this->owner->hasDatabaseField("SortNumber")) {
-            $field = "SortNumber";
+        } elseif ($this->owner->hasDatabaseField('AlternativeSortNumber')) {
+            $field = 'AlternativeSortNumber';
+        } elseif ($this->owner->hasDatabaseField('Sort')) {
+            $field = 'Sort';
+        } elseif ($this->owner->hasDatabaseField('SortNumber')) {
+            $field = 'SortNumber';
         } else {
-            user_error("No field Sort or AlternativeSortNumber (or $sortField) was found on data object: ". $this->owner->ClassName, E_USER_WARNING);
+            user_error("No field Sort or AlternativeSortNumber (or ${sortField}) was found on data object: " . $this->owner->ClassName, E_USER_WARNING);
         }
         return $field;
     }

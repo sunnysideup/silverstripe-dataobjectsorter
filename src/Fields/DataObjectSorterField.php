@@ -2,10 +2,9 @@
 
 namespace Sunnysideup\DataobjectSorter\Fields;
 
-use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
-use SilverStripe\ORM\ArrayList;
-use Sunnysideup\DataobjectSorter\Fields\DataObjectSorterField;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\ORM\ArrayList;
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  * @description: allows you to sort dataobjects
@@ -14,9 +13,8 @@ use SilverStripe\Forms\LiteralField;
  */
 class DataObjectSorterField extends LiteralField
 {
-
     /**
-     * @var string $content
+     * @var string
      */
     protected $content;
 

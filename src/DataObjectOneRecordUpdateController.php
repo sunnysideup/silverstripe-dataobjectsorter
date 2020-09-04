@@ -2,18 +2,17 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
-use SilverStripe\Core\Injector\Injector;
-use Sunnysideup\DataobjectSorter\DataObjectOneRecordUpdateController;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\View\SSViewer;
 use SilverStripe\Control\Director;
-use SilverStripe\View\Requirements;
-use SilverStripe\Versioned\Versioned;
-use SilverStripe\Forms\HiddenField;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\Form;
+use SilverStripe\Forms\FormAction;
+use SilverStripe\Forms\HiddenField;
+use SilverStripe\Versioned\Versioned;
+use SilverStripe\View\Requirements;
+use SilverStripe\View\SSViewer;
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz
@@ -24,14 +23,13 @@ use SilverStripe\Forms\Form;
 
 class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 {
-    private static $allowed_actions = array(
-        "onerecordform" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
-        "show" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
-        "save" => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION'
-    );
+    private static $allowed_actions = [
+        'onerecordform' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+        'show' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+        'save' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+    ];
 
     /**
-     *
      * make sure to also change in routes if you change this link
      * @var string
      */
@@ -40,14 +38,15 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     public static function popup_link_only($className, $recordID)
     {
         DataObjectSorterRequirements::popup_link_requirements();
-        return Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('show/'.$className."/".$recordID);
+        return Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('show/' . $className . '/' . $recordID);
     }
+
     public static function popup_link($className, $recordID, $linkText = 'click here to edit')
     {
         $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID);
         if ($link) {
             return '
-                <a href="'.$link.'" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\''.$link.'\', \'sortlistFor'.$className.$recordID.'\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">'.$linkText.'</a>';
+                <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . '\', \'sortlistFor' . $className . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
         }
     }
 
@@ -59,10 +58,10 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         if (! Director::is_ajax()) {
             DataObjectSorterRequirements::popup_requirements('onerecord');
             $url = Director::absoluteURL(
-                 Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('onerecordform')
+                Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('onerecordform')
             );
             Requirements::customScript(
-                "var DataObjectOneRecordUpdateURL = '".$url."'",
+                "var DataObjectOneRecordUpdateURL = '" . $url . "'",
                 'DataObjectOneRecordUpdateURL'
             );
         }
@@ -74,19 +73,19 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         $table = $this->SecureTableToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $table::get()->byID($record);
-        if (!$obj) {
-            user_error("record could not be found!", E_USER_ERROR);
+        if (! $obj) {
+            user_error('record could not be found!', E_USER_ERROR);
         }
         if (! $obj->canEdit()) {
             $this->permissionFailureStandard();
         }
         $formFields = $this->getFormFields($obj);
-        if (!$formFields) {
-            user_error("Form Fields could not be Found", E_USER_ERROR);
+        if (! $formFields) {
+            user_error('Form Fields could not be Found', E_USER_ERROR);
         }
         $fields = new FieldList(
-            new HiddenField("Table", "Table", $table),
-            new HiddenField("Record", "Record", $record)
+            new HiddenField('Table', 'Table', $table),
+            new HiddenField('Record', 'Record', $record)
         );
         foreach ($formFields as $f) {
             $fields->push($f);
@@ -94,9 +93,9 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 
         $form = new Form(
             $controller = $this,
-            $name = "OneRecordForm",
+            $name = 'OneRecordForm',
             $fields,
-            $actions = new FieldList(new FormAction("save", "save and close"))
+            $actions = new FieldList(new FormAction('save', 'save and close'))
         );
         $form->loadDataFrom($obj);
         return $form;
@@ -113,9 +112,8 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
             return '
                 <p>Your changes have been saved, please <a href="#" onclick="self.close(); return false;">close window</a>.</p>
                 <script type="text/javascript">self.close();</script>';
-        } else {
-            return $this->permissionFailureStandard();
         }
+        return $this->permissionFailureStandard();
     }
 
     public function show()
