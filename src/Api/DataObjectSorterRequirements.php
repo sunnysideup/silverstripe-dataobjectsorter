@@ -60,7 +60,7 @@ class DataObjectSorterRequirements extends ViewableData
             // Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/jquery.simplemodal-1.4.4.js');
             Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/modalpopup.js');
-            Requirements::themedCSS('client/css/modalpopup');
+            Requirements::themedCSS('modalpopup');
         }
     }
 
@@ -73,19 +73,19 @@ class DataObjectSorterRequirements extends ViewableData
         if (! self::get_popup_requirements_have_been_added()) {
             self::set_popup_requirements_have_been_added(true);
             Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
-            Requirements::themedCSS('client/css/sorter');
+            Requirements::themedCSS('sorter');
             $type = strtolower($type);
             switch ($type) {
                 case 'onefieldonerecord':
-                    Requirements::themedCSS('client/css/onefieldonerecord');
+                    Requirements::themedCSS('onefieldonerecord');
                     Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/onefieldonerecord.js');
                     break;
                 case 'onefield':
-                    Requirements::themedCSS('client/css/onefield');
+                    Requirements::themedCSS('onefield');
                     Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/onefield.js');
                     break;
                 case 'onerecord':
-                    Requirements::themedCSS('client/css/onerecord');
+                    Requirements::themedCSS('onerecord');
                     Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/onerecord.js');
                     break;
                 case 'sorter':
