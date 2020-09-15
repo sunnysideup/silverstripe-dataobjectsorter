@@ -85,5 +85,5 @@
 	border: 1px solid #3cb0fd!important;
 }
 
-.loading {background-image: url(/dataobjectsorter/images/loading.gif); background-position: right top; background-repeat: no-repeat; background-color: #ccc;}
+.loading {background-image: url(../images/loading.gif); background-position: right top; background-repeat: no-repeat; background-color: #ccc;}
 	.loading input {background-color: #ccc;}

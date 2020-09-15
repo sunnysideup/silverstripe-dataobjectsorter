@@ -39,7 +39,7 @@ ul#DataObjectSorterList li { list-style: none; margin: 1em; padding: 0!important
         #DataObjectOneFieldUpdateUL li input {width: 20em;}
             #DataObjectOneFieldUpdateUL li input:focus {border-color: red;}
 
-.loading {background-image: url(/dataobjectsorter/images/loading.gif); background-position: right top; background-repeat: no-repeat; background-color: #ccc;}
+.loading {background-image: url(../images/loading.gif); background-position: right top; background-repeat: no-repeat; background-color: #ccc;}
     .loading input {background-color: #ccc;}
 
 a:link, a:visited {color: #778811;}
