@@ -66,7 +66,7 @@ class DataObjectSorterRequirements extends ViewableData
 
     /**
      * @param  string $type - one of the following: onefieldonerecord, onefield, onerecord, sorter
-     * @return [type]       [description]
+     * @return        
      */
     public static function popup_requirements($type)
     {

@@ -131,8 +131,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     }
 
     /**
-     * @param  DataObject $obj       [description]
-     * @param  string $fieldName     [description]
+     * @param  DataObject $obj       
+     * @param  string $fieldName     
      * @return \SilverStripe\Forms\FormField
      */
     protected function getFormField($obj, $fieldName)
