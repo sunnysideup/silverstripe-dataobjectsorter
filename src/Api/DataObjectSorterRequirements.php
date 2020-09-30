@@ -5,10 +5,16 @@ namespace Sunnysideup\DataobjectSorter\Api;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
-use SilverStripe\View\ViewableData;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injectable;
 
-class DataObjectSorterRequirements extends ViewableData
+class DataObjectSorterRequirements
 {
+    use Configurable;
+    use Extensible;
+    use Injectable;
+
     /**
      * set to TRUE to add your own Requirements
      *
@@ -66,7 +72,7 @@ class DataObjectSorterRequirements extends ViewableData
 
     /**
      * @param  string $type - one of the following: onefieldonerecord, onefield, onerecord, sorter
-     * @return        
+     * @return
      */
     public static function popup_requirements($type)
     {
