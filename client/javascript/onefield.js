@@ -203,7 +203,7 @@ if(
             var nameArray = nameValue.split("/");
             var table = nameArray[0];
             if(table  !== this.tableName) {
-                alert("ERROR 51");
+                alert("ERROR --- " + table + '!==' + this.tableName);
                 return;
             }
             var id = nameArray[1];

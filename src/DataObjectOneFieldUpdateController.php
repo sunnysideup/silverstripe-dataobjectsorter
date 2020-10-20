@@ -53,15 +53,15 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     private static $_objects_without_field = null;
 
     /**
-     * @param  string $ClassName
-     * @param  string $FieldName
+     * @param  string $className
+     * @param  string $fieldName
      * @param  string $where
      * @param  string $sort
      * @param  string $titleField
      *
      * @return string
      */
-    public static function popup_link_only(string $ClassName, string $FieldName, ?string $where = '', ?string $sort = '', ?string $titleField = 'Title')
+    public static function popup_link_only(string $className, string $fieldName, ?string $where = '', ?string $sort = '', ?string $titleField = 'Title')
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $params = [];
@@ -74,13 +74,14 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         if ($titleField) {
             $params['titlefield'] = 'titlefield=' . urlencode($titleField);
         }
+        $className = self::classNameToString($className);
         return Injector::inst()->get(DataObjectOneFieldUpdateController::class)
-            ->Link('show/' . $ClassName . '/' . $FieldName) . '?' . implode('&amp;', $params);
+            ->Link('show/' . $className . '/' . $fieldName) . '?' . implode('&amp;', $params);
     }
 
     /**
-     * @param  string $ClassName
-     * @param  string $FieldName
+     * @param  string $className
+     * @param  string $fieldName
      * @param  string $where
      * @param  string $sort
      * @param  string $linkText
@@ -88,12 +89,12 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
      *
      * @return string
      */
-    public static function popup_link($ClassName, $FieldName, $where = '', $sort = '', $linkText = 'click here to edit', $titleField = 'Title')
+    public static function popup_link($className, $fieldName, $where = '', $sort = '', $linkText = 'click here to edit', $titleField = 'Title')
     {
-        $link = self::popup_link_only($ClassName, $FieldName, $where, $sort, $titleField = 'Title');
+        $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField = 'Title');
         if ($link) {
             return '
-                <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . '\', \'sortlistFor' . $ClassName . $FieldName . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
+                <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . '\', \'sortlistFor' . $className . $fieldName . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
         }
     }
 
@@ -118,16 +119,16 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         Versioned::set_reading_mode('Stage.Stage');
         $updateMessage = '';
         $updateCount = 0;
-        $table = $request->param('ID');
+        $className = str_replace('-', '\\', $request->param('ID'));
         $field = $request->param('OtherID');
         $titleField = $request->getVar('titlefield');
         $ids = explode(',', $request->getVar('id'));
         $newValue = $request->getVar('value');
         if (Member::currentUserID()) {
-            if (class_exists($table) && count($ids) > 0 && ($newValue || $newValue === 0)) {
+            if (class_exists($className) && count($ids) > 0 && ($newValue || $newValue === 0)) {
                 foreach ($ids as $id) {
                     if (intval($id)) {
-                        if ($obj = $table::get()->byID($id)) {
+                        if ($obj = $className::get()->byID($id)) {
                             if ($obj->hasDatabaseField($field)) {
                                 if ($obj->canEdit()) {
                                     $obj->{$field} = $newValue;
@@ -163,7 +164,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                 user_error('field does not exist', E_USER_ERROR);
                             }
                         } else {
-                            user_error("could not find record: ${table}, ${id} ", E_USER_ERROR);
+                            user_error("could not find record: ${$className}, ${id} ", E_USER_ERROR);
                         }
                     }
                 }
@@ -172,7 +173,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                 }
                 return $updateMessage;
             }
-            user_error("data object specified: '${table}' or id count: '" . count($ids) . "' or newValue: '${newValue}' is not valid", E_USER_ERROR);
+            user_error("data object specified: '${$className}' or id count: '" . count($ids) . "' or newValue: '${newValue}' is not valid", E_USER_ERROR);
         } else {
             user_error('you need to be logged in to make the changes', E_USER_ERROR);
         }
@@ -183,7 +184,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     {
         Versioned::set_reading_mode('Stage.Stage');
         if (self::$_objects === null) {
-            $table = $this->SecureTableToBeUpdated();
+            $className = $this->SecureClassNameToBeUpdated();
             $field = $this->SecureFieldToBeUpdated();
             $where = '';
             if (isset($this->requestParams['where']) && $this->requestParams['where']) {
@@ -203,9 +204,9 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             }
 
             if (isset($_GET['debug'])) {
-                print_r("SELECT * FROM ${table} ${where} SORT BY ${sort} LIMIT ${start}, " . Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
+                print_r("SELECT * FROM ${$className} ${where} SORT BY ${sort} LIMIT ${start}, " . Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
             }
-            $dataList = $table::get()->where($where)->sort($sort)->limit(1000);
+            $dataList = $className::get()->where($where)->sort($sort)->limit(1000);
             $ids = [];
             if ($dataList->count()) {
                 foreach ($dataList as $obj) {
@@ -214,14 +215,14 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                     }
                 }
             }
-            $dataList = $table::get()->filter(['ID' => $ids])->sort($sort)->limit(1000);
+            $dataList = $className::get()->filter(['ID' => $ids])->sort($sort)->limit(1000);
             $_objects = new PaginatedList($dataList, $this->request);
             $_objects->setPageLength(Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
             $arrayList = ArrayList::create();
             if ($_objects->count()) {
                 foreach ($_objects as $obj) {
                     $obj->FormField = $obj->dbObject($field)->scaffoldFormField();
-                    $obj->FormField->setName($obj->ClassName . '/' . $obj->ID);
+                    $obj->FormField->setName(self::classNameToString($obj->ClassName) . '/' . $obj->ID);
                     //3.0TODO Check that I work vvv.
                     $obj->FormField->addExtraClass('updateField');
                     $obj->FieldToBeUpdatedValue = $obj->{$field};

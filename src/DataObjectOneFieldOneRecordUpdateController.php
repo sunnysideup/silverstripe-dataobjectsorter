@@ -37,32 +37,33 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 
     /**
      * get a link
-     * @param  string $ClassName
-     * @param  string $FieldName
+     * @param  string $className
+     * @param  string $fieldName
      * @param  string $recordID
      *
      * @return string
      */
-    public static function popup_link_only($ClassName, $FieldName, $recordID)
+    public static function popup_link_only($className, $fieldName, $recordID)
     {
         DataObjectSorterRequirements::popup_link_requirements();
+        $className = self::classNameToString($className);
         return Injector::inst()->get(DataObjectOneFieldOneRecordUpdateController::class)
-            ->Link('show/' . $ClassName . '/' . $FieldName) . '?id=' . $recordID;
+            ->Link('show/' . $className . '/' . $fieldName) . '?id=' . $recordID;
     }
 
     /**
      * get a link
-     * @param  string $ClassName
-     * @param  string $FieldName
+     * @param  string $className
+     * @param  string $fieldName
      * @param  string $recordID
      * @param  string $linkText
      * @return string
      */
-    public static function popup_link($ClassName, $FieldName, $recordID, $linkText = 'click here to edit')
+    public static function popup_link($className, $fieldName, $recordID, $linkText = 'click here to edit')
     {
-        if ($link = self::popup_link_only($ClassName, $FieldName, $recordID)) {
+        if ($link = self::popup_link_only($className, $fieldName, $recordID)) {
             return '
-                <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . '\', \'sortlistFor' . $ClassName . $FieldName . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
+                <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . '\', \'sortlistFor' . $className . $fieldName . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
         }
     }
 
@@ -85,10 +86,10 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     public function onefieldform()
     {
         Versioned::set_reading_mode('Stage.Stage');
-        $table = $this->SecureTableToBeUpdated();
+        $className = $this->SecureClassNameToBeUpdated();
         $field = $this->SecureFieldToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
-        $obj = $table::get()->byID($record);
+        $obj = $className::get()->byID($record);
         if (! $obj) {
             user_error('record could not be found!', E_USER_ERROR);
         }
@@ -105,7 +106,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
             $name = 'OneFieldForm',
             $fields = new FieldList(
                 $FormField,
-                new HiddenField('Table', 'Table', $table),
+                new HiddenField('Table', 'Table', self::classNameToString($className)),
                 new HiddenField('Field', 'Field', $field),
                 new HiddenField('Record', 'Record', $record)
             ),
@@ -115,10 +116,10 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 
     public function save($data, $form)
     {
-        $table = $this->SecureTableToBeUpdated();
+        $className = $this->SecureClassNameToBeUpdated();
         $field = $this->SecureFieldToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
-        $obj = $table::get()->byID($record);
+        $obj = $className::get()->byID($record);
         if (! $obj->canEdit()) {
             return $this->permissionFailureStandard();
         }
