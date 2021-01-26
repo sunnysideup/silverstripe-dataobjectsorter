@@ -84,7 +84,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
             user_error('Form Fields could not be Found', E_USER_ERROR);
         }
         $fields = new FieldList(
-            new HiddenField('Table', 'Table',  self::classNameToString($className)),
+            new HiddenField('Table', 'Table', self::classNameToString($className)),
             new HiddenField('Record', 'Record', $record)
         );
         foreach ($formFields as $f) {

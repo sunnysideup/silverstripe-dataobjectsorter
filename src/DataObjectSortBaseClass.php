@@ -3,11 +3,11 @@
 namespace Sunnysideup\DataobjectSorter;
 
 use SilverStripe\Control\Controller;
+use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
-use SilverStripe\Core\ClassInfo;
 
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
@@ -161,13 +161,13 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return singleton($this->SecureClassNameToBeUpdated())->plural_name();
     }
 
-    protected static function classNameToString(string $className) : string
+    protected static function classNameToString(string $className): string
     {
         return str_replace('\\', '-', $className);
     }
 
-    protected static function stringToClassName(string $className) : string
+    protected static function stringToClassName(string $className): string
     {
-        return str_replace('-', '\\' , $className);
+        return str_replace('-', '\\', $className);
     }
 }
