@@ -150,41 +150,41 @@
     /*
      * SimpleModal default options
      *
-     * appendTo:		(String:'body') The jQuery selector to append the elements to. For .NET, use 'form'.
-     * focus:			(Boolean:true) Focus in the first visible, enabled element?
-     * opacity:			(Number:50) The opacity value for the overlay div, from 0 - 100
-     * overlayId:		(String:'simplemodal-overlay') The DOM element id for the overlay div
-     * overlayCss:		(Object:{}) The CSS styling for the overlay div
-     * containerId:		(String:'simplemodal-container') The DOM element id for the container div
-     * containerCss:	(Object:{}) The CSS styling for the container div
-     * dataId:			(String:'simplemodal-data') The DOM element id for the data div
-     * dataCss:			(Object:{}) The CSS styling for the data div
-     * minHeight:		(Number:null) The minimum height for the container
-     * minWidth:		(Number:null) The minimum width for the container
-     * maxHeight:		(Number:null) The maximum height for the container. If not specified, the window height is used.
-     * maxWidth:		(Number:null) The maximum width for the container. If not specified, the window width is used.
-     * autoResize:		(Boolean:false) Automatically resize the container if it exceeds the browser window dimensions?
-     * autoPosition:	(Boolean:true) Automatically position the container upon creation and on window resize?
-     * zIndex:			(Number: 1000) Starting z-index value
-     * close:			(Boolean:true) If true, closeHTML, escClose and overClose will be used if set.
+     * appendTo:        (String:'body') The jQuery selector to append the elements to. For .NET, use 'form'.
+     * focus:            (Boolean:true) Focus in the first visible, enabled element?
+     * opacity:            (Number:50) The opacity value for the overlay div, from 0 - 100
+     * overlayId:        (String:'simplemodal-overlay') The DOM element id for the overlay div
+     * overlayCss:        (Object:{}) The CSS styling for the overlay div
+     * containerId:        (String:'simplemodal-container') The DOM element id for the container div
+     * containerCss:    (Object:{}) The CSS styling for the container div
+     * dataId:            (String:'simplemodal-data') The DOM element id for the data div
+     * dataCss:            (Object:{}) The CSS styling for the data div
+     * minHeight:        (Number:null) The minimum height for the container
+     * minWidth:        (Number:null) The minimum width for the container
+     * maxHeight:        (Number:null) The maximum height for the container. If not specified, the window height is used.
+     * maxWidth:        (Number:null) The maximum width for the container. If not specified, the window width is used.
+     * autoResize:        (Boolean:false) Automatically resize the container if it exceeds the browser window dimensions?
+     * autoPosition:    (Boolean:true) Automatically position the container upon creation and on window resize?
+     * zIndex:            (Number: 1000) Starting z-index value
+     * close:            (Boolean:true) If true, closeHTML, escClose and overClose will be used if set.
                                  If false, none of them will be used.
-     * closeHTML:		(String:'<a class="modalCloseImg" title="Close"></a>') The HTML for the default close link.
+     * closeHTML:        (String:'<a class="modalCloseImg" title="Close"></a>') The HTML for the default close link.
                                 SimpleModal will automatically add the closeClass to this element.
-     * closeClass:		(String:'simplemodal-close') The CSS class used to bind to the close event
-     * escClose:		(Boolean:true) Allow Esc keypress to close the dialog?
-     * overlayClose:	(Boolean:false) Allow click on overlay to close the dialog?
-     * fixed:			(Boolean:true) If true, the container will use a fixed position. If false, it will use a
+     * closeClass:        (String:'simplemodal-close') The CSS class used to bind to the close event
+     * escClose:        (Boolean:true) Allow Esc keypress to close the dialog?
+     * overlayClose:    (Boolean:false) Allow click on overlay to close the dialog?
+     * fixed:            (Boolean:true) If true, the container will use a fixed position. If false, it will use a
                                 absolute position (the dialog will scroll with the page)
-     * position:		(Array:null) Position of container [top, left]. Can be number of pixels or percentage
-     * persist:			(Boolean:false) Persist the data across modal calls? Only used for existing
+     * position:        (Array:null) Position of container [top, left]. Can be number of pixels or percentage
+     * persist:            (Boolean:false) Persist the data across modal calls? Only used for existing
                                 DOM elements. If true, the data will be maintained across modal calls, if false,
                                 the data will be reverted to its original state.
-     * modal:			(Boolean:true) User will be unable to interact with the page below the modal or tab away from the dialog.
+     * modal:            (Boolean:true) User will be unable to interact with the page below the modal or tab away from the dialog.
                                 If false, the overlay, iframe, and certain events will be disabled allowing the user to interact
                                 with the page below the dialog.
-     * onOpen:			(Function:null) The callback function used in place of SimpleModal's open
-     * onShow:			(Function:null) The callback function used after the modal dialog has opened
-     * onClose:			(Function:null) The callback function used in place of SimpleModal's close
+     * onOpen:            (Function:null) The callback function used in place of SimpleModal's open
+     * onShow:            (Function:null) The callback function used after the modal dialog has opened
+     * onClose:            (Function:null) The callback function used in place of SimpleModal's close
      */
     $.modal.defaults = {
         appendTo: 'body',
