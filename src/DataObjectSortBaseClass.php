@@ -57,7 +57,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     public function show()
     {
-        return $this->renderWith(ClassInfo::shortName($this));
+        return $this->renderWith(self::class);
     }
 
     /**

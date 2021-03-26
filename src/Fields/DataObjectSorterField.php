@@ -13,17 +13,13 @@ use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
  */
 class DataObjectSorterField extends LiteralField
 {
-    /**
-     * @var string
-     */
-    protected $content;
 
     public function __construct($name, $className)
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $objects = $className::get();
         $arrayList = new ArrayList();
-        $dos->Children = $objects;
+        $arrayList->Children = $objects;
         $content = $this->customise($arrayList)->renderWith(DataObjectSorterField::class);
         parent::__construct($name, $content);
     }
