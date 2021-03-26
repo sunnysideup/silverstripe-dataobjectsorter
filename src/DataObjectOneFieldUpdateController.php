@@ -132,7 +132,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $ids = explode(',', $request->getVar('id'));
         $newValue = $request->getVar('value');
         if (Member::currentUserID()) {
-            if (class_exists($className) && count($ids) > 0 && ($newValue || $newValue === 0)) {
+            if (class_exists($className) && count($ids) > 0 && ($newValue || intval($newValue) === 0)) {
                 foreach ($ids as $id) {
                     if (intval($id)) {
                         if ($obj = $className::get()->byID($id)) {
@@ -180,7 +180,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                 }
                 return $updateMessage;
             }
-            user_error("data object specified: '${$className}' or id count: '" . count($ids) . "' or newValue: '${newValue}' is not valid", E_USER_ERROR);
+            user_error("data object specified: '{$className}' or id count: '" . count($ids) . "' or newValue: '{$newValue}' is not valid", E_USER_ERROR);
         } else {
             user_error('you need to be logged in to make the changes', E_USER_ERROR);
         }
