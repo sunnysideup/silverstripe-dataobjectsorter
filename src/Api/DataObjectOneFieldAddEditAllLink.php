@@ -2,22 +2,21 @@
 
 namespace Sunnysideup\DataobjectSorter\Api;
 
-use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\CheckboxField;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\FieldType\DBField;
 use Sunnysideup\DataobjectSorter\DataObjectOneFieldUpdateController;
 
 class DataObjectOneFieldAddEditAllLink
 {
-
     public static function add_edit_links_to_checkboxes(string $className, FieldList $feldList)
     {
-        if( ! class_exists($className)) {
-            user_error('Could not find '.$className .' as ClassName.');
+        if (! class_exists($className)) {
+            user_error('Could not find ' . $className . ' as ClassName.');
         }
         $dataFields = $feldList->dataFields();
-        foreach($dataFields as $formField) {
-            if($formField instanceof CheckboxField) {
+        foreach ($dataFields as $formField) {
+            if ($formField instanceof CheckboxField) {
                 $fieldName = $formField->getName();
                 $where = '';
                 $sort = '';
@@ -38,7 +37,7 @@ class DataObjectOneFieldAddEditAllLink
                 $newDescriptionArray = array_filter(
                     [
                         $oldDescription,
-                        $link
+                        $link,
                     ]
                 );
                 $newDescription = implode('<br />', $newDescriptionArray);
@@ -46,5 +45,4 @@ class DataObjectOneFieldAddEditAllLink
             }
         }
     }
-
 }

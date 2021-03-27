@@ -121,7 +121,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     public function sort()
     {
-        return $this->renderWith(get_class($this));
+        return $this->renderWith(static::class);
     }
 
     /**

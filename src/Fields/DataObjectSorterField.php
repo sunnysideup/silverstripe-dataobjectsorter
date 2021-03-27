@@ -13,7 +13,6 @@ use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
  */
 class DataObjectSorterField extends LiteralField
 {
-
     public function __construct($name, $className)
     {
         DataObjectSorterRequirements::popup_link_requirements();

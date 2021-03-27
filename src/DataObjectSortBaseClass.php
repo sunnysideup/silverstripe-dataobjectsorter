@@ -3,7 +3,6 @@
 namespace Sunnysideup\DataobjectSorter;
 
 use SilverStripe\Control\Controller;
-use SilverStripe\Core\ClassInfo;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
@@ -57,7 +56,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     public function show()
     {
-        return $this->renderWith(get_class($this));
+        return $this->renderWith(static::class);
     }
 
     /**
