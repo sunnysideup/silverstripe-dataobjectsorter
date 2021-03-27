@@ -15,7 +15,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      *
      * @var string
      */
-    const CAN_DO_STUFF = 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION';
+    public const CAN_DO_STUFF = 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION';
 
     private static $url_handlers = [
         '$Action//$ID/$OtherID/$ThirdID/$FourthID/$FifthID' => 'handleAction',

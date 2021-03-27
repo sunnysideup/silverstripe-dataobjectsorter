@@ -52,7 +52,6 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      * @param string $className - DataObject Class Name you want to sort
      * @param string | Int $filterField - Field you want to filter for OR ParentID number (i.e. you are sorting children of Parent with ID = $filterField)
      * @param string $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
-     * @param string $linkText - text to show on the link
      * @param string $titleField - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
      *
      * @return string - html

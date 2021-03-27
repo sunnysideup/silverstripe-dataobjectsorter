@@ -80,7 +80,6 @@ class DataObjectSorterDOD extends DataExtension
 
     /**
      * standard SS method
-     * @param FieldList $fields
      * @return FieldList
      */
     public function updateCMSFields(FieldList $fields)

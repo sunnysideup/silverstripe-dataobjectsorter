@@ -53,8 +53,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     private static $_objects_without_field = null;
 
     /**
-     * @param  string $className
-     * @param  string $fieldName
      * @param  string $where
      * @param  string $sort
      * @param  string $titleField
