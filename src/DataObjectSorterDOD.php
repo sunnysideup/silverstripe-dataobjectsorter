@@ -46,13 +46,13 @@ class DataObjectSorterDOD extends DataExtension
     {
         $sortField = $this->SortFieldForDataObjectSorter();
         $baseDataClass = ClassInfo::baseDataClass($this->owner->ClassName);
-        if ($baseDataClass) {
+        if ($baseDataClass !== '') {
             if (is_array($data) && count($data)) {
                 foreach ($data as $position => $id) {
-                    $id = intval($id);
+                    $id = (int) $id;
                     $object = $baseDataClass::get()->byID($id);
                     //we add one because position 0 is not good.
-                    $position = intval($position) + 1;
+                    $position = (int) $position + 1;
                     if ($object && $object->canEdit()) {
                         if ($position !== $object->{$sortField}) {
                             $object->{$sortField} = $position;
@@ -103,11 +103,7 @@ class DataObjectSorterDOD extends DataExtension
      **/
     public function dataObjectSorterPopupLink($filterField = '', $filterValue = '', $alternativeTitle = '')
     {
-        if ($alternativeTitle) {
-            $linkText = $alternativeTitle;
-        } else {
-            $linkText = 'Sort ' . $this->owner->plural_name();
-        }
+        $linkText = $alternativeTitle !== '' ? $alternativeTitle : 'Sort ' . $this->owner->plural_name();
 
         return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText);
     }
@@ -130,7 +126,7 @@ class DataObjectSorterDOD extends DataExtension
         } elseif ($this->owner->hasDatabaseField('SortNumber')) {
             $field = 'SortNumber';
         } else {
-            user_error("No field Sort or AlternativeSortNumber (or ${sortField}) was found on data object: " . $this->owner->ClassName, E_USER_WARNING);
+            user_error("No field Sort or AlternativeSortNumber (or {$sortField}) was found on data object: " . $this->owner->ClassName, E_USER_WARNING);
         }
         return $field;
     }

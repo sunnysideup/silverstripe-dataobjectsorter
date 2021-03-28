@@ -51,7 +51,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
                     class="modalPopUp modal-popup"
                     data-width="800"
                     data-height="600"
-                    data-rel="window.open(\'' . $link . '\', \'sortlistFor' . $className . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;"
+                    data-rel="window.open(\'' . $link . "', 'sortlistFor" . $className . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;"
                 >' . $linkText . '</a>';
         }
     }

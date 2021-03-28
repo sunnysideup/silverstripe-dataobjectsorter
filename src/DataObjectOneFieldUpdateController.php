@@ -46,11 +46,11 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
 
     private static $page_size = 50;
 
-    private static $field = null;
+    private static $field;
 
-    private static $_objects = null;
+    private static $_objects;
 
-    private static $_objects_without_field = null;
+    private static $_objects_without_field;
 
     /**
      * @param  string $where
@@ -90,13 +90,13 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     public static function popup_link($className, $fieldName, $where = '', $sort = '', $linkText = 'click here to edit', $titleField = 'Title')
     {
         $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField = 'Title');
-        if ($link) {
+        if ($link !== '') {
             return '
                 <a href="' . $link . '"
                     class="modalPopUp modal-popup"
                     data-width="800"
                     data-height="600"
-                    data-rel="window.open(\'' . $link . '\', \'sortlistFor' . $className . $fieldName . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;"
+                    data-rel="window.open(\'' . $link . "', 'sortlistFor" . $className . $fieldName . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;"
                 >
                     ' . $linkText .
                 '</a>';
@@ -129,10 +129,10 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $titleField = $request->getVar('titlefield');
         $ids = explode(',', $request->getVar('id'));
         $newValue = $request->getVar('value');
-        if (Member::currentUserID()) {
-            if (class_exists($className) && count($ids) > 0 && ($newValue || intval($newValue) === 0)) {
+        if (Member::currentUserID() !== 0) {
+            if (class_exists($className) && count($ids) > 0 && ($newValue || (int) $newValue === 0)) {
                 foreach ($ids as $id) {
-                    if (intval($id)) {
+                    if ((int) $id !== 0) {
                         if ($obj = $className::get()->byID($id)) {
                             if ($obj->hasDatabaseField($field)) {
                                 if ($obj->canEdit()) {
@@ -157,24 +157,20 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                         $title = $obj->ID;
                                     }
                                     $newValueObject = $obj->dbObject($field);
-                                    if ($newValueObject->hasMethod('Nice')) {
-                                        $newValueFancy = $newValueObject->Nice();
-                                    } else {
-                                        $newValueFancy = $newValueObject->Raw();
-                                    }
-                                    $updateCount++;
-                                    $updateMessage .= "Record updated: <i class=\"fieldTitle\">${field}</i>  for <i class=\"recordTitle\">" . $title . '</i> updated to <i class="newValue">' . $newValueFancy . '</i><br />';
+                                    $newValueFancy = $newValueObject->hasMethod('Nice') ? $newValueObject->Nice() : $newValueObject->Raw();
+                                    ++$updateCount;
+                                    $updateMessage .= "Record updated: <i class=\"fieldTitle\">{$field}</i>  for <i class=\"recordTitle\">" . $title . '</i> updated to <i class="newValue">' . $newValueFancy . '</i><br />';
                                 }
                             } else {
                                 user_error('field does not exist', E_USER_ERROR);
                             }
                         } else {
-                            user_error("could not find record: ${$className}, ${id} ", E_USER_ERROR);
+                            user_error("could not find record: {${$className}}, {$id} ", E_USER_ERROR);
                         }
                     }
                 }
                 if ($updateCount > 1) {
-                    return "${updateCount} records Updated";
+                    return "{$updateCount} records Updated";
                 }
                 return $updateMessage;
             }
@@ -205,11 +201,11 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             // }
             $start = 0;
             if (isset($this->requestParams['start'])) {
-                $start = intval($this->requestParams['start']);
+                $start = (int) $this->requestParams['start'];
             }
 
             if (isset($_GET['debug'])) {
-                print_r("SELECT * FROM ${$className} ${where} SORT BY ${sort} LIMIT ${start}, " . Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
+                print_r("SELECT * FROM {${$className}} {$where} SORT BY {$sort} LIMIT {$start}, " . Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
             }
             $dataList = $className::get()->where($where)->sort($sort)->limit(1000);
             $ids = [];

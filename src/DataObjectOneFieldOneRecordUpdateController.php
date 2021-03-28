@@ -61,9 +61,9 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
      */
     public static function popup_link($className, $fieldName, $recordID, $linkText = 'click here to edit')
     {
-        if ($link = self::popup_link_only($className, $fieldName, $recordID)) {
+        if (($link = self::popup_link_only($className, $fieldName, $recordID)) !== '') {
             return '
-                <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . '\', \'sortlistFor' . $className . $fieldName . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
+                <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . "', 'sortlistFor" . $className . $fieldName . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
         }
     }
 

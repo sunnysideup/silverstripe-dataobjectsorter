@@ -58,7 +58,7 @@ class DataObjectSorterRequirements
     public static function popup_link_requirements()
     {
         $done = self::get_popup_link_requirements_have_been_added();
-        $isCMS = Config::inst()->get(SSViewer::class, 'theme_enabled') ? false : true;
+        $isCMS = !(bool) Config::inst()->get(SSViewer::class, 'theme_enabled');
         if ($done || $isCMS) {
             //do nothing
         } else {
@@ -99,7 +99,7 @@ class DataObjectSorterRequirements
                     Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/sorter.js');
                     break;
                 default:
-                    user_error("type ${type} is not a valid option");
+                    user_error("type {$type} is not a valid option");
             }
         }
     }

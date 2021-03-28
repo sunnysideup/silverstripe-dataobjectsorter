@@ -45,7 +45,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         ];
     }
 
-    public function init()
+    protected function init()
     {
         // Only administrators can run this method
         parent::init();
@@ -66,7 +66,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         $link = $this->config()->get('url_segment') . '/';
         if ($action) {
-            $link .= "${action}/";
+            $link .= "{$action}/";
         }
         return $link;
     }
@@ -85,14 +85,14 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             return addslashes($_POST['Field']);
         }
         $field = $this->getRequest()->param('OtherID');
-        if ($className = $this->SecureClassNameToBeUpdated()) {
-            if ($obj = DataObject::get_one($className)) {
+        if (($className = $this->SecureClassNameToBeUpdated()) !== '') {
+            if (($obj = DataObject::get_one($className)) !== null) {
                 if ($obj->hasDatabaseField($field)) {
                     return $field;
                 }
-                user_error("${field} does not exist on ${$className}", E_USER_ERROR);
+                user_error("{$field} does not exist on {${$className}}", E_USER_ERROR);
             } else {
-                user_error("there are no records in ${$className}", E_USER_ERROR);
+                user_error("there are no records in {${$className}}", E_USER_ERROR);
             }
         } else {
             user_error('there is no table specified', E_USER_ERROR);
@@ -104,16 +104,12 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      */
     protected function SecureClassNameToBeUpdated()
     {
-        if (isset($_POST['Table'])) {
-            $classNameString = addslashes($_POST['Table']);
-        } else {
-            $classNameString = $this->getRequest()->param('ID');
-        }
+        $classNameString = isset($_POST['Table']) ? addslashes($_POST['Table']) : $this->getRequest()->param('ID');
         $className = self::stringToClassName($classNameString);
         if (class_exists($className)) {
             return $className;
         }
-        user_error("Could not find className: ${$className}", E_USER_ERROR);
+        user_error("Could not find className: {${$className}}", E_USER_ERROR);
     }
 
     /**
@@ -130,11 +126,11 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     protected function SecureRecordToBeUpdated()
     {
         if (isset($_POST['Record'])) {
-            return intval($_POST['Record']);
+            return (int) $_POST['Record'];
         }
         if (isset($_GET['id'])) {
             $record = $_GET['id'];
-            return intval($record);
+            return (int) $record;
         }
         return 0;
     }
@@ -157,7 +153,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      */
     protected function HumanReadableTableName()
     {
-        return singleton($this->SecureClassNameToBeUpdated())->plural_name();
+        return \Singleton($this->SecureClassNameToBeUpdated())->plural_name();
     }
 
     protected static function classNameToString(string $className): string

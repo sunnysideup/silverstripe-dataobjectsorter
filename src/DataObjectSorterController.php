@@ -36,7 +36,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     private static $url_segment = 'dataobjectsorter';
 
-    private static $_children_cache_for_sorting = null;
+    private static $_children_cache_for_sorting;
 
     /**
      * returns a link for sorting objects. You can use this in the CMS like this....
@@ -92,14 +92,14 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     public static function popup_link($className, $filterField = '', $filterValue = '', $linkText = 'sort this list', $titleField = '')
     {
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
-        if ($link) {
+        if ($link !== '') {
             return '
             <a
                 href="' . $link . '"
                 class="modalPopUp modal-popup"
                 data-width="800"
                 data-height="600"
-                data-rel="window.open(\'' . $link . '\', \'sortlistFor' . $className . $filterField . $filterValue . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;"
+                data-rel="window.open(\'' . $link . "', 'sortlistFor" . $className . $filterField . $filterValue . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;"
             >' . $linkText . '</a>';
         }
     }
@@ -137,7 +137,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
 
                 return $obj->dodataobjectsort($request->requestVar('dos'));
             }
-            user_error("${class} does not exist", E_USER_WARNING);
+            user_error("{$class} does not exist", E_USER_WARNING);
         } else {
             user_error('Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
         }
@@ -151,7 +151,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     {
         if (self::$_children_cache_for_sorting === null) {
             $class = $this->request->param('ID');
-            if ($class) {
+            if ($class !== '') {
                 $class = str_replace('-', '\\', $class);
                 if (class_exists($class)) {
                     $filterField = Convert::raw2sql($this->request->param('OtherID'));
@@ -164,7 +164,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                     } elseif (is_numeric($filterField)) {
                         $objects = $objects->filter(['ParentID' => $filterField]);
                     }
-                    $singletonObj = singleton($class);
+                    $singletonObj = \Singleton($class);
                     $sortField = $singletonObj->SortFieldForDataObjectSorter();
                     $objects = $objects->sort($sortField, 'ASC');
                     $tobeExcludedArray = [];
@@ -190,7 +190,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                                 $tobeExcludedArray[$obj->ID] = $obj->ID;
                             }
                         }
-                        if (count($tobeExcludedArray)) {
+                        if (count($tobeExcludedArray) > 0) {
                             $objects = $objects->exclude(['ID' => $tobeExcludedArray]);
                         }
                         $this->addRequirements($class);
@@ -199,7 +199,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                         return null;
                     }
                 } else {
-                    user_error("${class} does not exist", E_USER_WARNING);
+                    user_error("{$class} does not exist", E_USER_WARNING);
                 }
             } else {
                 user_error('Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
