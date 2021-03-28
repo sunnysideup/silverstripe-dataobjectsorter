@@ -56,7 +56,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         }
     }
 
-    public function init()
+    protected function init()
     {
         //must set this first.
         Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
