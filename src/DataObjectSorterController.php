@@ -133,13 +133,13 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         if ($class) {
             $class = str_replace('-', '\\', $class);
             if (class_exists($class)) {
-                $obj = DataObject::get_one($class);
+                $obj = $this->SecureObjectToBeUpdated();
 
                 return $obj->dodataobjectsort($request->requestVar('dos'));
             }
             user_error("{$class} does not exist", E_USER_WARNING);
         } else {
-            user_error('Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
+            user_error('Please make sure to provide a class to sort e.g. /dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
         }
     }
 
@@ -202,7 +202,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                     user_error("{$class} does not exist", E_USER_WARNING);
                 }
             } else {
-                user_error('Please make sure to provide a class to sort e.g. http://www.sunnysideup.co.nz/dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
+                user_error('Please make sure to provide a class to sort e.g. /dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
             }
         }
 

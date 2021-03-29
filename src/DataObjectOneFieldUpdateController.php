@@ -139,6 +139,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                     $obj->{$field} = $newValue;
                                     if ($obj instanceof SiteTree) {
                                         $obj->writeToStage('Stage');
+                                        // todo: do publish recursively.
                                         $obj->publish('Stage', 'Live');
                                     } else {
                                         $obj->write();
@@ -159,7 +160,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                     $newValueObject = $obj->dbObject($field);
                                     $newValueFancy = $newValueObject->hasMethod('Nice') ? $newValueObject->Nice() : $newValueObject->Raw();
                                     ++$updateCount;
-                                    $updateMessage .= "Record updated: <i class=\"fieldTitle\">{$field}</i>  for <i class=\"recordTitle\">" . $title . '</i> updated to <i class="newValue">' . $newValueFancy . '</i><br />';
+                                    $updateMessage .= "Record updated: <i class=\"fieldTitle\">{$this->SecureFieldToBeUpdatedNice()}</i>  for <i class=\"recordTitle\">" . $title . '</i> updated to <i class="newValue">' . $newValueFancy . '</i><br />';
                                 }
                             } else {
                                 user_error('field does not exist', E_USER_ERROR);

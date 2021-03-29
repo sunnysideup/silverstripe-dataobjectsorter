@@ -79,25 +79,47 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     /**
      * @return string
      */
-    protected function SecureFieldToBeUpdated()
+    protected function SecureFieldToBeUpdated() : string
     {
-        if (isset($_POST['Field'])) {
-            return addslashes($_POST['Field']);
-        }
-        $field = $this->getRequest()->param('OtherID');
-        if (($className = $this->SecureClassNameToBeUpdated()) !== '') {
-            if (($obj = DataObject::get_one($className)) !== null) {
-                if ($obj->hasDatabaseField($field)) {
-                    return $field;
-                }
-                user_error("{$field} does not exist on {${$className}}", E_USER_ERROR);
+        $obj = $this->SecureObjectToBeUpdated();
+        if ($obj) {
+            if (isset($_POST['Field'])) {
+                return addslashes($_POST['Field']);
             } else {
-                user_error("there are no records in {${$className}}", E_USER_ERROR);
+                $field = $this->getRequest()->param('OtherID');
             }
+            if ($obj->hasDatabaseField($field)) {
+                return $field;
+            }
+            user_error("{$field} does not exist on {${$className}}", E_USER_ERROR);
         } else {
             user_error('there is no table specified', E_USER_ERROR);
         }
     }
+
+    public function SecureFieldToBeUpdatedNice()
+    {
+        $field = $this->SecureFieldToBeUpdated();
+        if($field) {
+            $labels = $this->SecureObjectToBeUpdated()->FieldLabels();
+            return $labels[$field] ?? $field;
+        }
+    }
+
+    protected $objectCache = [];
+
+    protected function SecureObjectToBeUpdated()
+    {
+        $className = $this->SecureClassNameToBeUpdated();
+        if ($className !== '') {
+            if(! isset($this->objectCache[$className])) {
+                $this->objectCache[$className] = DataObject::get_one($className);
+            }
+            return $this->objectCache[$className];
+        }
+        user_error('there is no table specified', E_USER_ERROR);
+    }
+
 
     /**
      * @return string
