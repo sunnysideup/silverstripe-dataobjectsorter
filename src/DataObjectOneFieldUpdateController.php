@@ -132,7 +132,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         if (Member::currentUserID() !== 0) {
             if (class_exists($className) && count($ids) > 0 && ($newValue || (int) $newValue === 0)) {
                 foreach ($ids as $id) {
-                    if ((int) $id !== 0) {
+                    if ((int) $id > 0) {
                         if ($obj = $className::get()->byID($id)) {
                             if ($obj->hasDatabaseField($field)) {
                                 if ($obj->canEdit()) {

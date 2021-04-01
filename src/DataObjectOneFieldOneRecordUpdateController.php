@@ -43,7 +43,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
      *
      * @return string
      */
-    public static function popup_link_only($className, $fieldName, $recordID)
+    public static function popup_link_only($className, $fieldName, $recordID) : string
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $className = self::classNameToString($className);
@@ -59,12 +59,14 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
      * @param  string $linkText
      * @return string
      */
-    public static function popup_link($className, $fieldName, $recordID, $linkText = 'click here to edit')
+    public static function popup_link($className, $fieldName, $recordID, $linkText = 'click here to edit') : string
     {
-        if (($link = self::popup_link_only($className, $fieldName, $recordID)) !== '') {
+        $link = self::popup_link_only($className, $fieldName, $recordID);
+        if ($link !== '') {
             return '
                 <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . "', 'sortlistFor" . $className . $fieldName . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
         }
+        return '';
     }
 
     protected function init()
