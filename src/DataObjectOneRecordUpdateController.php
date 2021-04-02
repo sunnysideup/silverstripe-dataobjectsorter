@@ -56,23 +56,6 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         }
     }
 
-    protected function init()
-    {
-        //must set this first.
-        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
-        parent::init();
-        if (! Director::is_ajax()) {
-            DataObjectSorterRequirements::popup_requirements('onerecord');
-            $url = Director::absoluteURL(
-                Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('onerecordform')
-            );
-            Requirements::customScript(
-                "var DataObjectOneRecordUpdateURL = '" . $url . "'",
-                'DataObjectOneRecordUpdateURL'
-            );
-        }
-    }
-
     public function onerecordform()
     {
         Versioned::set_reading_mode('Stage.Stage');
@@ -131,6 +114,23 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
             //..
         } else {
             return $this->permissionFailure();
+        }
+    }
+
+    protected function init()
+    {
+        //must set this first.
+        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        parent::init();
+        if (! Director::is_ajax()) {
+            DataObjectSorterRequirements::popup_requirements('onerecord');
+            $url = Director::absoluteURL(
+                Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('onerecordform')
+            );
+            Requirements::customScript(
+                "var DataObjectOneRecordUpdateURL = '" . $url . "'",
+                'DataObjectOneRecordUpdateURL'
+            );
         }
     }
 }

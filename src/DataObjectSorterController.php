@@ -104,16 +104,6 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         }
     }
 
-    protected function init()
-    {
-        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
-        parent::init();
-        if (Director::is_ajax()) {
-        } else {
-            DataObjectSorterRequirements::popup_requirements('sorter');
-        }
-    }
-
     /**
      * the standard action...
      * no need to add anything here now
@@ -207,6 +197,16 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         }
 
         return self::$_children_cache_for_sorting;
+    }
+
+    protected function init()
+    {
+        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        parent::init();
+        if (Director::is_ajax()) {
+        } else {
+            DataObjectSorterRequirements::popup_requirements('sorter');
+        }
     }
 
     /**

@@ -103,22 +103,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         }
     }
 
-    protected function init()
-    {
-        //must set this first ...
-        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
-        parent::init();
-        DataObjectSorterRequirements::popup_requirements('onefield');
-        $url = Director::absoluteURL(
-            Injector::inst()->get(DataObjectOneFieldUpdateController::class)
-                ->Link('updatefield')
-        );
-        Requirements::customScript(
-            "var DataObjectOneFieldUpdateURL = '" . $url . "'",
-            'DataObjectOneFieldUpdateURL'
-        );
-    }
-
     public function updatefield($request = null)
     {
         Versioned::set_reading_mode('Stage.Stage');
@@ -249,5 +233,21 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     {
         $this->DataObjectsToBeUpdated();
         return self::$_objects_without_field;
+    }
+
+    protected function init()
+    {
+        //must set this first ...
+        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        parent::init();
+        DataObjectSorterRequirements::popup_requirements('onefield');
+        $url = Director::absoluteURL(
+            Injector::inst()->get(DataObjectOneFieldUpdateController::class)
+                ->Link('updatefield')
+        );
+        Requirements::customScript(
+            "var DataObjectOneFieldUpdateURL = '" . $url . "'",
+            'DataObjectOneFieldUpdateURL'
+        );
     }
 }

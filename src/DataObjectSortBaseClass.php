@@ -17,6 +17,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      */
     public const CAN_DO_STUFF = 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION';
 
+    protected $objectCache = [];
+
     private static $url_handlers = [
         '$Action//$ID/$OtherID/$ThirdID/$FourthID/$FifthID' => 'handleAction',
     ];
@@ -45,15 +47,6 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         ];
     }
 
-    protected function init()
-    {
-        // Only administrators can run this method
-        parent::init();
-        if (! Permission::check('DATA_OBJECT_SORT_AND_EDIT_PERMISSION')) {
-            return $this->permissionFailureStandard();
-        }
-    }
-
     public function show()
     {
         return $this->renderWith(static::class);
@@ -76,15 +69,33 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return Security::permissionFailure($this, _t('Security.PERMFAILURE', ' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
     }
 
-    protected function SecureFieldToBeUpdated() : string
+    public function SecureFieldToBeUpdatedNice()
+    {
+        $field = $this->SecureFieldToBeUpdated();
+        if ($field !== '') {
+            $labels = $this->SecureObjectToBeUpdated()->FieldLabels();
+            return $labels[$field] ?? $field;
+        }
+    }
+
+    protected function init()
+    {
+        // Only administrators can run this method
+        parent::init();
+        if (! Permission::check('DATA_OBJECT_SORT_AND_EDIT_PERMISSION')) {
+            return $this->permissionFailureStandard();
+        }
+    }
+
+    protected function SecureFieldToBeUpdated(): string
     {
         $obj = $this->SecureObjectToBeUpdated();
         if ($obj) {
             if (isset($_POST['Field'])) {
                 return addslashes($_POST['Field']);
-            } else {
-                $field = $this->getRequest()->param('OtherID');
             }
+            $field = $this->getRequest()->param('OtherID');
+
             if ($obj->hasDatabaseField($field)) {
                 return $field;
             }
@@ -94,29 +105,17 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         }
     }
 
-    public function SecureFieldToBeUpdatedNice()
-    {
-        $field = $this->SecureFieldToBeUpdated();
-        if($field !== '') {
-            $labels = $this->SecureObjectToBeUpdated()->FieldLabels();
-            return $labels[$field] ?? $field;
-        }
-    }
-
-    protected $objectCache = [];
-
     protected function SecureObjectToBeUpdated()
     {
         $className = $this->SecureClassNameToBeUpdated();
         if ($className !== '') {
-            if(! isset($this->objectCache[$className])) {
+            if (! isset($this->objectCache[$className])) {
                 $this->objectCache[$className] = DataObject::get_one($className);
             }
             return $this->objectCache[$className];
         }
         user_error('there is no table specified', E_USER_ERROR);
     }
-
 
     /**
      * @return string

@@ -58,7 +58,7 @@ class DataObjectSorterRequirements
     public static function popup_link_requirements()
     {
         $done = self::get_popup_link_requirements_have_been_added();
-        $isCMS = !(bool) Config::inst()->get(SSViewer::class, 'theme_enabled');
+        $isCMS = ! (bool) Config::inst()->get(SSViewer::class, 'theme_enabled');
         if ($done || $isCMS) {
             //do nothing
         } else {
