@@ -80,7 +80,6 @@ class DataObjectSorterDOD extends DataExtension
 
     /**
      * standard SS method
-     * @return FieldList
      */
     public function updateCMSFields(FieldList $fields)
     {
@@ -89,7 +88,6 @@ class DataObjectSorterDOD extends DataExtension
             $link = $this->dataObjectSorterPopupLink();
             $fields->addFieldToTab('Root.Sort', new LiteralField('DataObjectSorterPopupLink', "<h2 class='dataObjectSorterDODLink'>" . $link . '</h2>'));
         }
-        return $fields;
     }
 
     /**
