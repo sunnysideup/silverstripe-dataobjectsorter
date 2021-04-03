@@ -18,12 +18,11 @@ use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
  * @description: allows you to sort dataobjects, you need to provide them in this way: http://www.app.com/dataobjectsorter/[dataobjectname]/
  *
  * @package: dataobjectsorter
- **/
-
+ */
 class DataObjectSorterController extends DataObjectSortBaseClass
 {
     /**
-     * standard SS variable
+     * standard SS variable.
      */
     private static $allowed_actions = [
         'sort' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
@@ -31,7 +30,8 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     ];
 
     /**
-     * make sure to also change in routes if you change this link
+     * make sure to also change in routes if you change this link.
+     *
      * @var string
      */
     private static $url_segment = 'dataobjectsorter';
@@ -47,12 +47,12 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      * else {
      * 	$fields->addFieldToTab("Root.Position", new NumericField($name = "Sort", "Sort index number (the lower the number, the earlier it shows up"));
      * }
-     * </code>
+     * </code>.
      *
-     * @param string $className - DataObject Class Name you want to sort
+     * @param string       $className   - DataObject Class Name you want to sort
      * @param string | Int $filterField - Field you want to filter for OR ParentID number (i.e. you are sorting children of Parent with ID = $filterField)
-     * @param string $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
-     * @param string $titleField - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
+     * @param string       $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
+     * @param string       $titleField  - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
      *
      * @return string - html
      */
@@ -79,20 +79,20 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      * else {
      * 	$fields->addFieldToTab("Root.Position", new NumericField($name = "Sort", "Sort index number (the lower the number, the earlier it shows up"));
      * }
-     * </code>
+     * </code>.
      *
-     * @param string $className - DataObject Class Name you want to sort
+     * @param string       $className   - DataObject Class Name you want to sort
      * @param string | Int $filterField - Field you want to filter for OR ParentID number (i.e. you are sorting children of Parent with ID = $filterField)
-     * @param string $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
-     * @param string $linkText - text to show on the link
-     * @param string $titleField - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
+     * @param string       $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
+     * @param string       $linkText    - text to show on the link
+     * @param string       $titleField  - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
      *
      * @return string - html
      */
     public static function popup_link($className, $filterField = '', $filterValue = '', $linkText = 'sort this list', $titleField = '')
     {
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
-        if ($link !== '') {
+        if ('' !== $link) {
             return '
             <a
                 href="' . $link . '"
@@ -106,7 +106,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
 
     /**
      * the standard action...
-     * no need to add anything here now
+     * no need to add anything here now.
      */
     public function sort()
     {
@@ -115,6 +115,8 @@ class DataObjectSorterController extends DataObjectSortBaseClass
 
     /**
      * runs the actual sorting...
+     *
+     * @param mixed $request
      */
     public function dosort($request)
     {
@@ -135,13 +137,14 @@ class DataObjectSorterController extends DataObjectSortBaseClass
 
     /**
      * runs the actual sorting...
+     *
      * @return object - return dataobject set of items to be sorted
      */
     public function Children()
     {
-        if (self::$_children_cache_for_sorting === null) {
+        if (null === self::$_children_cache_for_sorting) {
             $class = $this->request->param('ID');
-            if ($class !== '') {
+            if ('' !== $class) {
                 $class = str_replace('-', '\\', $class);
                 if (class_exists($class)) {
                     $filterField = Convert::raw2sql($this->request->param('OtherID'));

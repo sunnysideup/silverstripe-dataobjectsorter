@@ -16,16 +16,16 @@ class DataObjectSorterRequirements
     use Injectable;
 
     /**
-     * set to TRUE to add your own Requirements
+     * set to TRUE to add your own Requirements.
      *
-     * @var boolean
+     * @var bool
      */
     private static $popup_link_requirements_have_been_added = false;
 
     /**
-     * set to TRUE to add your own Requirements
+     * set to TRUE to add your own Requirements.
      *
-     * @var boolean
+     * @var bool
      */
     private static $popup_requirements_have_been_added = false;
 
@@ -71,7 +71,8 @@ class DataObjectSorterRequirements
     }
 
     /**
-     * @param  string $type - one of the following: onefieldonerecord, onefield, onerecord, sorter
+     * @param string $type - one of the following: onefieldonerecord, onefield, onerecord, sorter
+     *
      * @return
      */
     public static function popup_requirements($type)
@@ -85,18 +86,22 @@ class DataObjectSorterRequirements
                 case 'onefieldonerecord':
                     Requirements::themedCSS('client/css/onefieldonerecord');
                     Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/onefieldonerecord.js');
+
                     break;
                 case 'onefield':
                     Requirements::themedCSS('client/css/onefield');
                     Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/onefield.js');
+
                     break;
                 case 'onerecord':
                     Requirements::themedCSS('client/css/onerecord');
                     Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/onerecord.js');
+
                     break;
                 case 'sorter':
                     Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/jquery-ui-1.9.1.custom.min.js');
                     Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/sorter.js');
+
                     break;
                 default:
                     user_error("type {$type} is not a valid option");

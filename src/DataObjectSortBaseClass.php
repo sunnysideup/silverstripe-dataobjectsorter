@@ -53,6 +53,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     }
 
     /**
+     * @param null|mixed $action
+     *
      * @return string
      */
     public function Link($action = null)
@@ -61,6 +63,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if ($action) {
             $link .= "{$action}/";
         }
+
         return $link;
     }
 
@@ -72,8 +75,9 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     public function SecureFieldToBeUpdatedNice()
     {
         $field = $this->SecureFieldToBeUpdated();
-        if ($field !== '') {
+        if ('' !== $field) {
             $labels = $this->SecureObjectToBeUpdated()->FieldLabels();
+
             return $labels[$field] ?? $field;
         }
     }
@@ -108,10 +112,11 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     protected function SecureObjectToBeUpdated()
     {
         $className = $this->SecureClassNameToBeUpdated();
-        if ($className !== '') {
+        if ('' !== $className) {
             if (! isset($this->objectCache[$className])) {
                 $this->objectCache[$className] = DataObject::get_one($className);
             }
+
             return $this->objectCache[$className];
         }
         user_error('there is no table specified', E_USER_ERROR);
@@ -148,14 +153,17 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         }
         if (isset($_GET['id'])) {
             $record = $_GET['id'];
+
             return (int) $record;
         }
+
         return 0;
     }
 
     /**
-     * @param  DataObject $obj
-     * @param  string $fieldName
+     * @param DataObject $obj
+     * @param string     $fieldName
+     *
      * @return \SilverStripe\Forms\FormField
      */
     protected function getFormField($obj, $fieldName)
@@ -163,6 +171,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if (! self::$field) {
             self::$field = $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
         }
+
         return self::$field;
     }
 

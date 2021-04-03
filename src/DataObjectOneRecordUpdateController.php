@@ -18,9 +18,7 @@ use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
  *@author nicolaas [at] sunnysideup.co.nz
  *@package: dataobjectsorter
  *@description: allows you to edit one record
- *
- **/
-
+ */
 class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 {
     private static $allowed_actions = [
@@ -30,7 +28,8 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     ];
 
     /**
-     * make sure to also change in routes if you change this link
+     * make sure to also change in routes if you change this link.
+     *
      * @var string
      */
     private static $url_segment = 'dataobjectonerecordupdate';
@@ -38,6 +37,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     public static function popup_link_only($className, $recordID)
     {
         DataObjectSorterRequirements::popup_link_requirements();
+
         return Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('show/' . $className . '/' . $recordID);
     }
 
@@ -87,6 +87,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
             $actions = new FieldList(new FormAction('save', 'save and close'))
         );
         $form->loadDataFrom($obj);
+
         return $form;
     }
 
@@ -98,10 +99,12 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         if ($obj->canEdit()) {
             $form->saveInto($obj);
             $obj->write();
+
             return '
                 <p>Your changes have been saved, please <a href="#" onclick="self.close(); return false;">close window</a>.</p>
                 <script type="text/javascript">self.close();</script>';
         }
+
         return $this->permissionFailureStandard();
     }
 
