@@ -103,10 +103,12 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             if ($obj->hasDatabaseField($field)) {
                 return $field;
             }
-            user_error("{$field} does not exist on {${$className}}", E_USER_ERROR);
+            $className = $this->SecureClassNameToBeUpdated();
+            user_error ( $field . " does not exist on " . $className, E_USER_ERROR);
         } else {
             user_error('there is no table specified', E_USER_ERROR);
         }
+        return '';
     }
 
     protected function SecureObjectToBeUpdated()
@@ -132,7 +134,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if (class_exists($className)) {
             return $className;
         }
-        user_error("Could not find className: {${$className}}", E_USER_ERROR);
+        user_error("Could not find className: " . $className, E_USER_ERROR);
+        return '';
     }
 
     /**
