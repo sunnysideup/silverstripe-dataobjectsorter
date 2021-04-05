@@ -78,14 +78,10 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     }
 
     /**
-     * @param string $className
-     * @param string $fieldName
      * @param string $where
      * @param string $sort
      * @param string $linkText
      * @param string $titleField
-     *
-     * @return string
      */
     public static function popup_link(
         string $className,
@@ -94,8 +90,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         ?string $sort = '',
         ?string $linkText = 'click here to edit',
         ?string $titleField = 'Title'
-    ) : string
-    {
+    ): string {
         $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField = 'Title');
         if ('' !== $link) {
             return '
@@ -108,6 +103,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                     ' . $linkText .
                 '</a>';
         }
+
         return '';
     }
 
