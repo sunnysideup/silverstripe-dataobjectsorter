@@ -18,9 +18,7 @@ use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
  *@author nicolaas [at] sunnysideup.co.nz
  *@package: dataobjectsorter
  *@description: allows you to edit one field in one record
- *
- **/
-
+ */
 class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClass
 {
     private static $allowed_actions = [
@@ -30,16 +28,18 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     ];
 
     /**
-     * make sure to also change in routes if you change this link
+     * make sure to also change in routes if you change this link.
+     *
      * @var string
      */
     private static $url_segment = 'dataobjectonefieldonerecordupdate';
 
     /**
-     * get a link
-     * @param  string $className
-     * @param  string $fieldName
-     * @param  string $recordID
+     * get a link.
+     *
+     * @param string $className
+     * @param string $fieldName
+     * @param string $recordID
      *
      * @return string
      */
@@ -47,16 +47,19 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $className = self::classNameToString($className);
+
         return Injector::inst()->get(DataObjectOneFieldOneRecordUpdateController::class)
             ->Link('show/' . $className . '/' . $fieldName) . '?id=' . $recordID;
     }
 
     /**
-     * get a link
-     * @param  string $className
-     * @param  string $fieldName
-     * @param  string $recordID
-     * @param  string $linkText
+     * get a link.
+     *
+     * @param string $className
+     * @param string $fieldName
+     * @param string $recordID
+     * @param string $linkText
+     *
      * @return string
      */
     public static function popup_link($className, $fieldName, $recordID, $linkText = 'click here to edit')
@@ -65,22 +68,6 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
             return '
                 <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . "', 'sortlistFor" . $className . $fieldName . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
         }
-    }
-
-    protected function init()
-    {
-        //must set this first ...
-        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
-        // Only administrators can run this method
-        parent::init();
-        DataObjectSorterRequirements::popup_requirements('onefieldonerecord');
-        $url = Director::absoluteURL(
-            Injector::inst()->get(DataObjectOneFieldOneRecordUpdateController::class)->Link('updatefield')
-        );
-        Requirements::customScript(
-            "var DataObjectOneFieldOneRecordUpdateURL = '" . $url . "'",
-            'DataObjectOneFieldOneRecordUpdateURL'
-        );
     }
 
     public function onefieldform()
@@ -101,6 +88,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
             user_error('Form Field could not be Found', E_USER_ERROR);
         }
         $FormField->setValue($obj->{$field});
+
         return new Form(
             $controller = $this,
             $name = 'OneFieldForm',
@@ -125,8 +113,25 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         }
         $obj->{$field} = $data[$field];
         $obj->write();
+
         return '
             <p>Your changes have been saved, please <a href="#" onclick="self.close(); return false;">close window</a>.</p>
             <script type="text/javascript">self.close();</script>';
+    }
+
+    protected function init()
+    {
+        //must set this first ...
+        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        // Only administrators can run this method
+        parent::init();
+        DataObjectSorterRequirements::popup_requirements('onefieldonerecord');
+        $url = Director::absoluteURL(
+            Injector::inst()->get(DataObjectOneFieldOneRecordUpdateController::class)->Link('updatefield')
+        );
+        Requirements::customScript(
+            "var DataObjectOneFieldOneRecordUpdateURL = '" . $url . "'",
+            'DataObjectOneFieldOneRecordUpdateURL'
+        );
     }
 }

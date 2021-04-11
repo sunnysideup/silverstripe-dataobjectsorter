@@ -45,21 +45,14 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         ];
     }
 
-    protected function init()
-    {
-        // Only administrators can run this method
-        parent::init();
-        if (! Permission::check('DATA_OBJECT_SORT_AND_EDIT_PERMISSION')) {
-            return $this->permissionFailureStandard();
-        }
-    }
-
     public function show()
     {
         return $this->renderWith(static::class);
     }
 
     /**
+     * @param null|mixed $action
+     *
      * @return string
      */
     public function Link($action = null)
@@ -68,12 +61,22 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if ($action) {
             $link .= "{$action}/";
         }
+
         return $link;
     }
 
     public function permissionFailureStandard()
     {
         return Security::permissionFailure($this, _t('Security.PERMFAILURE', ' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
+    }
+
+    protected function init()
+    {
+        // Only administrators can run this method
+        parent::init();
+        if (! Permission::check('DATA_OBJECT_SORT_AND_EDIT_PERMISSION')) {
+            return $this->permissionFailureStandard();
+        }
     }
 
     /**
@@ -130,14 +133,17 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         }
         if (isset($_GET['id'])) {
             $record = $_GET['id'];
+
             return (int) $record;
         }
+
         return 0;
     }
 
     /**
-     * @param  DataObject $obj
-     * @param  string $fieldName
+     * @param DataObject $obj
+     * @param string     $fieldName
+     *
      * @return \SilverStripe\Forms\FormField
      */
     protected function getFormField($obj, $fieldName)
@@ -145,6 +151,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if (! self::$field) {
             self::$field = $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
         }
+
         return self::$field;
     }
 

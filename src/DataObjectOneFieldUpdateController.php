@@ -28,9 +28,7 @@ use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
  * URL is like this
  * dataobjectonefieldupdate/update/$Action/$ID/$OtherID
  * dataobjectonefieldupdate/[show]/[updatefield]/[tablename]/[fieldname]
- *
- **/
-
+ */
 class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
 {
     private static $allowed_actions = [
@@ -39,7 +37,8 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     ];
 
     /**
-     * make sure to also change in routes if you change this link
+     * make sure to also change in routes if you change this link.
+     *
      * @var string
      */
     private static $url_segment = 'dataobjectonefieldupdate';
@@ -53,9 +52,9 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     private static $_objects_without_field;
 
     /**
-     * @param  string $where
-     * @param  string $sort
-     * @param  string $titleField
+     * @param string $where
+     * @param string $sort
+     * @param string $titleField
      *
      * @return string
      */
@@ -73,24 +72,25 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             $params['titlefield'] = 'titlefield=' . urlencode($titleField);
         }
         $className = self::classNameToString($className);
+
         return Injector::inst()->get(DataObjectOneFieldUpdateController::class)
             ->Link('show/' . $className . '/' . $fieldName) . '?' . implode('&amp;', $params);
     }
 
     /**
-     * @param  string $className
-     * @param  string $fieldName
-     * @param  string $where
-     * @param  string $sort
-     * @param  string $linkText
-     * @param  string $titleField
+     * @param string $className
+     * @param string $fieldName
+     * @param string $where
+     * @param string $sort
+     * @param string $linkText
+     * @param string $titleField
      *
      * @return string
      */
     public static function popup_link($className, $fieldName, $where = '', $sort = '', $linkText = 'click here to edit', $titleField = 'Title')
     {
         $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField = 'Title');
-        if ($link !== '') {
+        if ('' !== $link) {
             return '
                 <a href="' . $link . '"
                     class="modalPopUp modal-popup"
@@ -103,22 +103,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         }
     }
 
-    protected function init()
-    {
-        //must set this first ...
-        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
-        parent::init();
-        DataObjectSorterRequirements::popup_requirements('onefield');
-        $url = Director::absoluteURL(
-            Injector::inst()->get(DataObjectOneFieldUpdateController::class)
-                ->Link('updatefield')
-        );
-        Requirements::customScript(
-            "var DataObjectOneFieldUpdateURL = '" . $url . "'",
-            'DataObjectOneFieldUpdateURL'
-        );
-    }
-
     public function updatefield($request = null)
     {
         Versioned::set_reading_mode('Stage.Stage');
@@ -129,10 +113,10 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $titleField = $request->getVar('titlefield');
         $ids = explode(',', $request->getVar('id'));
         $newValue = $request->getVar('value');
-        if (Member::currentUserID() !== 0) {
-            if (class_exists($className) && count($ids) > 0 && ($newValue || (int) $newValue === 0)) {
+        if (0 !== Member::currentUserID()) {
+            if (class_exists($className) && count($ids) > 0 && ($newValue || 0 === (int) $newValue)) {
                 foreach ($ids as $id) {
-                    if ((int) $id !== 0) {
+                    if (0 !== (int) $id) {
                         if ($obj = $className::get()->byID($id)) {
                             if ($obj->hasDatabaseField($field)) {
                                 if ($obj->canEdit()) {
@@ -172,6 +156,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                 if ($updateCount > 1) {
                     return "{$updateCount} records Updated";
                 }
+
                 return $updateMessage;
             }
             user_error("data object specified: '{$className}' or id count: '" . count($ids) . "' or newValue: '{$newValue}' is not valid", E_USER_ERROR);
@@ -184,7 +169,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     public function DataObjectsToBeUpdated()
     {
         Versioned::set_reading_mode('Stage.Stage');
-        if (self::$_objects === null) {
+        if (null === self::$_objects) {
             $className = $this->SecureClassNameToBeUpdated();
             $field = $this->SecureFieldToBeUpdated();
             $where = '';
@@ -242,11 +227,29 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     /**
      * retun a list of objects
      * we need it like this for pagination....
+     *
      * @return \SilverStripe\ORM\DataList
      */
     public function PaginatedListItems()
     {
         $this->DataObjectsToBeUpdated();
+
         return self::$_objects_without_field;
+    }
+
+    protected function init()
+    {
+        //must set this first ...
+        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        parent::init();
+        DataObjectSorterRequirements::popup_requirements('onefield');
+        $url = Director::absoluteURL(
+            Injector::inst()->get(DataObjectOneFieldUpdateController::class)
+                ->Link('updatefield')
+        );
+        Requirements::customScript(
+            "var DataObjectOneFieldUpdateURL = '" . $url . "'",
+            'DataObjectOneFieldUpdateURL'
+        );
     }
 }

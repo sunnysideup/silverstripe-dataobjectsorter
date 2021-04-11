@@ -1,7 +1,3 @@
 <?php
 
-
-/**
-*@author Nicolaas [at] sunnysideup.co.nz
-*
-**/
+// @author Nicolaas [at] sunnysideup.co.nz

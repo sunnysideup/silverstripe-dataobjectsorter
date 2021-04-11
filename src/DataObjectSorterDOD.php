@@ -14,8 +14,7 @@ use SilverStripe\ORM\DataExtension;
  * @description: adds dataobject sorting functionality
  *
  * @package: dataobjectsorter
- **/
-
+ */
 class DataObjectSorterDOD extends DataExtension
 {
     /**
@@ -24,29 +23,31 @@ class DataObjectSorterDOD extends DataExtension
     private static $sort_field = 'Sort';
 
     /**
-     * standard SS variable
+     * standard SS variable.
      */
     private static $db = [
         'Sort' => 'Int',
     ];
 
     /**
-     * standard SS variable
+     * standard SS variable.
      */
     private static $casting = [
         'SortTitle' => 'Varchar',
     ];
 
     /**
-     * action sort
+     * action sort.
+     *
      * @param array $data
+     *
      * @return string
      */
     public function dodataobjectsort($data)
     {
         $sortField = $this->SortFieldForDataObjectSorter();
         $baseDataClass = ClassInfo::baseDataClass($this->owner->ClassName);
-        if ($baseDataClass !== '') {
+        if ('' !== $baseDataClass) {
             if (is_array($data) && count($data)) {
                 foreach ($data as $position => $id) {
                     $id = (int) $id;
@@ -75,11 +76,13 @@ class DataObjectSorterDOD extends DataExtension
         } else {
             return _t('DataObjectSorter.ERROR1', 'Error 1');
         }
+
         return _t('DataObjectSorter.UPDATEDRECORDS', 'Updated record(s)');
     }
 
     /**
-     * standard SS method
+     * standard SS method.
+     *
      * @return FieldList
      */
     public function updateCMSFields(FieldList $fields)
@@ -89,30 +92,31 @@ class DataObjectSorterDOD extends DataExtension
             $link = $this->dataObjectSorterPopupLink();
             $fields->addFieldToTab('Root.Sort', new LiteralField('DataObjectSorterPopupLink', "<h2 class='dataObjectSorterDODLink'>" . $link . '</h2>'));
         }
+
         return $fields;
     }
 
     /**
-     * simplified method
+     * simplified method.
      *
      * @param string $filterField
      * @param string $filterValue
      * @param string $alternativeTitle
      *
      * @return string HTML
-     **/
+     */
     public function dataObjectSorterPopupLink($filterField = '', $filterValue = '', $alternativeTitle = '')
     {
-        $linkText = $alternativeTitle !== '' ? $alternativeTitle : 'Sort ' . $this->owner->plural_name();
+        $linkText = '' !== $alternativeTitle ? $alternativeTitle : 'Sort ' . $this->owner->plural_name();
 
         return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText);
     }
 
     /**
-     * returns field name for sorting
+     * returns field name for sorting.
      *
      * @return string
-     **/
+     */
     public function SortFieldForDataObjectSorter()
     {
         $sortField = Config::inst()->get(DataObjectSorterDOD::class, 'sort_field');
@@ -128,6 +132,7 @@ class DataObjectSorterDOD extends DataExtension
         } else {
             user_error("No field Sort or AlternativeSortNumber (or {$sortField}) was found on data object: " . $this->owner->ClassName, E_USER_WARNING);
         }
+
         return $field;
     }
 }
