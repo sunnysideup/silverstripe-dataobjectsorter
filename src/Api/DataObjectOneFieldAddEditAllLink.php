@@ -9,7 +9,7 @@ use Sunnysideup\DataobjectSorter\DataObjectOneFieldUpdateController;
 
 class DataObjectOneFieldAddEditAllLink
 {
-    public static function add_edit_links_to_checkboxes(string $className, FieldList $feldList)
+    public static function add_edit_links_to_checkboxes(string $className, FieldList $feldList, $whereArrayExceptions = [], $sortArrayExceptions = [])
     {
         if (! class_exists($className)) {
             user_error('Could not find ' . $className . ' as ClassName.');
@@ -18,15 +18,15 @@ class DataObjectOneFieldAddEditAllLink
         foreach ($dataFields as $formField) {
             if ($formField instanceof CheckboxField) {
                 $fieldName = $formField->getName();
-                $where = '';
-                $sort = '';
+                $where = $whereArrayExceptions[$fieldName] ?? '';
+                $sort = $sortArrayExceptions[$fieldName] ?? '';
                 $linkText = 'Edit All ';
                 $titleField = 'Title';
                 $link = DataObjectOneFieldUpdateController::popup_link(
                     $className,
                     $fieldName,
-                    $where = '',
-                    $sort = '',
+                    $where,
+                    $sort,
                     $linkText,
                     $titleField,
                 );

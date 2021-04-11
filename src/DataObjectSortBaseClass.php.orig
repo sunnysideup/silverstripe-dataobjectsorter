@@ -72,6 +72,21 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return Security::permissionFailure($this, _t('Security.PERMFAILURE', ' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
     }
 
+<<<<<<< HEAD
+    protected function init()
+    {
+        // Only administrators can run this method
+        parent::init();
+        if (! Permission::check('DATA_OBJECT_SORT_AND_EDIT_PERMISSION')) {
+            return $this->permissionFailureStandard();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function SecureFieldToBeUpdated()
+=======
     public function SecureFieldToBeUpdatedNice()
     {
         $field = $this->SecureFieldToBeUpdated();
@@ -83,6 +98,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     }
 
     protected function init()
+>>>>>>> d79b4cd45325d73c7e31bd4d528f3ce7cb392077
     {
         // Only administrators can run this method
         parent::init();

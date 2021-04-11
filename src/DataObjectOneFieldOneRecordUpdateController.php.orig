@@ -36,6 +36,13 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 
     /**
      * get a link.
+<<<<<<< HEAD
+     *
+     * @param string $className
+     * @param string $fieldName
+     * @param string $recordID
+=======
+>>>>>>> d79b4cd45325d73c7e31bd4d528f3ce7cb392077
      *
      * @param string $className
      * @param string $fieldName
@@ -57,6 +64,11 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
      * @param string $fieldName
      * @param string $recordID
      * @param string $linkText
+<<<<<<< HEAD
+     *
+     * @return string
+=======
+>>>>>>> d79b4cd45325d73c7e31bd4d528f3ce7cb392077
      */
     public static function popup_link($className, $fieldName, $recordID, $linkText = 'click here to edit'): string
     {
@@ -66,9 +78,12 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
                 <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . "', 'sortlistFor" . $className . $fieldName . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
         }
 
+<<<<<<< HEAD
+=======
         return '';
     }
 
+>>>>>>> d79b4cd45325d73c7e31bd4d528f3ce7cb392077
     public function onefieldform()
     {
         Versioned::set_reading_mode('Stage.Stage');

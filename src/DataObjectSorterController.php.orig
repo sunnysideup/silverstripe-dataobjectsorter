@@ -103,9 +103,12 @@ class DataObjectSorterController extends DataObjectSortBaseClass
             >' . $linkText . '</a>';
         }
 
+<<<<<<< HEAD
+=======
         return '';
     }
 
+>>>>>>> d79b4cd45325d73c7e31bd4d528f3ce7cb392077
     /**
      * the standard action...
      * no need to add anything here now.

@@ -78,10 +78,20 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     }
 
     /**
+<<<<<<< HEAD
+     * @param string $className
+     * @param string $fieldName
+=======
+>>>>>>> d79b4cd45325d73c7e31bd4d528f3ce7cb392077
      * @param string $where
      * @param string $sort
      * @param string $linkText
      * @param string $titleField
+<<<<<<< HEAD
+     *
+     * @return string
+=======
+>>>>>>> d79b4cd45325d73c7e31bd4d528f3ce7cb392077
      */
     public static function popup_link(
         string $className,
@@ -104,9 +114,12 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                 '</a>';
         }
 
+<<<<<<< HEAD
+=======
         return '';
     }
 
+>>>>>>> d79b4cd45325d73c7e31bd4d528f3ce7cb392077
     public function updatefield($request = null)
     {
         Versioned::set_reading_mode('Stage.Stage');
@@ -120,7 +133,11 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         if (0 !== Member::currentUserID()) {
             if (class_exists($className) && count($ids) > 0 && ($newValue || 0 === (int) $newValue)) {
                 foreach ($ids as $id) {
+<<<<<<< HEAD
+                    if (0 !== (int) $id) {
+=======
                     if ((int) $id > 0) {
+>>>>>>> d79b4cd45325d73c7e31bd4d528f3ce7cb392077
                         if ($obj = $className::get()->byID($id)) {
                             if ($obj->hasDatabaseField($field)) {
                                 if ($obj->canEdit()) {

@@ -72,6 +72,11 @@ class DataObjectSorterRequirements
 
     /**
      * @param string $type - one of the following: onefieldonerecord, onefield, onerecord, sorter
+<<<<<<< HEAD
+     *
+     * @return
+=======
+>>>>>>> d79b4cd45325d73c7e31bd4d528f3ce7cb392077
      */
     public static function popup_requirements(string $type)
     {
