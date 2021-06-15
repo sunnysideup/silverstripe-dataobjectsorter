@@ -8,7 +8,7 @@ $MetaTags
 </head>
 
 <body class="typography">
-    <% include DataObjectSorter %>
+    <% include Sunnysideup/DataobjectSorter/Includes/DataObjectSorter %>
 </body>
 
 </html>

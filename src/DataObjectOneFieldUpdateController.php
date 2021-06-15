@@ -195,8 +195,9 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             }
 
             if (isset($_GET['debug'])) {
-                print_r("SELECT * FROM {${$className}} {$where} SORT BY {$sort} LIMIT {$start}, " . Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
+                print_r("SELECT * FROM {$className} {$where} SORT BY {$sort} LIMIT {$start}, " . Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
             }
+
             $dataList = $className::get()->where($where)->sort($sort)->limit(1000);
             $ids = [];
             if ($dataList->count()) {
