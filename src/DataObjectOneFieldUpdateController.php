@@ -43,7 +43,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
      */
     private static $url_segment = 'dataobjectonefieldupdate';
 
-    private static $page_size = 50;
+    private static $page_size = 5000;
 
     private static $field;
 
@@ -198,29 +198,23 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                 print_r("SELECT * FROM {$className} {$where} SORT BY {$sort} LIMIT {$start}, " . Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
             }
 
-            $dataList = $className::get()->where($where)->sort($sort)->limit(1000);
-            $ids = [];
-            if ($dataList->count()) {
-                foreach ($dataList as $obj) {
-                    if ($obj->canEdit() && $obj->canView()) {
-                        $ids[$obj->ID] = $obj->ID;
-                    }
-                }
-            }
-            $dataList = $className::get()->filter(['ID' => $ids])->sort($sort)->limit(1000);
+            $dataList = $className::get()->where($where)->sort($sort);
             $_objects = new PaginatedList($dataList, $this->request);
             $_objects->setPageLength(Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
             $arrayList = ArrayList::create();
             if ($_objects->count()) {
                 foreach ($_objects as $obj) {
-                    $obj->FormField = $obj->dbObject($field)->scaffoldFormField();
-                    $obj->FormField->setName(self::classNameToString($obj->ClassName) . '/' . $obj->ID);
-                    //3.0TODO Check that I work vvv.
-                    $obj->FormField->addExtraClass('updateField');
-                    $obj->FieldToBeUpdatedValue = $obj->{$field};
-                    $obj->FormField->setValue($obj->{$field});
-                    $title = $obj->getTitle();
-                    $arrayList->push(new ArrayData(['FormField' => $obj->FormField, 'MyTitle' => $title]));
+                    if ($obj->canEdit() && $obj->canView()) {
+                        $ids[$obj->ID] = $obj->ID;
+                        $obj->FormField = $obj->dbObject($field)->scaffoldFormField();
+                        $obj->FormField->setName(self::classNameToString($obj->ClassName) . '/' . $obj->ID);
+                        //3.0TODO Check that I work vvv.
+                        $obj->FormField->addExtraClass('updateField');
+                        $obj->FieldToBeUpdatedValue = $obj->{$field};
+                        $obj->FormField->setValue($obj->{$field});
+                        $title = $obj->getTitle();
+                        $arrayList->push(new ArrayData(['FormField' => $obj->FormField, 'MyTitle' => $title]));
+                    }
                 }
             }
             self::$_objects = $arrayList;
