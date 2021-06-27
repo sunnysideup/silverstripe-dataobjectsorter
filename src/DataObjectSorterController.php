@@ -163,7 +163,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                     $sortField = $singletonObj->SortFieldForDataObjectSorter();
                     $objects = $objects->sort($sortField, 'ASC');
                     $tobeExcludedArray = [];
-                    if ($objects->count()) {
+                    if ($objects->exists()) {
                         foreach ($objects as $obj) {
                             if ($obj->canEdit()) {
                                 if ($titleField) {

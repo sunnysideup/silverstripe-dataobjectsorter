@@ -202,7 +202,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             $_objects = new PaginatedList($dataList, $this->request);
             $_objects->setPageLength(Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
             $arrayList = ArrayList::create();
-            if ($_objects->count()) {
+            if ($_objects->exists()) {
                 foreach ($_objects as $obj) {
                     if ($obj->canEdit() && $obj->canView()) {
                         $ids[$obj->ID] = $obj->ID;
