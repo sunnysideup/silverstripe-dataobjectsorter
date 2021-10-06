@@ -115,7 +115,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $className = str_replace('-', '\\', $request->param('ID'));
         $field = $request->param('OtherID');
         $titleField = $request->getVar('titlefield');
-        $ids = explode(',', $request->getVar('id'));
+        $ids = trim($request->getVar('id')) ? explode(',', $request->getVar('id')) : [];
         $newValue = $request->getVar('value');
         if (0 !== Member::currentUserID()) {
             if (class_exists($className) && count($ids) > 0 && ($newValue || 0 === (int) $newValue)) {

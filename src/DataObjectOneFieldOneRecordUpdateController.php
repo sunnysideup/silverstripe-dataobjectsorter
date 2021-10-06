@@ -83,9 +83,6 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
             return $this->permissionFailureStandard();
         }
         $FormField = $this->getFormField($obj, $field);
-        if (! $FormField) {
-            user_error('Form Field could not be Found', E_USER_ERROR);
-        }
         $FormField->setValue($obj->{$field});
 
         return new Form(

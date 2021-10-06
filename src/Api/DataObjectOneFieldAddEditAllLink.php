@@ -31,9 +31,6 @@ class DataObjectOneFieldAddEditAllLink
                     $titleField,
                 );
                 $oldDescription = $formField->getDescription();
-                if ($oldDescription instanceof DBField) {
-                    $oldDescription = $oldDescription->RAW();
-                }
                 $newDescriptionArray = array_filter(
                     [
                         $oldDescription,

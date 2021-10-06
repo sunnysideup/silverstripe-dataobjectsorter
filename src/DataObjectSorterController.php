@@ -8,6 +8,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\DataList;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
@@ -140,7 +141,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     /**
      * runs the actual sorting...
      *
-     * @return object - return dataobject set of items to be sorted
+     * @return DataList - return dataobject set of items to be sorted
      */
     public function Children()
     {
