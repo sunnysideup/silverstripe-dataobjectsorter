@@ -37,7 +37,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     public static function popup_link_only($className, $recordID)
     {
         DataObjectSorterRequirements::popup_link_requirements();
-        $className = str_replace('\\', '-', $className);
+        $className = self::classNameToString('\\', '-', $className);
         return Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('show/' . $className . '/' . $recordID);
     }
 
@@ -60,8 +60,8 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     {
         Versioned::set_reading_mode('Stage.Stage');
         $className = $this->SecureClassNameToBeUpdated();
-        $record = $this->SecureRecordToBeUpdated();
-        $obj = $className::get()->byID($record);
+        $recordId = $this->SecureRecordIdToBeUpdated();
+        $obj = $className::get()->byID($recordId);
         if (! $obj) {
             user_error('record could not be found!', E_USER_ERROR);
         }
@@ -74,7 +74,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         }
         $fields = new FieldList(
             new HiddenField('Table', 'Table', self::classNameToString($className)),
-            new HiddenField('Record', 'Record', $record)
+            new HiddenField('Record', 'Record', $recordId)
         );
         foreach ($formFields as $f) {
             $fields->push($f);
@@ -94,8 +94,8 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     public function save($data, $form)
     {
         $className = $this->SecureClassNameToBeUpdated();
-        $record = $this->SecureRecordToBeUpdated();
-        $obj = $className::get()->byID($record);
+        $recordId = $this->SecureRecordIdToBeUpdated();
+        $obj = $className::get()->byID($recordId);
         if ($obj->canEdit()) {
             $form->saveInto($obj);
             $obj->write();
@@ -111,9 +111,11 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     public function show()
     {
         $className = $this->SecureClassNameToBeUpdated();
-        $record = $this->SecureRecordToBeUpdated();
-        $obj = $className::get()->byID($record);
-        if (! $obj->canEdit()) {
+        $recordId = $this->SecureRecordIdToBeUpdated();
+        $obj = $className::get()->byID($recordId);
+        if ($obj->canEdit()) {
+            //..
+        } else {
             return $this->permissionFailure();
         }
     }

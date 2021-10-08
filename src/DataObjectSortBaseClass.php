@@ -115,23 +115,26 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     protected function SecureObjectToBeUpdated()
     {
         $className = $this->SecureClassNameToBeUpdated();
-        if ('' !== $className) {
+        if (class_exists($className)) {
             if (! isset($this->objectCache[$className])) {
                 $this->objectCache[$className] = DataObject::get_one($className);
             }
 
             return $this->objectCache[$className];
         }
-        user_error('there is no table specified', E_USER_ERROR);
+        user_error('there is no table / classname specified', E_USER_ERROR);
     }
 
     /**
      * @return string
      */
-    protected function SecureClassNameToBeUpdated()
+    protected function SecureClassNameToBeUpdated() : string
     {
         $classNameString = isset($_POST['Table']) ? addslashes($_POST['Table']) : $this->getRequest()->param('ID');
         $className = self::stringToClassName($classNameString);
+        if(! class_exists($className) && class_exists($classNameString)) {
+            $className = $classNameString;
+        }
         if (class_exists($className)) {
             return $className;
         }
@@ -151,7 +154,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     /**
      * @return int
      */
-    protected function SecureRecordToBeUpdated()
+    protected function SecureRecordIdToBeUpdated() : int
     {
         if (isset($_POST['Record'])) {
             return (int) $_POST['Record'];
@@ -162,7 +165,9 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             return (int) $record;
         }
 
-        return 0;
+        $$id = (int) $this->getRequest()->param('OtherID');
+
+        return $id;
     }
 
     /**

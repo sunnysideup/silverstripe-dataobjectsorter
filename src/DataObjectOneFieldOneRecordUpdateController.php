@@ -74,8 +74,8 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         Versioned::set_reading_mode('Stage.Stage');
         $className = $this->SecureClassNameToBeUpdated();
         $field = $this->SecureFieldToBeUpdated();
-        $record = $this->SecureRecordToBeUpdated();
-        $obj = $className::get()->byID($record);
+        $recordId = $this->SecureRecordIdToBeUpdated();
+        $obj = $className::get()->byID($recordId);
         if (! $obj) {
             user_error('record could not be found!', E_USER_ERROR);
         }
@@ -92,7 +92,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
                 $FormField,
                 new HiddenField('Table', 'Table', self::classNameToString($className)),
                 new HiddenField('Field', 'Field', $field),
-                new HiddenField('Record', 'Record', $record)
+                new HiddenField('Record', 'Record', $recordId)
             ),
             $actions = new FieldList(new FormAction('save', 'save and close'))
         );
@@ -102,8 +102,8 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     {
         $className = $this->SecureClassNameToBeUpdated();
         $field = $this->SecureFieldToBeUpdated();
-        $record = $this->SecureRecordToBeUpdated();
-        $obj = $className::get()->byID($record);
+        $recordId = $this->SecureRecordIdToBeUpdated();
+        $obj = $className::get()->byID($recordId);
         if (! $obj->canEdit()) {
             return $this->permissionFailureStandard();
         }
