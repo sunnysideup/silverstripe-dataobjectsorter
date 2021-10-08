@@ -60,7 +60,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     public static function popup_link_only($className, $filterField = '', $filterValue = '', $titleField = '')
     {
         DataObjectSorterRequirements::popup_link_requirements();
-        $className = str_replace('\\', '-', $className);
+        $className = self::classNameToString('\\', '-', $className);
 
         return Controller::join_links(
             Injector::inst()->get(DataObjectSorterController::class)->Link('sort'),
@@ -125,13 +125,9 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     {
         Versioned::set_reading_mode('Stage.Stage');
         $class = $request->param('ID');
-        if ($class) {
-            $class = str_replace('-', '\\', $class);
-            if (class_exists($class)) {
-                $obj = $this->SecureObjectToBeUpdated();
-
-                return $obj->dodataobjectsort($request->requestVar('dos'));
-            }
+        $obj = $this->SecureObjectToBeUpdated();
+        if ($obj) {
+            return $obj->dodataobjectsort($request->requestVar('dos'));
             user_error("{$class} does not exist", E_USER_WARNING);
         } else {
             user_error('Please make sure to provide a class to sort e.g. /dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
@@ -148,7 +144,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         if (null === self::$_children_cache_for_sorting) {
             $class = $this->request->param('ID');
             if ('' !== $class) {
-                $class = str_replace('-', '\\', $class);
+                $class = self::stringToClassName('-', '\\', $class);
                 if (class_exists($class)) {
                     $filterField = Convert::raw2sql($this->request->param('OtherID'));
                     $filterValue = Convert::raw2sql($this->request->param('ThirdID'));
@@ -222,7 +218,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     protected function addRequirements($className)
     {
-        $className = str_replace('\\', '-', $className);
+        $className = self::classNameToString('\\', '-', $className);
         $url = Director::absoluteURL(
             Injector::inst()->get(DataObjectSorterController::class)->Link('dosort/' . $className)
         );

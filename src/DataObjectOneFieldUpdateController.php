@@ -112,7 +112,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         Versioned::set_reading_mode('Stage.Stage');
         $updateMessage = '';
         $updateCount = 0;
-        $className = str_replace('-', '\\', $request->param('ID'));
+        $className = self::stringToClassName('-', '\\', $request->param('ID'));
         $field = $request->param('OtherID');
         $titleField = $request->getVar('titlefield');
         $ids = trim($request->getVar('id')) ? explode(',', $request->getVar('id')) : [];

@@ -37,7 +37,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     public static function popup_link_only($className, $recordID)
     {
         DataObjectSorterRequirements::popup_link_requirements();
-
+        $className = str_replace('\\', '-', $className);
         return Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('show/' . $className . '/' . $recordID);
     }
 
@@ -113,9 +113,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         $className = $this->SecureClassNameToBeUpdated();
         $record = $this->SecureRecordToBeUpdated();
         $obj = $className::get()->byID($record);
-        if ($obj->canEdit()) {
-            //..
-        } else {
+        if (! $obj->canEdit()) {
             return $this->permissionFailure();
         }
     }
