@@ -57,7 +57,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      *
      * @return string - html
      */
-    public static function popup_link_only($className, $filterField = '', $filterValue = '', $titleField = '')
+    public static function popup_link_only(string $className, ?string $filterField = '', ?string $filterValue = '', ?string $titleField = '')
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $className = self::classNameToString('\\', '-', $className);
@@ -90,7 +90,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      *
      * @return string - html
      */
-    public static function popup_link($className, $filterField = '', $filterValue = '', $linkText = 'sort this list', $titleField = '')
+    public static function popup_link(string $className, ?string $filterField = '', ?string $filterValue = '', ?string $linkText = 'sort this list', $titleField = '')
     {
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
         if ('' !== $link) {
@@ -125,7 +125,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     {
         Versioned::set_reading_mode('Stage.Stage');
         $class = $request->param('ID');
-        $obj = $this->SecureObjectToBeUpdated();
+        $obj = $this->SecureSingletonToBeUpdated();
         if ($obj) {
             return $obj->dodataobjectsort($request->requestVar('dos'));
             user_error("{$class} does not exist", E_USER_WARNING);
@@ -142,56 +142,43 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     public function Children()
     {
         if (null === self::$_children_cache_for_sorting) {
-            $class = $this->request->param('ID');
-            if ('' !== $class) {
-                $class = self::stringToClassName('-', '\\', $class);
-                if (class_exists($class)) {
-                    $filterField = Convert::raw2sql($this->request->param('OtherID'));
-                    $filterValue = Convert::raw2sql($this->request->param('ThirdID'));
-                    $titleField = Convert::raw2sql($this->request->param('FourthID'));
-                    $objects = $class::get();
-                    if ($filterField && $filterValue) {
-                        $filterValue = explode(',', $filterValue);
-                        $objects = $objects->filter([$filterField => $filterValue]);
-                    } elseif (is_numeric($filterField)) {
-                        $objects = $objects->filter(['ParentID' => $filterField]);
-                    }
-                    $singletonObj = \Singleton($class);
-                    $sortField = $singletonObj->SortFieldForDataObjectSorter();
-                    $objects = $objects->sort($sortField, 'ASC');
-                    $tobeExcludedArray = [];
-                    if ($objects->exists()) {
-                        foreach ($objects as $obj) {
-                            if ($obj->canEdit()) {
-                                if ($titleField) {
-                                    $method = 'getSortTitle';
+            $objects = $this->getRecords();
+            if($objects) {
+                $singletonObj = $this->SecureSingletonToBeUpdated();
+                $className = $this->SecureClassNameToBeUpdated();
+                $sortField = $singletonObj->SortFieldForDataObjectSorter();
+                $objects = $objects->sort($sortField, 'ASC');
+                $tobeExcludedArray = [];
+                $titleField = (string) Convert::raw2sql($this->request->param('FourthID'));
+                if ($objects->exists()) {
+                    foreach ($objects as $obj) {
+                        if ($obj->canEdit()) {
+                            if ($titleField) {
+                                $method = 'getSortTitle';
+                                if ($obj->hasMethod($method)) {
+                                    $obj->SortTitle = $obj->{$method}();
+                                } else {
+                                    $method = 'SortTitle';
                                     if ($obj->hasMethod($method)) {
                                         $obj->SortTitle = $obj->{$method}();
-                                    } else {
-                                        $method = 'SortTitle';
-                                        if ($obj->hasMethod($method)) {
-                                            $obj->SortTitle = $obj->{$method}();
-                                        } elseif ($obj->hasDatabaseField($titleField)) {
-                                            $obj->SortTitle = $obj->{$titleField};
-                                        }
+                                    } elseif ($obj->hasDatabaseField($titleField)) {
+                                        $obj->SortTitle = $obj->{$titleField};
                                     }
-                                } else {
-                                    $obj->SortTitle = $obj->getTitle();
                                 }
                             } else {
-                                $tobeExcludedArray[$obj->ID] = $obj->ID;
+                                $obj->SortTitle = $obj->getTitle();
                             }
+                        } else {
+                            $tobeExcludedArray[$obj->ID] = $obj->ID;
                         }
-                        if (count($tobeExcludedArray) > 0) {
-                            $objects = $objects->exclude(['ID' => $tobeExcludedArray]);
-                        }
-                        $this->addRequirements($class);
-                        self::$_children_cache_for_sorting = $objects;
-                    } else {
-                        return null;
                     }
+                    if (count($tobeExcludedArray) > 0) {
+                        $objects = $objects->exclude(['ID' => $tobeExcludedArray]);
+                    }
+                    $this->addRequirements($className);
+                    self::$_children_cache_for_sorting = $objects;
                 } else {
-                    user_error("{$class} does not exist", E_USER_WARNING);
+                    return null;
                 }
             } else {
                 user_error('Please make sure to provide a class to sort e.g. /dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
@@ -203,7 +190,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
 
     protected function init()
     {
-        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        DataObjectSorterRequirements::theme_fix();
         parent::init();
         if (Director::is_ajax()) {
         } else {
@@ -219,12 +206,13 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     protected function addRequirements($className)
     {
         $className = self::classNameToString('\\', '-', $className);
-        $url = Director::absoluteURL(
-            Injector::inst()->get(DataObjectSorterController::class)->Link('dosort/' . $className)
+        DataObjectSorterRequirements::url_variable(
+            DataObjectSorterController::class,
+            'DataObjectSorterURL',
+            'dosort/' . $className
         );
-        Requirements::customScript(
-            "var DataObjectSorterURL = '" . $url . "'",
-            'DataObjectSorterURL'
+        $url = Director::absoluteURL(
+            Injector::inst()->get()->Link()
         );
     }
 }

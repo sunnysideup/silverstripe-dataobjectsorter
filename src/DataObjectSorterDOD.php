@@ -103,7 +103,7 @@ class DataObjectSorterDOD extends DataExtension
      */
     public function dataObjectSorterPopupLink($filterField = '', $filterValue = '', $alternativeTitle = '')
     {
-        $linkText = '' !== $alternativeTitle ? $alternativeTitle : 'Sort ' . $this->owner->plural_name();
+        $linkText = $alternativeTitle ?: 'Sort ' . $this->owner->plural_name();
 
         return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText);
     }
@@ -113,7 +113,7 @@ class DataObjectSorterDOD extends DataExtension
      *
      * @return string
      */
-    public function SortFieldForDataObjectSorter()
+    public function SortFieldForDataObjectSorter() : string
     {
         $sortField = Config::inst()->get(DataObjectSorterDOD::class, 'sort_field');
         $field = 'Sort';

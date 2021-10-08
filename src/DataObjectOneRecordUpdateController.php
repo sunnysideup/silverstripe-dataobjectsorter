@@ -34,14 +34,15 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
      */
     private static $url_segment = 'dataobjectonerecordupdate';
 
-    public static function popup_link_only($className, $recordID)
+    public static function popup_link_only(string $className, int $recordID)
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $className = self::classNameToString('\\', '-', $className);
-        return Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('show/' . $className . '/' . $recordID);
+        return Injector::inst()->get(DataObjectOneRecordUpdateController::class)
+            ->Link('show/' . $className).'?id='.$recordID;
     }
 
-    public static function popup_link($className, $recordID, $linkText = 'click here to edit')
+    public static function popup_link(string $className, int $recordID, ?string $linkText = 'click here to edit')
     {
         $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID);
         if ($link) {
@@ -58,15 +59,9 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 
     public function onerecordform()
     {
-        Versioned::set_reading_mode('Stage.Stage');
-        $className = $this->SecureClassNameToBeUpdated();
-        $recordId = $this->SecureRecordIdToBeUpdated();
-        $obj = $className::get()->byID($recordId);
-        if (! $obj) {
-            user_error('record could not be found!', E_USER_ERROR);
-        }
-        if (! $obj->canEdit()) {
-            $this->permissionFailureStandard();
+        $obj = $this->getRecordAndCheckPermissions();
+        if ($obj instanceof HTTPResponse) {
+            return $obj;
         }
         $formFields = $this->getFormFields($obj);
         if (! $formFields) {
@@ -93,45 +88,37 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 
     public function save($data, $form)
     {
-        $className = $this->SecureClassNameToBeUpdated();
-        $recordId = $this->SecureRecordIdToBeUpdated();
-        $obj = $className::get()->byID($recordId);
-        if ($obj->canEdit()) {
-            $form->saveInto($obj);
-            $obj->write();
-
-            return '
-                <p>Your changes have been saved, please <a href="#" onclick="self.close(); return false;">close window</a>.</p>
-                <script type="text/javascript">self.close();</script>';
+        $obj = $this->getRecordAndCheckPermissions();
+        if ($obj instanceof HTTPResponse) {
+            return $obj;
         }
+        $form->saveInto($obj);
+        $obj->write();
 
-        return $this->permissionFailureStandard();
+        return '
+            <p>Your changes have been saved, please <a href="#" onclick="self.close(); return false;">close window</a>.</p>
+            <script type="text/javascript">self.close();</script>';
+
     }
 
     public function show()
     {
-        $className = $this->SecureClassNameToBeUpdated();
-        $recordId = $this->SecureRecordIdToBeUpdated();
-        $obj = $className::get()->byID($recordId);
-        if ($obj->canEdit()) {
-            //..
-        } else {
-            return $this->permissionFailure();
+        $obj = $this->getRecordAndCheckPermissions();
+        if ($obj instanceof HTTPResponse) {
+            return $obj;
         }
+        return parent::show();
     }
 
     protected function init()
     {
         //must set this first.
-        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        DataObjectSorterRequirements::theme_fix(DataObjectSorterRequirements::class);
         parent::init();
         if (! Director::is_ajax()) {
             DataObjectSorterRequirements::popup_requirements('onerecord');
-            $url = Director::absoluteURL(
-                Injector::inst()->get(DataObjectOneRecordUpdateController::class)->Link('onerecordform')
-            );
-            Requirements::customScript(
-                "var DataObjectOneRecordUpdateURL = '" . $url . "'",
+            DataObjectSorterRequirements::url_variable(
+                DataObjectOneRecordUpdateController::class,
                 'DataObjectOneRecordUpdateURL'
             );
         }

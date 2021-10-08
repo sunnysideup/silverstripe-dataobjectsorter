@@ -61,20 +61,11 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     public static function popup_link_only(string $className, string $fieldName, ?string $where = '', ?string $sort = '', ?string $titleField = 'Title')
     {
         DataObjectSorterRequirements::popup_link_requirements();
-        $params = [];
-        if ($where) {
-            $params['where'] = 'where=' . urlencode($where);
-        }
-        if ($sort) {
-            $params['sort'] = 'sort=' . urlencode($sort);
-        }
-        if ($titleField) {
-            $params['titlefield'] = 'titlefield=' . urlencode($titleField);
-        }
         $className = self::classNameToString($className);
+        $params = self::params_builder($where, $sort, $titleField);
 
         return Injector::inst()->get(DataObjectOneFieldUpdateController::class)
-            ->Link('show/' . $className . '/' . $fieldName) . '?' . implode('&amp;', $params);
+            ->Link('show/' . $className . '/' . $fieldName) . '?' . $params;
     }
 
     /**
@@ -112,7 +103,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         Versioned::set_reading_mode('Stage.Stage');
         $updateMessage = '';
         $updateCount = 0;
-        $className = self::stringToClassName('-', '\\', $request->param('ID'));
+        $className = $this->SecureClassNameToBeUpdated();
         $field = $request->param('OtherID');
         $titleField = $request->getVar('titlefield');
         $ids = trim($request->getVar('id')) ? explode(',', $request->getVar('id')) : [];
@@ -175,36 +166,12 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     {
         Versioned::set_reading_mode('Stage.Stage');
         if (null === self::$_objects) {
-            $className = $this->SecureClassNameToBeUpdated();
             $field = $this->SecureFieldToBeUpdated();
-            $where = '';
-            if (isset($this->requestParams['where']) && $this->requestParams['where']) {
-                $where = urldecode($this->requestParams['where']);
-            }
-            $sort = '';
-            if (isset($this->requestParams['sort']) && $this->requestParams['sort']) {
-                $sort = urldecode($this->requestParams['sort']);
-            }
-            // $titleField = 'Title';
-            // if (isset($this->requestParams['titlefield']) && $this->requestParams['titlefield']) {
-            //     $titleField = urldecode($this->requestParams['titlefield']);
-            // }
-            $start = 0;
-            if (isset($this->requestParams['start'])) {
-                $start = (int) $this->requestParams['start'];
-            }
-
-            if (isset($_GET['debug'])) {
-                print_r("SELECT * FROM {$className} {$where} SORT BY {$sort} LIMIT {$start}, " . Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
-            }
-
-            $dataList = $className::get()->where($where)->sort($sort);
-            $_objects = new PaginatedList($dataList, $this->request);
-            $_objects->setPageLength(Config::inst()->get(DataObjectOneFieldUpdateController::class, 'page_size'));
+            $records->getRecordsPaginated();
             $arrayList = ArrayList::create();
-            if ($_objects->exists()) {
-                foreach ($_objects as $obj) {
-                    if ($obj->canEdit() && $obj->canView()) {
+            if ($records->exists()) {
+                foreach ($records as $obj) {
+                    if ($obj->canEdit()) {
                         $ids[$obj->ID] = $obj->ID;
                         $obj->FormField = $obj->dbObject($field)->scaffoldFormField();
                         $obj->FormField->setName(self::classNameToString($obj->ClassName) . '/' . $obj->ID);
@@ -217,8 +184,8 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                     }
                 }
             }
-            self::$_objects = $arrayList;
-            self::$_objects_without_field = $_objects;
+            self::$_objects = $records;
+            self::$_objects_without_field = $records;
         }
 
         return self::$_objects;
@@ -240,15 +207,13 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     protected function init()
     {
         //must set this first ...
-        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        DataObjectSorterRequirements::theme_fix();
         parent::init();
-        DataObjectSorterRequirements::popup_requirements('onefield');
-        $url = Director::absoluteURL(
-            Injector::inst()->get(DataObjectOneFieldUpdateController::class)
-                ->Link('updatefield')
+        DataObjectSorterRequirements::popup_requirements(
+            'onefield',
         );
-        Requirements::customScript(
-            "var DataObjectOneFieldUpdateURL = '" . $url . "'",
+        DataObjectSorterRequirements::url_variable(
+            DataObjectOneFieldUpdateController::class,
             'DataObjectOneFieldUpdateURL'
         );
     }

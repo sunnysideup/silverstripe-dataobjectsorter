@@ -2,14 +2,22 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
+use SilverStripe\Core\Convert;
 use SilverStripe\Control\Controller;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\PaginatedList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
 
+use SilverStripe\Core\Config\Config;
+
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
+
+    private static $page_size = 1000;
+
     /**
      * Permission for user management.
      *
@@ -28,6 +36,21 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     ];
 
     private static $field = '';
+
+    protected static function params_builder(string $where, string $sort, ?string $titleField = '')
+    {
+        $params = [];
+        if ($where) {
+            $params['where'] = 'where=' . urlencode($where);
+        }
+        if ($sort) {
+            $params['sort'] = 'sort=' . urlencode($sort);
+        }
+        if ($titleField) {
+            $params['titlefield'] = 'titlefield=' . urlencode($titleField);
+        }
+        return implode('&amp;', $params);
+    }
 
     public function providePermissions()
     {
@@ -67,16 +90,29 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return $link;
     }
 
-    public function permissionFailureStandard()
+    /**
+     *
+     * @return HTTPResponse
+     */
+    public function permissionFailureStandard(?string $message = null)
     {
-        return Security::permissionFailure($this, _t('Security.PERMFAILURE', ' This page is secured and you need administrator rights to access it. Enter your credentials below and we will send you right along.'));
+        if(! $message) {
+            _t(
+                'Security.PERMFAILURE',
+                '
+                    This page is secured and you need administrator rights to access it.
+                    Enter your credentials below and we will send you right along.
+                '
+            );
+        }
+        return Security::permissionFailure($this, $message);
     }
 
     public function SecureFieldToBeUpdatedNice()
     {
         $field = $this->SecureFieldToBeUpdated();
         if ('' !== $field) {
-            $labels = $this->SecureObjectToBeUpdated()->FieldLabels();
+            $labels = $this->SecureSingletonToBeUpdated()->FieldLabels();
 
             return $labels[$field] ?? $field;
         }
@@ -93,7 +129,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected function SecureFieldToBeUpdated(): string
     {
-        $obj = $this->SecureObjectToBeUpdated();
+        $obj = $this->SecureSingletonToBeUpdated();
         if ($obj) {
             if (isset($_POST['Field'])) {
                 return addslashes($_POST['Field']);
@@ -112,7 +148,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return '';
     }
 
-    protected function SecureObjectToBeUpdated()
+    protected function SecureSingletonToBeUpdated()
     {
         $className = $this->SecureClassNameToBeUpdated();
         if (class_exists($className)) {
@@ -126,11 +162,13 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     }
 
     /**
+     * returns a ClassName that is a real classname.
+     * it may also return a table
      * @return string
      */
     protected function SecureClassNameToBeUpdated() : string
     {
-        $classNameString = isset($_POST['Table']) ? addslashes($_POST['Table']) : $this->getRequest()->param('ID');
+        $classNameString = $this->getRequest()->param('ID');
         $className = self::stringToClassName($classNameString);
         if(! class_exists($className) && class_exists($classNameString)) {
             $className = $classNameString;
@@ -146,7 +184,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     /**
      * @return string
      */
-    protected function SecureClassNameToBeUpdatedAsString()
+    protected function SecureClassNameToBeUpdatedAsString() : string
     {
         return self::classNameToString($this->SecureClassNameToBeUpdated());
     }
@@ -161,11 +199,10 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         }
         if (isset($_GET['id'])) {
             $record = $_GET['id'];
-
             return (int) $record;
         }
 
-        $$id = (int) $this->getRequest()->param('OtherID');
+        $id = (int) $this->getRequest()->param('OtherID');
 
         return $id;
     }
@@ -188,7 +225,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     /**
      * @return string
      */
-    protected function HumanReadableTableName()
+    protected function HumanReadableTableName() : string
     {
         return \Singleton($this->SecureClassNameToBeUpdated())->plural_name();
     }
@@ -202,4 +239,64 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         return str_replace('-', '\\', $className);
     }
+
+    /**
+     * returns an HTTPResponse in case of an error and a DataObject if it can be edited.
+     * @return HTTPResponse|DataObject
+     */
+    protected function getRecordAndCheckPermissions()
+    {
+        Versioned::set_reading_mode('Stage.Stage');
+        $className = $this->SecureClassNameToBeUpdated();
+        $recordId = $this->SecureRecordIdToBeUpdated();
+        $obj = $className::get()->byID($recordId);
+        if (! $obj) {
+            user_error('record could not be found!', E_USER_ERROR);
+            return $this->permissionFailureStandard('Could not find record, please login again.');
+        }
+        if (! $obj->canEdit()) {
+            return $this->permissionFailureStandard();
+        }
+
+        return $obj;
+
+    }
+
+    protected function getRecords()
+    {
+        Versioned::set_reading_mode('Stage.Stage');
+        $className = $this->SecureClassNameToBeUpdated();
+        if ($className) {
+            $filterField = Convert::raw2sql($this->request->param('OtherID'));
+            $filterValue = Convert::raw2sql($this->request->param('ThirdID'));
+            $objects = $class::get();
+            if ($filterField && $filterValue) {
+                $filterValue = explode(',', $filterValue);
+                $objects = $objects->filter([$filterField => $filterValue]);
+            } elseif (is_numeric($filterField)) {
+                $objects = $objects->filter(['ParentID' => $filterField]);
+            }
+            if ($this->request->getVar('where')) {
+                $where = Convert::raw2sql(urldecode($this->request->getVar('where')));
+                if($where) {
+                    $objects = $objects->where($where);
+                }
+            }
+            if ($this->request->getVar('sort')) {
+                $sort = Convert::raw2sql(urldecode($this->request->getVar('sort')));
+                if($sort) {
+                    $objects = $objects->sort($sort);
+                }
+            }
+            return $objects;
+        }
+    }
+
+    protected function getRecordsPaginated() : PaginatedList
+    {
+        $records =  new PaginatedList($this->getRecords(), $this->request);
+        $records->setPageLength(Config::inst()->get(static::class, 'page_size'));
+        return $records;
+    }
+
 }

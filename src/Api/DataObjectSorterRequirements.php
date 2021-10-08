@@ -5,9 +5,14 @@ namespace Sunnysideup\DataobjectSorter\Api;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
+
+use SilverStripe\Control\Director;
+
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 
 class DataObjectSorterRequirements
 {
@@ -104,6 +109,32 @@ class DataObjectSorterRequirements
                 default:
                     user_error("type {$type} is not a valid option");
             }
+
+
         }
+
+    }
+    public static function url_variable(string $className, string $varName, ?string $action = 'updatefield')
+    {
+        $url = Director::absoluteURL(
+            Injector::inst()->get($className)
+                ->Link($action)
+        );
+        Requirements::customScript(
+            "var ".$varName." = '" . $url . "'",
+            $varName.'URL'
+        );
+    }
+
+    public static function theme_fix(?string $className = '')
+    {
+        if(! $className) {
+            $className = DataObjectSorterRequirements::class;
+        }
+        Config::modify()->update(
+            SSViewer::class,
+            'theme_enabled',
+            Config::inst()->get($className, 'run_through_theme')
+        );
     }
 }

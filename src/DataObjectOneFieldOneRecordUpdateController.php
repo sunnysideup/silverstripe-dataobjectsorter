@@ -3,6 +3,7 @@
 namespace Sunnysideup\DataobjectSorter;
 
 use SilverStripe\Control\Director;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
@@ -41,7 +42,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
      * @param string $fieldName
      * @param string $recordID
      */
-    public static function popup_link_only($className, $fieldName, $recordID): string
+    public static function popup_link_only(string $className, string $fieldName, int $recordID): string
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $className = self::classNameToString($className);
@@ -58,7 +59,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
      * @param string $recordID
      * @param string $linkText
      */
-    public static function popup_link($className, $fieldName, $recordID, $linkText = 'click here to edit'): string
+    public static function popup_link(string $className, string $fieldName, int $recordID, ?string $linkText = 'click here to edit'): string
     {
         $link = self::popup_link_only($className, $fieldName, $recordID);
         if ('' !== $link) {
@@ -71,17 +72,11 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 
     public function onefieldform()
     {
-        Versioned::set_reading_mode('Stage.Stage');
-        $className = $this->SecureClassNameToBeUpdated();
+        $obj = $this->getRecordAndCheckPermissions();
+        if ($obj instanceof HTTPResponse) {
+            return $obj;
+        }
         $field = $this->SecureFieldToBeUpdated();
-        $recordId = $this->SecureRecordIdToBeUpdated();
-        $obj = $className::get()->byID($recordId);
-        if (! $obj) {
-            user_error('record could not be found!', E_USER_ERROR);
-        }
-        if (! $obj->canEdit()) {
-            return $this->permissionFailureStandard();
-        }
         $FormField = $this->getFormField($obj, $field);
         $FormField->setValue($obj->{$field});
 
@@ -100,13 +95,11 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 
     public function save($data, $form)
     {
-        $className = $this->SecureClassNameToBeUpdated();
-        $field = $this->SecureFieldToBeUpdated();
-        $recordId = $this->SecureRecordIdToBeUpdated();
-        $obj = $className::get()->byID($recordId);
-        if (! $obj->canEdit()) {
-            return $this->permissionFailureStandard();
+        $obj = $this->getRecordAndCheckPermissions();
+        if ($obj instanceof HTTPResponse) {
+            return $obj;
         }
+        $field = $this->SecureFieldToBeUpdated();
         $obj->{$field} = $data[$field];
         $obj->write();
 
@@ -118,15 +111,12 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     protected function init()
     {
         //must set this first ...
-        Config::modify()->update(SSViewer::class, 'theme_enabled', Config::inst()->get(DataObjectSorterRequirements::class, 'run_through_theme'));
+        DataObjectSorterRequirements::theme_fix();
         // Only administrators can run this method
         parent::init();
         DataObjectSorterRequirements::popup_requirements('onefieldonerecord');
-        $url = Director::absoluteURL(
-            Injector::inst()->get(DataObjectOneFieldOneRecordUpdateController::class)->Link('updatefield')
-        );
-        Requirements::customScript(
-            "var DataObjectOneFieldOneRecordUpdateURL = '" . $url . "'",
+        DataObjectSorterRequirements::url_variable(
+            DataObjectOneFieldOneRecordUpdateController::class,
             'DataObjectOneFieldOneRecordUpdateURL'
         );
     }
