@@ -6,12 +6,16 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
+
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
 use SilverStripe\Versioned\Versioned;
+
+use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
@@ -102,20 +106,26 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         }
     }
 
-    protected static function params_builder(string $where, string $sort, ?string $titleField = ''): array
+    protected static function params_builder(array $array): array
     {
-        $params = [];
-        if ($where) {
-            $params['where'] = 'where=' . urlencode($where);
-        }
-        if ($sort) {
-            $params['sort'] = 'sort=' . urlencode($sort);
-        }
-        if ($titleField) {
-            $params['titlefield'] = 'titlefield=' . urlencode($titleField);
-        }
-
-        return $params;
+        // extract($array);
+        // $params = [];
+        // if ($where) {
+        //     $params['where'] = $where;
+        // }
+        // if ($sort) {
+        //     $params['sort'] =  $sort;
+        // }
+        // if ($titleField) {
+        //     $params['titlefield'] = $titleField;
+        // }
+        // if ($filterField) {
+        //     $params['filterField'] = $titleField;
+        // }
+        // if ($filterValue) {
+        //     $params['filterValue'] = $filterValue;
+        // }
+        return $array;
     }
 
     protected function init()
@@ -283,8 +293,10 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         Versioned::set_reading_mode('Stage.Stage');
         $className = $this->SecureClassNameToBeUpdated();
         if ($className) {
-            $filterField = Convert::raw2sql($this->request->param('OtherID'));
-            $filterValue = Convert::raw2sql($this->request->param('ThirdID'));
+            $filterField = (string) Convert::raw2sql(urldecode($this->request->getVar('filterField')));
+            $filterValue = (string) Convert::raw2sql(urldecode($this->request->getVar('filterValue')));
+            $where = (string) Convert::raw2sql(urldecode($this->request->getVar('where')));
+            $sort = (string) Convert::raw2sql(urldecode($this->request->getVar('sort')));
             $objects = $class::get();
             if ($filterField && $filterValue) {
                 $filterValue = explode(',', $filterValue);
@@ -292,17 +304,11 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             } elseif (is_numeric($filterField)) {
                 $objects = $objects->filter(['ParentID' => $filterField]);
             }
-            if ($this->request->getVar('where')) {
-                $where = Convert::raw2sql(urldecode($this->request->getVar('where')));
-                if ($where) {
-                    $objects = $objects->where($where);
-                }
+            if ($where) {
+                $objects = $objects->where($where);
             }
-            if ($this->request->getVar('sort')) {
-                $sort = Convert::raw2sql(urldecode($this->request->getVar('sort')));
-                if ($sort) {
-                    $objects = $objects->sort($sort);
-                }
+            if ($sort) {
+                $objects = $objects->sort($sort);
             }
 
             return $objects;

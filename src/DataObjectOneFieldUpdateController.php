@@ -54,7 +54,13 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
      */
     public static function popup_link_only(string $className, string $fieldName, ?string $where = '', ?string $sort = '', ?string $titleField = 'Title')
     {
-        $params = self::params_builder($where, $sort, $titleField);
+        $params = self::params_builder(
+            [
+                'where' => $where,
+                'sort' => $sort,
+                'titleField' => $titleField,
+            ]
+        );
 
         return self::link_only_maker(
             DataObjectOneFieldUpdateController::class,

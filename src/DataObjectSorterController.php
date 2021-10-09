@@ -55,14 +55,17 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     public static function popup_link_only(string $className, ?string $filterField = '', ?string $filterValue = '', ?string $titleField = '')
     {
+        $params = self::params_builder(
+            [
+                'filterField' => $recordID,
+                'filterValue' => $filterValue,
+                'titleField' => $titleField,
+            ]
+        );
         return self::link_only_maker(
             DataObjectSorterController::class,
             'sort/' . self::classNameToString($className),
-            [
-                'filterfield' => $recordID,
-                'filtervalue' => $filterValue,
-                'titleField' => $titleField,
-            ]
+            $params
         );
     }
 
@@ -144,7 +147,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                 $sortField = $singletonObj->SortFieldForDataObjectSorter();
                 $objects = $objects->sort($sortField, 'ASC');
                 $tobeExcludedArray = [];
-                $titleField = (string) Convert::raw2sql($this->request->param('FourthID'));
+                $titleField = (string) $this->request->getVar('titleField');
                 if ($objects->exists()) {
                     foreach ($objects as $obj) {
                         if ($obj->canEdit()) {
