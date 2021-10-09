@@ -13,6 +13,8 @@ use SilverStripe\Security\Security;
 
 use SilverStripe\Core\Config\Config;
 
+use SilverStripe\Versioned\Versioned;
+
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
 
@@ -37,7 +39,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     private static $field = '';
 
-    protected static function params_builder(string $where, string $sort, ?string $titleField = '')
+    protected static function params_builder(string $where, string $sort, ?string $titleField = '') : array
     {
         $params = [];
         if ($where) {
@@ -49,7 +51,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if ($titleField) {
             $params['titlefield'] = 'titlefield=' . urlencode($titleField);
         }
-        return implode('&amp;', $params);
+        return $params;
     }
 
     public function providePermissions()
@@ -238,6 +240,31 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     protected static function stringToClassName(string $className): string
     {
         return str_replace('-', '\\', $className);
+    }
+
+    protected static function link_only_maker(string $controllerClassName, string $action, $params)
+    {
+        $className = self::classNameToString($className);
+
+        return Injector::inst()->get($controllerClassName)
+            ->Link($action) . '?' . http_build_query($params);
+    }
+
+    protected static function link_html_maker(string $link, string $cssClasses, string $code, string $linkText) : string
+    {
+        if ($link) {
+            DataObjectSorterRequirements::popup_link_requirements();
+            return '
+                <a href="' . $link . '"
+                    class="'.$cssClasses.'"
+                    data-width="800"
+                    data-height="600"
+                    data-rel="window.open(\'' . $link . '\', \'update' . $code . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left=20,top=20\'); return false;"
+                >' . $linkText . '</a>';
+        }
+
+        return '';
+
     }
 
     /**

@@ -59,16 +59,17 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     public static function popup_link_only(string $className, ?string $filterField = '', ?string $filterValue = '', ?string $titleField = '')
     {
-        DataObjectSorterRequirements::popup_link_requirements();
-        $className = self::classNameToString('\\', '-', $className);
 
-        return Controller::join_links(
-            Injector::inst()->get(DataObjectSorterController::class)->Link('sort'),
-            $className,
-            $filterField,
-            $filterValue,
-            $titleField
+        return self::link_only_maker(
+            DataObjectSorterController::class,
+            'sort/' . $className,
+            [
+                'filterfield' => $recordID,
+                'filtervalue' => $filterValue,
+                'titleField' => $titleField,
+            ]
         );
+
     }
 
     /**
@@ -90,21 +91,21 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      *
      * @return string - html
      */
-    public static function popup_link(string $className, ?string $filterField = '', ?string $filterValue = '', ?string $linkText = 'sort this list', $titleField = '')
+    public static function popup_link(
+        string $className,
+        ?string $filterField = '',
+        ?string $filterValue = '',
+        ?string $linkText = 'sort this list',
+        $titleField = ''
+    )
     {
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
-        if ('' !== $link) {
-            return '
-            <a
-                href="' . $link . '"
-                class="modalPopUp modal-popup"
-                data-width="800"
-                data-height="600"
-                data-rel="window.open(\'' . $link . "', 'sortlistFor" . $className . $filterField . $filterValue . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;"
-            >' . $linkText . '</a>';
-        }
-
-        return '';
+        return self::link_html_maker(
+            $link,
+            'modalPopUp modal-popup',
+            'sortlistFor' . self::classNameToString($className) . $filterField . $filterValue,
+            $linkText
+        );
     }
 
     /**

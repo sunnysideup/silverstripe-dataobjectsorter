@@ -44,11 +44,11 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
      */
     public static function popup_link_only(string $className, string $fieldName, int $recordID): string
     {
-        DataObjectSorterRequirements::popup_link_requirements();
-        $className = self::classNameToString($className);
-
-        return Injector::inst()->get(DataObjectOneFieldOneRecordUpdateController::class)
-            ->Link('show/' . $className . '/' . $fieldName) . '?id=' . $recordID;
+        return self::link_only_maker(
+            DataObjectOneFieldOneRecordUpdateController::class,
+            'show/' . $className . '/' . $fieldName,
+            ['id' => $recordID]
+        );
     }
 
     /**
@@ -59,15 +59,20 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
      * @param string $recordID
      * @param string $linkText
      */
-    public static function popup_link(string $className, string $fieldName, int $recordID, ?string $linkText = 'click here to edit'): string
+    public static function popup_link(
+        string $className,
+        string $fieldName,
+        int $recordID,
+        ?string $linkText = 'click here to edit'
+    ): string
     {
         $link = self::popup_link_only($className, $fieldName, $recordID);
-        if ('' !== $link) {
-            return '
-                <a href="' . $link . '" class="modalPopUp modal-popup" data-width="800" data-height="600" data-rel="window.open(\'' . $link . "', 'sortlistFor" . $className . $fieldName . $recordID . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left = 440,top = 200\'); return false;">' . $linkText . '</a>';
-        }
-
-        return '';
+        return self::link_html_maker(
+            $link,
+            'modalPopUp modal-popup',
+            'oneFieldOneRecord' . self::classNameToString($className) . $fieldName . $recordID,
+            $linkText
+        );
     }
 
     public function onefieldform()
