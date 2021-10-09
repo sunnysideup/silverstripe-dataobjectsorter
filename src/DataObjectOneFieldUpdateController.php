@@ -4,6 +4,7 @@ namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\ArrayList;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ArrayData;
@@ -107,7 +108,9 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             if (class_exists($className) && count($ids) > 0 && ($newValue || 0 === (int) $newValue)) {
                 foreach ($ids as $id) {
                     if ((int) $id > 0) {
-                        if ($obj = $className::get()->byID($id)) {
+                        /** @var $obj DataObject|null */
+                        $obj = $className::get()->byID($id);
+                        if ($obj) {
                             if ($obj->hasDatabaseField($field)) {
                                 if ($obj->canEdit()) {
                                     $obj->{$field} = $newValue;
