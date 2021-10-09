@@ -3,7 +3,6 @@
 namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\Control\Director;
-use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
@@ -62,6 +61,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                 'titleField' => $titleField,
             ]
         );
+
         return self::link_only_maker(
             DataObjectSorterController::class,
             'sort/' . self::classNameToString($className),
