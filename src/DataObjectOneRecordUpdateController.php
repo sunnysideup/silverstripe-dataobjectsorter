@@ -33,7 +33,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
     {
         return self::link_only_maker(
             DataObjectOneRecordUpdateController::class,
-            'show/' . $className,
+            'show/' . self::classNameToString($className),
             ['id' => $recordID]
         );
     }

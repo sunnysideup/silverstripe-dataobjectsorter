@@ -57,7 +57,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     {
         return self::link_only_maker(
             DataObjectSorterController::class,
-            'sort/' . $className,
+            'sort/' . self::classNameToString($className),
             [
                 'filterfield' => $recordID,
                 'filtervalue' => $filterValue,

@@ -58,7 +58,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
 
         return self::link_only_maker(
             DataObjectOneFieldUpdateController::class,
-            'show/' . $className . '/' . $fieldName,
+            'show/' . self::classNameToString($className) . '/' . $fieldName,
             $params
         );
     }

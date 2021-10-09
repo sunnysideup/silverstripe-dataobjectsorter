@@ -38,7 +38,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     {
         return self::link_only_maker(
             DataObjectOneFieldOneRecordUpdateController::class,
-            'show/' . $className . '/' . $fieldName,
+            'show/' . self::classNameToString($className) . '/' . $fieldName,
             ['id' => $recordID]
         );
     }
