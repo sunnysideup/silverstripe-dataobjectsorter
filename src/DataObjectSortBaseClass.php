@@ -203,15 +203,20 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     protected function SecureClassNameToBeUpdated(): string
     {
         if(! $this->classNameToBeUpdated) {
-            $classNameString = $this->getRequest()->param('ID');
-            $className = self::stringToClassName($classNameString);
-            if (! class_exists($className) && class_exists($classNameString)) {
-                $className = $classNameString;
+            $classNameString = $this->request->param('ID');
+            if(!$classNameString) {
+                $classNameString = $this->request->requestVar('Table');
             }
-            if (class_exists($className)) {
-                $this->classNameToBeUpdated = $className;
+            if(!$classNameString) {
+                $classNameString = $this->request->requestVar('ClassName');
+            }
+            if(! class_exists($classNameString)) {
+                $classNameString = self::stringToClassName($classNameString);
+            }
+            if (class_exists($classNameString)) {
+                $this->classNameToBeUpdated = $classNameString;
             } else {
-                user_error('Could not find className: ' . $className, E_USER_ERROR);
+                user_error('Could not find className: ' . $classNameString, E_USER_ERROR);
             }
         }
         return $this->classNameToBeUpdated;
