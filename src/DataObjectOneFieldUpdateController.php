@@ -3,16 +3,10 @@
 namespace Sunnysideup\DataobjectSorter;
 
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Control\Director;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\ArrayList;
-use SilverStripe\ORM\PaginatedList;
 use SilverStripe\Security\Member;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ArrayData;
-use SilverStripe\View\Requirements;
-use SilverStripe\View\SSViewer;
 use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 
 /**
@@ -61,6 +55,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     public static function popup_link_only(string $className, string $fieldName, ?string $where = '', ?string $sort = '', ?string $titleField = 'Title')
     {
         $params = self::params_builder($where, $sort, $titleField);
+
         return self::link_only_maker(
             DataObjectOneFieldUpdateController::class,
             'show/' . $className . '/' . $fieldName,
@@ -83,13 +78,13 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         ?string $titleField = 'Title'
     ): string {
         $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField = 'Title');
+
         return self::link_html_maker(
             $link,
             'modalPopUp modal-popup',
             'editOne' . self::classNameToString($className) . $fieldName,
             $linkText
         );
-
     }
 
     public function updatefield($request = null)

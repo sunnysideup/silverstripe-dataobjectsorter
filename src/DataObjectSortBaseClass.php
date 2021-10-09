@@ -2,24 +2,19 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-use SilverStripe\Core\Convert;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPResponse;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Convert;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\PaginatedList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
-
-use SilverStripe\Core\Config\Config;
-
 use SilverStripe\Versioned\Versioned;
 
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
-
-    private static $page_size = 1000;
-
     /**
      * Permission for user management.
      *
@@ -28,6 +23,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     public const CAN_DO_STUFF = 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION';
 
     protected $objectCache = [];
+
+    private static $page_size = 1000;
 
     private static $url_handlers = [
         '$Action//$ID/$OtherID/$ThirdID/$FourthID/$FifthID' => 'handleAction',
@@ -38,21 +35,6 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     ];
 
     private static $field = '';
-
-    protected static function params_builder(string $where, string $sort, ?string $titleField = '') : array
-    {
-        $params = [];
-        if ($where) {
-            $params['where'] = 'where=' . urlencode($where);
-        }
-        if ($sort) {
-            $params['sort'] = 'sort=' . urlencode($sort);
-        }
-        if ($titleField) {
-            $params['titlefield'] = 'titlefield=' . urlencode($titleField);
-        }
-        return $params;
-    }
 
     public function providePermissions()
     {
@@ -93,12 +75,11 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     }
 
     /**
-     *
      * @return HTTPResponse
      */
     public function permissionFailureStandard(?string $message = null)
     {
-        if(! $message) {
+        if (! $message) {
             _t(
                 'Security.PERMFAILURE',
                 '
@@ -107,6 +88,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                 '
             );
         }
+
         return Security::permissionFailure($this, $message);
     }
 
@@ -118,6 +100,22 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
             return $labels[$field] ?? $field;
         }
+    }
+
+    protected static function params_builder(string $where, string $sort, ?string $titleField = ''): array
+    {
+        $params = [];
+        if ($where) {
+            $params['where'] = 'where=' . urlencode($where);
+        }
+        if ($sort) {
+            $params['sort'] = 'sort=' . urlencode($sort);
+        }
+        if ($titleField) {
+            $params['titlefield'] = 'titlefield=' . urlencode($titleField);
+        }
+
+        return $params;
     }
 
     protected function init()
@@ -165,14 +163,13 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     /**
      * returns a ClassName that is a real classname.
-     * it may also return a table
-     * @return string
+     * it may also return a table.
      */
-    protected function SecureClassNameToBeUpdated() : string
+    protected function SecureClassNameToBeUpdated(): string
     {
         $classNameString = $this->getRequest()->param('ID');
         $className = self::stringToClassName($classNameString);
-        if(! class_exists($className) && class_exists($classNameString)) {
+        if (! class_exists($className) && class_exists($classNameString)) {
             $className = $classNameString;
         }
         if (class_exists($className)) {
@@ -183,24 +180,19 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return '';
     }
 
-    /**
-     * @return string
-     */
-    protected function SecureClassNameToBeUpdatedAsString() : string
+    protected function SecureClassNameToBeUpdatedAsString(): string
     {
         return self::classNameToString($this->SecureClassNameToBeUpdated());
     }
 
-    /**
-     * @return int
-     */
-    protected function SecureRecordIdToBeUpdated() : int
+    protected function SecureRecordIdToBeUpdated(): int
     {
         if (isset($_POST['Record'])) {
             return (int) $_POST['Record'];
         }
         if (isset($_GET['id'])) {
             $record = $_GET['id'];
+
             return (int) $record;
         }
 
@@ -224,10 +216,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return self::$field;
     }
 
-    /**
-     * @return string
-     */
-    protected function HumanReadableTableName() : string
+    protected function HumanReadableTableName(): string
     {
         return \Singleton($this->SecureClassNameToBeUpdated())->plural_name();
     }
@@ -250,26 +239,27 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             ->Link($action) . '?' . http_build_query($params);
     }
 
-    protected static function link_html_maker(string $link, string $cssClasses, string $code, string $linkText) : string
+    protected static function link_html_maker(string $link, string $cssClasses, string $code, string $linkText): string
     {
         if ($link) {
             DataObjectSorterRequirements::popup_link_requirements();
+
             return '
                 <a href="' . $link . '"
-                    class="'.$cssClasses.'"
+                    class="' . $cssClasses . '"
                     data-width="800"
                     data-height="600"
-                    data-rel="window.open(\'' . $link . '\', \'update' . $code . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left=20,top=20\'); return false;"
+                    data-rel="window.open(\'' . $link . "', 'update" . $code . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left=20,top=20\'); return false;"
                 >' . $linkText . '</a>';
         }
 
         return '';
-
     }
 
     /**
      * returns an HTTPResponse in case of an error and a DataObject if it can be edited.
-     * @return HTTPResponse|DataObject
+     *
+     * @return DataObject|HTTPResponse
      */
     protected function getRecordAndCheckPermissions()
     {
@@ -279,6 +269,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         $obj = $className::get()->byID($recordId);
         if (! $obj) {
             user_error('record could not be found!', E_USER_ERROR);
+
             return $this->permissionFailureStandard('Could not find record, please login again.');
         }
         if (! $obj->canEdit()) {
@@ -286,7 +277,6 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         }
 
         return $obj;
-
     }
 
     protected function getRecords()
@@ -305,25 +295,26 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             }
             if ($this->request->getVar('where')) {
                 $where = Convert::raw2sql(urldecode($this->request->getVar('where')));
-                if($where) {
+                if ($where) {
                     $objects = $objects->where($where);
                 }
             }
             if ($this->request->getVar('sort')) {
                 $sort = Convert::raw2sql(urldecode($this->request->getVar('sort')));
-                if($sort) {
+                if ($sort) {
                     $objects = $objects->sort($sort);
                 }
             }
+
             return $objects;
         }
     }
 
-    protected function getRecordsPaginated() : PaginatedList
+    protected function getRecordsPaginated(): PaginatedList
     {
-        $records =  new PaginatedList($this->getRecords(), $this->request);
+        $records = new PaginatedList($this->getRecords(), $this->request);
         $records->setPageLength(Config::inst()->get(static::class, 'page_size'));
+
         return $records;
     }
-
 }

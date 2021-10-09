@@ -2,17 +2,11 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPResponse;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\Requirements;
-use SilverStripe\View\SSViewer;
 use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 
 /**
@@ -38,8 +32,6 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     /**
      * get a link.
      *
-     * @param string $className
-     * @param string $fieldName
      * @param string $recordID
      */
     public static function popup_link_only(string $className, string $fieldName, int $recordID): string
@@ -54,8 +46,6 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     /**
      * get a link.
      *
-     * @param string $className
-     * @param string $fieldName
      * @param string $recordID
      * @param string $linkText
      */
@@ -64,9 +54,9 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         string $fieldName,
         int $recordID,
         ?string $linkText = 'click here to edit'
-    ): string
-    {
+    ): string {
         $link = self::popup_link_only($className, $fieldName, $recordID);
+
         return self::link_html_maker(
             $link,
             'modalPopUp modal-popup',

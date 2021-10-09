@@ -3,15 +3,10 @@
 namespace Sunnysideup\DataobjectSorter;
 
 use SilverStripe\Control\Director;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\Requirements;
-use SilverStripe\View\SSViewer;
 use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 
 /**
@@ -34,7 +29,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
      */
     private static $url_segment = 'dataobjectonerecordupdate';
 
-    public static function popup_link_only(string $className, int $recordID) : string
+    public static function popup_link_only(string $className, int $recordID): string
     {
         return self::link_only_maker(
             DataObjectOneRecordUpdateController::class,
@@ -43,9 +38,10 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         );
     }
 
-    public static function popup_link(string $className, int $recordID, ?string $linkText = 'click here to edit') : string
+    public static function popup_link(string $className, int $recordID, ?string $linkText = 'click here to edit'): string
     {
         $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID);
+
         return self::link_html_maker(
             $link,
             'modalPopUp modal-popup',
@@ -95,7 +91,6 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         return '
             <p>Your changes have been saved, please <a href="#" onclick="self.close(); return false;">close window</a>.</p>
             <script type="text/javascript">self.close();</script>';
-
     }
 
     public function show()
@@ -104,6 +99,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         if ($obj instanceof HTTPResponse) {
             return $obj;
         }
+
         return parent::show();
     }
 

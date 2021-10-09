@@ -110,10 +110,8 @@ class DataObjectSorterDOD extends DataExtension
 
     /**
      * returns field name for sorting.
-     *
-     * @return string
      */
-    public function SortFieldForDataObjectSorter() : string
+    public function SortFieldForDataObjectSorter(): string
     {
         $sortField = Config::inst()->get(DataObjectSorterDOD::class, 'sort_field');
         $field = 'Sort';

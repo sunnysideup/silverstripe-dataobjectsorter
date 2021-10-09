@@ -2,16 +2,12 @@
 
 namespace Sunnysideup\DataobjectSorter;
 
-use SilverStripe\Control\Controller;
 use SilverStripe\Control\Director;
-use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataList;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\Requirements;
-use SilverStripe\View\SSViewer;
 use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
 
 /**
@@ -59,7 +55,6 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     public static function popup_link_only(string $className, ?string $filterField = '', ?string $filterValue = '', ?string $titleField = '')
     {
-
         return self::link_only_maker(
             DataObjectSorterController::class,
             'sort/' . $className,
@@ -69,7 +64,6 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                 'titleField' => $titleField,
             ]
         );
-
     }
 
     /**
@@ -97,9 +91,9 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         ?string $filterValue = '',
         ?string $linkText = 'sort this list',
         $titleField = ''
-    )
-    {
+    ) {
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
+
         return self::link_html_maker(
             $link,
             'modalPopUp modal-popup',
@@ -144,7 +138,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     {
         if (null === self::$_children_cache_for_sorting) {
             $objects = $this->getRecords();
-            if($objects) {
+            if ($objects) {
                 $singletonObj = $this->SecureSingletonToBeUpdated();
                 $className = $this->SecureClassNameToBeUpdated();
                 $sortField = $singletonObj->SortFieldForDataObjectSorter();
@@ -206,7 +200,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     protected function addRequirements($className)
     {
-        $className = self::classNameToString('\\', '-', $className);
+        $className = self::classNameToString('\\');
         DataObjectSorterRequirements::url_variable(
             DataObjectSorterController::class,
             'DataObjectSorterURL',
