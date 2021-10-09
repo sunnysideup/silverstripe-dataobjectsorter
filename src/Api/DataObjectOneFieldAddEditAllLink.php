@@ -1,11 +1,11 @@
 <?php
 
-namespace Sunnysideup\DataobjectSorter\Api;
+namespace Sunnysideup\DataObjectSorter\Api;
 
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\FieldType\DBField;
-use Sunnysideup\DataobjectSorter\DataObjectOneFieldUpdateController;
+use Sunnysideup\DataObjectSorter\DataObjectOneFieldUpdateController;
 
 class DataObjectOneFieldAddEditAllLink
 {

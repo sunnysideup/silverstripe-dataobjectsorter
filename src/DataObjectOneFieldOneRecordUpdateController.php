@@ -1,13 +1,13 @@
 <?php
 
-namespace Sunnysideup\DataobjectSorter;
+namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
-use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz

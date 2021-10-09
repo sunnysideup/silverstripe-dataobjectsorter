@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunnysideup\DataobjectSorter;
+namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Convert;
@@ -8,7 +8,7 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Versioned\Versioned;
-use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  * @author nicolaas [at] sunnysideup.co.nz
@@ -147,7 +147,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                 $sortField = $singletonObj->SortFieldForDataObjectSorter();
                 $objects = $objects->sort($sortField, 'ASC');
                 $tobeExcludedArray = [];
-                $titleField = (string) $this->request->getVar('titleField');
+                $titleField = (string) $this->request->requestVar('titleField');
                 if ($objects->exists()) {
                     foreach ($objects as $obj) {
                         if ($obj->canEdit()) {

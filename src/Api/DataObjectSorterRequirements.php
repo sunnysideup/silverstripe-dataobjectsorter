@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunnysideup\DataobjectSorter\Api;
+namespace Sunnysideup\DataObjectSorter\Api;
 
 use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;

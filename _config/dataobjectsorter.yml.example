@@ -4,13 +4,13 @@
 
 SilverStripe\CMS\Model\SiteTree:
   extensions:
-    - Sunnysideup\DataobjectSorter\DataObjectSorterDOD
+    - Sunnysideup\DataObjectSorter\DataObjectSorterDOD
 
 MyDataObject:
   extensions:
-    - Sunnysideup\DataobjectSorter\DataObjectSorterDOD
+    - Sunnysideup\DataObjectSorter\DataObjectSorterDOD
 
-Sunnysideup\DataobjectSorter\DataObjectOneFieldUpdateController:
+Sunnysideup\DataObjectSorter\DataObjectOneFieldUpdateController:
   page_size: 10
 
 ####################################

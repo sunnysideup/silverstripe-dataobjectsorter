@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunnysideup\DataobjectSorter;
+namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Core\ClassInfo;

@@ -1,13 +1,13 @@
 <?php
 
-namespace Sunnysideup\DataobjectSorter;
+namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\Security\Member;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ArrayData;
-use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz
@@ -100,9 +100,9 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $updateCount = 0;
         $className = $this->SecureClassNameToBeUpdated();
         $field = $request->param('OtherID');
-        $titleField = $request->getVar('titlefield');
-        $ids = trim($request->getVar('id')) ? explode(',', $request->getVar('id')) : [];
-        $newValue = $request->getVar('value');
+        $titleField = $request->requestVar('titlefield');
+        $ids = trim($request->requestVar('id')) ? explode(',', $request->requestVar('id')) : [];
+        $newValue = $request->requestVar('value');
         if (0 !== Member::currentUserID()) {
             if (class_exists($className) && count($ids) > 0 && ($newValue || 0 === (int) $newValue)) {
                 foreach ($ids as $id) {

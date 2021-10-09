@@ -1,10 +1,10 @@
 <?php
 
-namespace Sunnysideup\DataobjectSorter\Fields;
+namespace Sunnysideup\DataObjectSorter\Fields;
 
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\ArrayList;
-use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  * @description: allows you to sort dataobjects

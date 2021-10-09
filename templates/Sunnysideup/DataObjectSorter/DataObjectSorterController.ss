@@ -8,7 +8,7 @@ $MetaTags
 </head>
 
 <body class="typography">
-    <% include Sunnysideup/DataobjectSorter/Includes/DataObjectOneFieldOneRecordUpdate %>
+    <% include Sunnysideup/DataObjectSorter/Includes/DataObjectSorter %>
 </body>
 
 </html>

@@ -1,13 +1,13 @@
 <?php
 
-namespace Sunnysideup\DataobjectSorter;
+namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\Control\Director;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
-use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  *@author nicolaas [at] sunnysideup.co.nz
@@ -61,8 +61,8 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
             user_error('Form Fields could not be Found', E_USER_ERROR);
         }
         $fields = new FieldList(
-            new HiddenField('Table', 'Table', self::classNameToString($className)),
-            new HiddenField('Record', 'Record', $recordId)
+            new HiddenField('Table', 'Table', $this->SecureClassNameToBeUpdatedAsString()),
+            new HiddenField('Record', 'Record', $this->SecureRecordIdToBeUpdated())
         );
         foreach ($formFields as $f) {
             $fields->push($f);

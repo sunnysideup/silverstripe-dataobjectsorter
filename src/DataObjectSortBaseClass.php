@@ -1,6 +1,6 @@
 <?php
 
-namespace Sunnysideup\DataobjectSorter;
+namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPResponse;
@@ -15,7 +15,9 @@ use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
 use SilverStripe\Versioned\Versioned;
 
-use Sunnysideup\DataobjectSorter\Api\DataObjectSorterRequirements;
+use SilverStripe\Forms\FieldList;
+
+use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
@@ -38,7 +40,21 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         'show' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
     ];
 
-    private static $field = '';
+    private static $field = null;
+
+    private static $fields = null;
+
+    protected $fieldToBeUpdated = '';
+
+    protected $classNameToBeUpdated = '';
+
+    protected $singletonToBeUpdated = null;
+
+    protected $record = null;
+
+    protected $records = null;
+
+    protected $recordID = 0;
 
     public function providePermissions()
     {
@@ -139,36 +155,45 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected function SecureFieldToBeUpdated(): string
     {
-        $obj = $this->SecureSingletonToBeUpdated();
-        if ($obj) {
-            if (isset($_POST['Field'])) {
-                return addslashes($_POST['Field']);
-            }
-            $field = $this->getRequest()->param('OtherID');
+        if (! $this->fieldToBeUpdated) {
+            $obj = $this->SecureSingletonToBeUpdated();
+            if ($obj) {
+                if (isset($_POST['Field'])) {
+                    return addslashes($_POST['Field']);
+                }
+                $field = $this->getRequest()->param('OtherID');
 
-            if ($obj->hasDatabaseField($field)) {
-                return $field;
+                if ($obj->hasDatabaseField($field)) {
+                    $this->fieldToBeUpdated = $field;
+                    return $field;
+                } else {
+                    $className = $this->SecureClassNameToBeUpdated();
+                    user_error($field . ' does not exist on ' . $className, E_USER_ERROR);
+                }
+            } else {
+                user_error('there is no table specified', E_USER_ERROR);
             }
-            $className = $this->SecureClassNameToBeUpdated();
-            user_error($field . ' does not exist on ' . $className, E_USER_ERROR);
-        } else {
-            user_error('there is no table specified', E_USER_ERROR);
         }
-
-        return '';
+        return $this->fieldToBeUpdated;
     }
 
+    /**
+     * @return DataObject|null
+     */
     protected function SecureSingletonToBeUpdated()
     {
-        $className = $this->SecureClassNameToBeUpdated();
-        if (class_exists($className)) {
-            if (! isset($this->objectCache[$className])) {
-                $this->objectCache[$className] = DataObject::get_one($className);
+        if(! $this->singletonToBeUpdated) {
+            $className = $this->SecureClassNameToBeUpdated();
+            if (class_exists($className)) {
+                if (! isset($this->objectCache[$className])) {
+                    $this->objectCache[$className] = DataObject::get_one($className);
+                }
+                $this->singletonToBeUpdated = $this->objectCache[$className];
+            } else {
+                user_error('there is no table / classname specified', E_USER_ERROR);
             }
-
-            return $this->objectCache[$className];
         }
-        user_error('there is no table / classname specified', E_USER_ERROR);
+        return $this->singletonToBeUpdated;
     }
 
     /**
@@ -177,17 +202,19 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      */
     protected function SecureClassNameToBeUpdated(): string
     {
-        $classNameString = $this->getRequest()->param('ID');
-        $className = self::stringToClassName($classNameString);
-        if (! class_exists($className) && class_exists($classNameString)) {
-            $className = $classNameString;
+        if(! $this->classNameToBeUpdated) {
+            $classNameString = $this->getRequest()->param('ID');
+            $className = self::stringToClassName($classNameString);
+            if (! class_exists($className) && class_exists($classNameString)) {
+                $className = $classNameString;
+            }
+            if (class_exists($className)) {
+                $this->classNameToBeUpdated = $className;
+            } else {
+                user_error('Could not find className: ' . $className, E_USER_ERROR);
+            }
         }
-        if (class_exists($className)) {
-            return $className;
-        }
-        user_error('Could not find className: ' . $className, E_USER_ERROR);
-
-        return '';
+        return $this->classNameToBeUpdated;
     }
 
     protected function SecureClassNameToBeUpdatedAsString(): string
@@ -197,18 +224,16 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected function SecureRecordIdToBeUpdated(): int
     {
-        if (isset($_POST['Record'])) {
-            return (int) $_POST['Record'];
+        if(! $this->recordID) {
+            $this->recordID = (int) $this->request->requestVar('Record');
+            if(! $this->recordID) {
+                $this->recordID = (int) $this->request->requestVar('id');
+            }
+            if(! $this->recordID) {
+                $this->recordID = (int) $this->getRequest()->param('OtherID');
+            }
         }
-        if (isset($_GET['id'])) {
-            $record = $_GET['id'];
-
-            return (int) $record;
-        }
-
-        $id = (int) $this->getRequest()->param('OtherID');
-
-        return $id;
+        return $this->recordID;
     }
 
     /**
@@ -224,6 +249,19 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         }
 
         return self::$field;
+    }
+    /**
+     * @param DataObject $obj
+     *
+     * @return FieldList
+     */
+    protected function getFormFields($obj)
+    {
+        if (! self::$fields) {
+            self::$fields = $obj->scaffoldFormFields();
+        }
+
+        return self::$fields;
     }
 
     protected function HumanReadableTableName(): string
@@ -293,10 +331,10 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         Versioned::set_reading_mode('Stage.Stage');
         $className = $this->SecureClassNameToBeUpdated();
         if ($className) {
-            $filterField = (string) Convert::raw2sql(urldecode($this->request->getVar('filterField')));
-            $filterValue = (string) Convert::raw2sql(urldecode($this->request->getVar('filterValue')));
-            $where = (string) Convert::raw2sql(urldecode($this->request->getVar('where')));
-            $sort = (string) Convert::raw2sql(urldecode($this->request->getVar('sort')));
+            $filterField = (string) Convert::raw2sql(urldecode($this->request->requestVar('filterField')));
+            $filterValue = (string) Convert::raw2sql(urldecode($this->request->requestVar('filterValue')));
+            $where = (string) Convert::raw2sql(urldecode($this->request->requestVar('where')));
+            $sort = (string) Convert::raw2sql(urldecode($this->request->requestVar('sort')));
             $objects = $class::get();
             if ($filterField && $filterValue) {
                 $filterValue = explode(',', $filterValue);
