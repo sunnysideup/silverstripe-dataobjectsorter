@@ -3,6 +3,7 @@
 namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\Control\Director;
+use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
@@ -22,6 +23,8 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         'save' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
     ];
 
+    private static $fields_method = 'DosFields';
+
     /**
      * make sure to also change in routes if you change this link.
      *
@@ -38,11 +41,30 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         );
     }
 
-    public static function popup_link(string $className, int $recordID, ?string $linkText = 'click here to edit'): string
+    public static function popup_link(
+        string $className,
+        int $recordID,
+        ?string $linkText = 'click here to edit'
+    ): string
     {
         $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID);
 
         return self::link_html_maker(
+            $link,
+            'modalPopUp modal-popup',
+            'oneRecord' . self::classNameToString($className) . $recordID,
+            $linkText
+        );
+    }
+    public static function button_link(
+        string $className,
+        int $recordID,
+        ?string $linkText = 'click here to edit'
+    ): string
+    {
+        $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID);
+
+        return self::button_maker(
             $link,
             'modalPopUp modal-popup',
             'oneRecord' . self::classNameToString($className) . $recordID,

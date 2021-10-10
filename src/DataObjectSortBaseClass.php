@@ -41,6 +41,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     private static $page_size = 1000;
 
+    private static $scaffold_form_method = 'DosFields';
+
     private static $url_handlers = [
         '$Action//$ID/$OtherID/$ThirdID/$FourthID/$FifthID' => 'handleAction',
     ];
@@ -265,7 +267,12 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     protected function getFormFields($obj)
     {
         if (! self::$fields) {
-            self::$fields = $obj->scaffoldFormFields();
+            $method = $this->Config()->get('scaffold_form_method');
+            if($obj->hasMethod($method)) {
+                self::$fields = $obj->{$method}();
+            } else {
+                self::$fields = $obj->scaffoldFormFields();
+            }
         }
 
         return self::$fields;
@@ -294,19 +301,33 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected static function link_html_maker(string $link, string $cssClasses, string $code, string $linkText): string
     {
+        $var = '';
         if ($link) {
             DataObjectSorterRequirements::popup_link_requirements();
 
-            return '
+            $var = '
                 <a href="' . $link . '"
                     class="' . $cssClasses . '"
                     data-width="800"
                     data-height="600"
                     data-rel="window.open(\'' . $link . "', 'update" . $code . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left=20,top=20\'); return false;"
-                >' . $linkText . '</a>';
+                ><span class="ui-button-text">' . $linkText . '</span></a>';
         }
 
-        return '';
+        return $var;
+    }
+
+    protected static function button_maker(string $link, string $cssClasses, string $code, string $linkText): string
+    {
+        return '
+        <div class="form-group field readonly">
+            <label class="form__field-label"></label>
+            <div class="form__field-holder">
+                <p class="form-control-static readonly">
+                    '.self::link_html_maker($link, 'btn action btn-outline-primary '.$cssClasses, $code, $linkText).'
+                </p>
+            </div>
+        </div>';
     }
 
     /**
@@ -341,7 +362,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             $filterValue = (string) Convert::raw2sql(urldecode($this->request->requestVar('filterValue')));
             $where = (string) Convert::raw2sql(urldecode($this->request->requestVar('where')));
             $sort = (string) Convert::raw2sql(urldecode($this->request->requestVar('sort')));
-            $objects = $class::get();
+            $objects = $className::get();
             if ($filterField && $filterValue) {
                 $filterValue = explode(',', $filterValue);
                 $objects = $objects->filter([$filterField => $filterValue]);

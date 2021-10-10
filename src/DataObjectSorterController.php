@@ -52,11 +52,15 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      *
      * @return string - html
      */
-    public static function popup_link_only(string $className, ?string $filterField = '', ?string $filterValue = '', ?string $titleField = '')
-    {
+    public static function popup_link_only(
+        string $className,
+        $filterField = '',
+        ?string $filterValue = '',
+        ?string $titleField = ''
+    ) {
         $params = self::params_builder(
             [
-                'filterField' => $recordID,
+                'filterField' => $filterField,
                 'filterValue' => $filterValue,
                 'titleField' => $titleField,
             ]
@@ -98,6 +102,42 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
 
         return self::link_html_maker(
+            $link,
+            'modalPopUp modal-popup',
+            'sortlistFor' . self::classNameToString($className) . $filterField . $filterValue,
+            $linkText
+        );
+    }
+
+    /**
+     * returns a link for sorting objects. You can use this in the CMS like this....
+     * <code>
+     * if(class_exists("DataObjectSorterController")) {
+     * 	$fields->addFieldToTab("Root.Position", new LiteralField("AdvertisementsSorter", DataObjectSorterController::popup_link("Advertisement", $filterField = "", $filterValue = "", $linkText = "sort ".Advertisement::$plural_name, $titleField = "FullTitle")));
+     * }
+     * else {
+     * 	$fields->addFieldToTab("Root.Position", new NumericField($name = "Sort", "Sort index number (the lower the number, the earlier it shows up"));
+     * }
+     * </code>.
+     *
+     * @param string     $className   - DataObject Class Name you want to sort
+     * @param int|string $filterField - Field you want to filter for OR ParentID number (i.e. you are sorting children of Parent with ID = $filterField)
+     * @param string     $filterValue - filter field should be equal to this integer OR string. You can provide a list of IDs like this: 1,2,3,4 where the filterFiel is probably equal to ID or MyRelationID
+     * @param string     $linkText    - text to show on the link
+     * @param string     $titleField  - field to show in the sort list. This defaults to the DataObject method "getTitle", but you can use "name" or something like that.
+     *
+     * @return string - html
+     */
+    public static function button_link(
+        string $className,
+        ?string $filterField = '',
+        ?string $filterValue = '',
+        ?string $linkText = 'sort this list',
+        $titleField = ''
+    ) {
+        $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
+
+        return self::button_maker(
             $link,
             'modalPopUp modal-popup',
             'sortlistFor' . self::classNameToString($className) . $filterField . $filterValue,

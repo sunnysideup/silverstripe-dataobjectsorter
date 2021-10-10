@@ -32,7 +32,6 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     /**
      * get a link.
      *
-     * @param string $recordID
      */
     public static function popup_link_only(string $className, string $fieldName, int $recordID): string
     {
@@ -46,8 +45,6 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
     /**
      * get a link.
      *
-     * @param string $recordID
-     * @param string $linkText
      */
     public static function popup_link(
         string $className,
@@ -58,6 +55,26 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         $link = self::popup_link_only($className, $fieldName, $recordID);
 
         return self::link_html_maker(
+            $link,
+            'modalPopUp modal-popup',
+            'oneFieldOneRecord' . self::classNameToString($className) . $fieldName . $recordID,
+            $linkText
+        );
+    }
+
+    /**
+     * create a nice button.
+     *
+     */
+    public static function button_link(
+        string $className,
+        string $fieldName,
+        int $recordID,
+        ?string $linkText = 'click here to edit'
+    ): string {
+        $link = self::popup_link_only($className, $fieldName, $recordID);
+
+        return self::button_maker(
             $link,
             'modalPopUp modal-popup',
             'oneFieldOneRecord' . self::classNameToString($className) . $fieldName . $recordID,
@@ -80,9 +97,9 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
             $name = 'OneFieldForm',
             $fields = new FieldList(
                 $FormField,
-                new HiddenField('Table', 'Table', self::classNameToString($className)),
+                new HiddenField('Table', 'Table', self::classNameToString($this->SecureClassNameToBeUpdatedAsString())),
                 new HiddenField('Field', 'Field', $field),
-                new HiddenField('Record', 'Record', $recordId)
+                new HiddenField('Record', 'Record', ($this->SecureRecordIdToBeUpdated()))
             ),
             $actions = new FieldList(new FormAction('save', 'save and close'))
         );

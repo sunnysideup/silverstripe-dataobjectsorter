@@ -9,6 +9,8 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
 
+use SilverStripe\Versioned\Versioned;
+
 /**
  * @author nicolaas [at] sunnysideup.co.nz
  * @description: adds dataobject sorting functionality
@@ -59,8 +61,8 @@ class DataObjectSorterDOD extends DataExtension
                             $object->{$sortField} = $position;
                             //hack for site tree
                             if ($object instanceof SiteTree) {
-                                $object->writeToStage('Stage');
-                                $object->Publish('Stage', 'Live');
+                                $obj->writeToStage(Versioned::DRAFT);
+                                $obj->publishRecursive();
                             } else {
                                 $object->write();
                             }

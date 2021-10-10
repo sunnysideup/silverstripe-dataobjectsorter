@@ -94,6 +94,27 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         );
     }
 
+    /**
+     *
+     */
+    public static function button_link(
+        string $className,
+        string $fieldName,
+        ?string $where = '',
+        ?string $sort = '',
+        ?string $linkText = 'click here to edit',
+        ?string $titleField = 'Title'
+    ): string {
+        $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField = 'Title');
+
+        return self::button_maker(
+            $link,
+            'modalPopUp modal-popup',
+            'editOne' . self::classNameToString($className) . $fieldName,
+            $linkText
+        );
+    }
+
     public function updatefield($request = null)
     {
         Versioned::set_reading_mode('Stage.Stage');
@@ -115,9 +136,8 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                 if ($obj->canEdit()) {
                                     $obj->{$field} = $newValue;
                                     if ($obj instanceof SiteTree) {
-                                        $obj->writeToStage('Stage');
-                                        // todo: do publish recursively.
-                                        $obj->publish('Stage', 'Live');
+                                        $obj->writeToStage(Versioned::DRAFT);
+                                        $obj->publishRecursive();
                                     } else {
                                         $obj->write();
                                     }
@@ -127,12 +147,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                         $title = $obj->Title();
                                     } elseif ($obj->hasMethod('getTitle')) {
                                         $title = $obj->getTitle();
-                                    } elseif ($title = $obj->Title) {
-                                        //do nothing
-                                    } elseif ($title = $obj->Name) {
-                                        //do nothing
-                                    } else {
-                                        $title = $obj->ID;
                                     }
                                     $newValueObject = $obj->dbObject($field);
                                     $newValueFancy = $newValueObject->hasMethod('Nice') ? $newValueObject->Nice() : $newValueObject->Raw();
@@ -165,7 +179,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         Versioned::set_reading_mode('Stage.Stage');
         if (null === self::$_objects) {
             $field = $this->SecureFieldToBeUpdated();
-            $records->getRecordsPaginated();
+            $records = $records->getRecordsPaginated();
             $arrayList = ArrayList::create();
             if ($records->exists()) {
                 foreach ($records as $obj) {
@@ -182,7 +196,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                     }
                 }
             }
-            self::$_objects = $records;
+            self::$_objects = $arrayList;
             self::$_objects_without_field = $records;
         }
 
