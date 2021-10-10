@@ -1,40 +1,40 @@
 {
-    "name": "sunnysideup/dataobjectsorter",
-    "type": "silverstripe-vendormodule",
-    "description": "Silverstripe module with crud functionality: edit one field for one record, edit one record, edit one field for all records AND sort records... ",
-    "keywords": [
-        "Silverstripe-CMS",
-        "CMS",
-        "Silverstripe",
-        "dataobjectsorter",
-        "crud",
-        "sort",
-        "edit one field",
-        "edit one record",
-        "list of fields",
-        "quick edit",
-        "sorting"
-    ],
-    "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "Nicolaas Francken",
-            "email": "modules@sunnysideup.co.nz",
-            "role": "lead developer"
-        }
-    ],
-    "require": {
-        "composer/installers": "^1.6",
-        "silverstripe/recipe-cms": "^4.2"
-    },
-    "extra": {
-        "expose": [
-            "client"
-        ]
-    },
-    "autoload": {
-        "psr-4": {
-            "Sunnysideup\\DataObjectSorter\\": "src/"
-        }
+  "name": "sunnysideup/dataobjectsorter",
+  "type": "silverstripe-vendormodule",
+  "description": "Silverstripe module with crud functionality: edit one field for one record, edit one record, edit one field for all records AND sort records... ",
+  "keywords": [
+    "Silverstripe-CMS",
+    "CMS",
+    "Silverstripe",
+    "dataobjectsorter",
+    "crud",
+    "sort",
+    "edit one field",
+    "edit one record",
+    "list of fields",
+    "quick edit",
+    "sorting"
+  ],
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Nicolaas Francken",
+      "email": "modules@sunnysideup.co.nz",
+      "role": "lead developer"
     }
+  ],
+  "require": {
+    "composer/installers": "^1.6",
+    "silverstripe/recipe-cms": "^4.2"
+  },
+  "extra": {
+    "expose": [
+      "client"
+    ]
+  },
+  "autoload": {
+    "psr-4": {
+      "Sunnysideup\\DataObjectSorter\\": "src/"
+    }
+  }
 }
