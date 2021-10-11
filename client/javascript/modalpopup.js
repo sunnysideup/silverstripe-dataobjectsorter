@@ -33,7 +33,9 @@ var DataObjectModalPopUp = {
                     borderRadius: 5
                   },
                   overlayClose: true,
-                  onclose: function () { window.location.reload() }
+                  onClose: function () {
+                    window.location.reload()
+                  }
                 }
               )
             }

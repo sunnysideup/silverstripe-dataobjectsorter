@@ -8,6 +8,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
+use SilverStripe\Forms\ReadonlyField;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
@@ -82,18 +83,13 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         if (! $formFields) {
             user_error('Form Fields could not be Found', E_USER_ERROR);
         }
-        $fields = new FieldList(
-            new HiddenField('Table', 'Table', $this->SecureClassNameToBeUpdatedAsString()),
-            new HiddenField('Record', 'Record', $this->SecureRecordIdToBeUpdated())
-        );
-        foreach ($formFields as $f) {
-            $fields->push($f);
-        }
+        $formFields->push(new HiddenField('Table', 'Table', $this->SecureClassNameToBeUpdatedAsString()));
+        $formFields->push(new HiddenField('Record', 'Record', $this->SecureRecordIdToBeUpdated()));
 
         $form = new Form(
             $controller = $this,
             $name = 'OneRecordForm',
-            $fields,
+            $formFields,
             $actions = new FieldList(new FormAction('save', 'save and close'))
         );
         $form->loadDataFrom($obj);
@@ -107,12 +103,11 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         if ($obj instanceof HTTPResponse) {
             return $obj;
         }
+
         $form->saveInto($obj);
         $obj->write();
 
-        return '
-            <p>Your changes have been saved, please <a href="#" onclick="self.close(); return false;">close window</a>.</p>
-            <script type="text/javascript">self.close();</script>';
+        return '<script>window.parent.jQuery.modal.close(true)</script>';
     }
 
     public function show()

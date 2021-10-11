@@ -115,9 +115,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         $obj->{$field} = $data[$field];
         $obj->write();
 
-        return '
-            <p>Your changes have been saved, please <a href="#" onclick="self.close(); return false;">close window</a>.</p>
-            <script type="text/javascript">self.close();</script>';
+        return 'DONE';
     }
 
     protected function init()

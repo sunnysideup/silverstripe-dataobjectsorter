@@ -65,7 +65,7 @@ class DataObjectSorterRequirements
             //do nothing
         } else {
             self::set_popup_link_requirements_have_been_added(true);
-            // Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
+            Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/jquery.simplemodal-1.4.4.js');
             Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/modalpopup.js');
             Requirements::themedCSS('client/css/modalpopup');
