@@ -48,7 +48,7 @@ class DataObjectSorterDOD extends DataExtension
     public function dodataobjectsort($data)
     {
         $sortField = $this->SortFieldForDataObjectSorter();
-        $baseDataClass = ClassInfo::baseDataClass($this->owner->ClassName);
+        $baseDataClass = ClassInfo::baseDataClass($this->getOwner()->ClassName);
         if ('' !== $baseDataClass) {
             if (is_array($data) && count($data)) {
                 foreach ($data as $position => $id) {
@@ -105,9 +105,9 @@ class DataObjectSorterDOD extends DataExtension
      */
     public function dataObjectSorterPopupLink($filterField = '', $filterValue = '', $alternativeTitle = '')
     {
-        $linkText = $alternativeTitle ?: 'Sort ' . $this->owner->plural_name();
+        $linkText = $alternativeTitle ?: 'Sort ' . $this->getOwner()->plural_name();
 
-        return DataObjectSorterController::popup_link($this->owner->ClassName, $filterField, $filterValue, $linkText);
+        return DataObjectSorterController::popup_link($this->getOwner()->ClassName, $filterField, $filterValue, $linkText);
     }
 
     /**
@@ -117,16 +117,16 @@ class DataObjectSorterDOD extends DataExtension
     {
         $sortField = Config::inst()->get(DataObjectSorterDOD::class, 'sort_field');
         $field = 'Sort';
-        if ($sortField && $this->owner->hasDatabaseField($sortField)) {
+        if ($sortField && $this->getOwner()->hasDatabaseField($sortField)) {
             $field = $sortField;
-        } elseif ($this->owner->hasDatabaseField('AlternativeSortNumber')) {
+        } elseif ($this->getOwner()->hasDatabaseField('AlternativeSortNumber')) {
             $field = 'AlternativeSortNumber';
-        } elseif ($this->owner->hasDatabaseField('Sort')) {
+        } elseif ($this->getOwner()->hasDatabaseField('Sort')) {
             $field = 'Sort';
-        } elseif ($this->owner->hasDatabaseField('SortNumber')) {
+        } elseif ($this->getOwner()->hasDatabaseField('SortNumber')) {
             $field = 'SortNumber';
         } else {
-            user_error("No field Sort or AlternativeSortNumber (or {$sortField}) was found on data object: " . $this->owner->ClassName, E_USER_WARNING);
+            user_error("No field Sort or AlternativeSortNumber (or {$sortField}) was found on data object: " . $this->getOwner()->ClassName, E_USER_WARNING);
         }
 
         return $field;

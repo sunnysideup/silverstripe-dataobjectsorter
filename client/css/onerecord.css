@@ -1,11 +1,71 @@
-body {background-color: #bbb; font-family: arial, verdana, helvetica;}
-h3 {color: maroon; text-align: center; width: 95%}
-fieldset {border: none; background-color: #aaa;}
-    fieldset label {font-weight: bold; color: #555; display: block; margin-top: 1em; margin-bottom: 0.2em; width: 95%}
-    fieldset input.text, fieldset textarea {width: 95%; padding: 0.7em; border: 0.3em solid transparent; -moz-border-radius: 5px; -webkit-border-radius: 5px;}
-        fieldset input.text:focus {border: 0.3em solid pink;}
-        fieldset textarea{height: 3em;}
-        fieldset .checkbox  {padding: 0.3rem 0;}
-        fieldset .checkbox input, fieldset .checkbox label {display: inline; }
-.btn-toolbar  input {margin: 20px auto; font-size: 2.3em; background-color: green; display: block; color: white;}
-    .btn-toolbar  input:hover {background-color: pink;}
+body {
+  background-color: #e8e8e8;
+  font-family: arial, verdana, helvetica;
+}
+
+h3 {
+  color: maroon;
+  text-align: center;
+  width: 95%
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+fieldset .field {
+  border-bottom: 1px solid #fff;
+  padding: 1rem;
+}
+
+fieldset label {
+  font-weight: bold;
+  color: #555;
+  display: block;
+  margin-bottom: 0.2em;
+  width: 95%
+}
+
+fieldset input.text, fieldset textarea {
+  width: 95%;
+  padding: 0.7em;
+  border: 0.3em solid transparent;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+fieldset input.text:focus {
+  border: 0.3em solid pink;
+}
+
+fieldset textarea {
+  height: 3em;
+}
+
+fieldset .checkbox input,
+fieldset .checkbox label {
+  display: inline;
+}
+
+.btn-toolbar {
+  padding: 1rem;
+}
+
+.btn-toolbar  input {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.btn-toolbar  input:hover {
+  border: 1px solid red;
+}
