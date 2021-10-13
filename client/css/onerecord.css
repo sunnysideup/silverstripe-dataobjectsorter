@@ -8,6 +8,10 @@ h3 {
   text-align: center;
   width: 95%
 }
+form {
+  max-width: 600px;
+  margin: 0 auto;
+}
 
 fieldset {
   border: none;
@@ -67,5 +71,6 @@ fieldset .checkbox label {
 }
 
 .btn-toolbar  input:hover {
-  border: 1px solid red;
+  text-decoration: underline;
+  background-color: green;
 }
