@@ -268,11 +268,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         if (! self::$fields) {
             $method = $this->Config()->get('scaffold_form_method');
-            if($obj->hasMethod($method)) {
-                self::$fields = $obj->{$method}();
-            } else {
-                self::$fields = $obj->scaffoldFormFields();
-            }
+            self::$fields = $obj->hasMethod($method) ? $obj->{$method}() : $obj->scaffoldFormFields();
         }
 
         return self::$fields;
@@ -324,7 +320,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             <label class="form__field-label"></label>
             <div class="form__field-holder">
                 <p class="form-control-static readonly">
-                    '.self::link_html_maker($link, 'btn action btn-outline-primary '.$cssClasses, $code, $linkText).'
+                    ' . self::link_html_maker($link, 'btn action btn-outline-primary ' . $cssClasses, $code, $linkText) . '
                 </p>
             </div>
         </div>';

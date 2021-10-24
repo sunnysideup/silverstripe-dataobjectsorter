@@ -8,7 +8,6 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
-use SilverStripe\Forms\ReadonlyField;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
@@ -46,8 +45,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         string $className,
         int $recordID,
         ?string $linkText = 'click here to edit'
-    ): string
-    {
+    ): string {
         $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID);
 
         return self::link_html_maker(
@@ -57,12 +55,12 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
             $linkText
         );
     }
+
     public static function button_link(
         string $className,
         int $recordID,
         ?string $linkText = 'click here to edit'
-    ): string
-    {
+    ): string {
         $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID);
 
         return self::button_maker(

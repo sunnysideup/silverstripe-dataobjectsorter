@@ -94,9 +94,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         );
     }
 
-    /**
-     *
-     */
     public static function button_link(
         string $className,
         string $fieldName,
@@ -129,12 +126,13 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             if (class_exists($className) && count($ids) > 0 && ($newValue || 0 === (int) $newValue)) {
                 foreach ($ids as $id) {
                     if ((int) $id > 0) {
-                        /** @var $obj DataObject|null */
+                        /** @var null|DataObject $obj */
                         $obj = $className::get()->byID($id);
                         if ($obj) {
                             if ($obj->hasDatabaseField($field)) {
                                 if ($obj->canEdit()) {
                                     $obj->{$field} = $newValue;
+                                    $title = 'no title for record'l
                                     if ($obj instanceof SiteTree) {
                                         $obj->writeToStage(Versioned::DRAFT);
                                         $obj->publishRecursive();
@@ -151,7 +149,11 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                     $newValueObject = $obj->dbObject($field);
                                     $newValueFancy = $newValueObject->hasMethod('Nice') ? $newValueObject->Nice() : $newValueObject->Raw();
                                     ++$updateCount;
-                                    $updateMessage .= "Record updated: <i class=\"fieldTitle\">{$this->SecureFieldToBeUpdatedNice()}</i>  for <i class=\"recordTitle\">" . $title . '</i> updated to <i class="newValue">' . $newValueFancy . '</i><br />';
+                                    $updateMessage .= "
+                                        Record updated:
+                                        <i class=\"fieldTitle\">{$this->SecureFieldToBeUpdatedNice()}</i>
+                                        for <i class=\"recordTitle\">" . $title . '</i>
+                                        updated to <i class="newValue">' . $newValueFancy . '</i><br />';
                                 }
                             } else {
                                 user_error('field does not exist', E_USER_ERROR);

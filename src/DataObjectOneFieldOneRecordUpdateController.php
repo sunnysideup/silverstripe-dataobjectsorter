@@ -31,7 +31,6 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 
     /**
      * get a link.
-     *
      */
     public static function popup_link_only(string $className, string $fieldName, int $recordID): string
     {
@@ -44,7 +43,6 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 
     /**
      * get a link.
-     *
      */
     public static function popup_link(
         string $className,
@@ -64,7 +62,6 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 
     /**
      * create a nice button.
-     *
      */
     public static function button_link(
         string $className,
