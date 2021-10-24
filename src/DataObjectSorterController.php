@@ -130,7 +130,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     public static function button_link(
         string $className,
-        string $filterField = '',
+        $filterField = '',
         ?string $filterValue = '',
         ?string $linkText = 'sort this list',
         ?string $titleField = ''
@@ -243,14 +243,14 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     protected function addRequirements($className)
     {
-        $className = self::classNameToString('\\');
+        $classNameShort = self::classNameToString($className);
         DataObjectSorterRequirements::url_variable(
             DataObjectSorterController::class,
             'DataObjectSorterURL',
-            'dosort/' . $className
+            'dosort/' . $classNameShort
         );
-        $url = Director::absoluteURL(
-            Injector::inst()->get()->Link()
-        );
+        // $url = Director::absoluteURL(
+        //     Injector::inst()->get()->Link()
+        // );
     }
 }
