@@ -94,10 +94,10 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     public static function popup_link(
         string $className,
-        ?string $filterField = '',
+        $filterField = '',
         ?string $filterValue = '',
         ?string $linkText = 'sort this list',
-        $titleField = ''
+        ?string $titleField = ''
     ) {
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
 
@@ -130,10 +130,10 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     public static function button_link(
         string $className,
-        ?string $filterField = '',
+        string $filterField = '',
         ?string $filterValue = '',
         ?string $linkText = 'sort this list',
-        $titleField = ''
+        ?string $titleField = ''
     ) {
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
 

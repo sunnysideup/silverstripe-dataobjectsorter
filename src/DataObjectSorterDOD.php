@@ -60,8 +60,8 @@ class DataObjectSorterDOD extends DataExtension
                             $object->{$sortField} = $position;
                             //hack for site tree
                             if ($object instanceof SiteTree) {
-                                $obj->writeToStage(Versioned::DRAFT);
-                                $obj->publishRecursive();
+                                $object->writeToStage(Versioned::DRAFT);
+                                $object->publishRecursive();
                             } else {
                                 $object->write();
                             }

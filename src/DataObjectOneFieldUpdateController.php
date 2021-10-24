@@ -132,7 +132,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                             if ($obj->hasDatabaseField($field)) {
                                 if ($obj->canEdit()) {
                                     $obj->{$field} = $newValue;
-                                    $title = 'no title for record'l
+                                    $title = 'no title for record';
                                     if ($obj instanceof SiteTree) {
                                         $obj->writeToStage(Versioned::DRAFT);
                                         $obj->publishRecursive();
@@ -181,7 +181,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         Versioned::set_reading_mode('Stage.Stage');
         if (null === self::$_objects) {
             $field = $this->SecureFieldToBeUpdated();
-            $records = $records->getRecordsPaginated();
+            $records = $this->getRecordsPaginated();
             $arrayList = ArrayList::create();
             if ($records->exists()) {
                 foreach ($records as $obj) {
