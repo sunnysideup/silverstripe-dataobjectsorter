@@ -291,7 +291,6 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected static function link_only_maker(string $controllerClassName, string $action, $params)
     {
-
         return Injector::inst()->get($controllerClassName)
             ->Link($action) . '?' . http_build_query($params);
     }

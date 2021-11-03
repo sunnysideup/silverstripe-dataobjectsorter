@@ -2,8 +2,9 @@
 
 namespace Sunnysideup\DataObjectSorter\Api;
 
-use SilverStripe\Control\Director;
+use SilverStripe\Admin\LeftAndMain;
 use SilverStripe\Control\Controller;
+use SilverStripe\Control\Director;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
@@ -11,8 +12,6 @@ use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
-
-use SilverStripe\Admin\LeftAndMain;
 
 class DataObjectSorterRequirements
 {
