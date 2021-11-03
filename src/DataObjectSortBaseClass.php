@@ -291,6 +291,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected static function link_only_maker(string $controllerClassName, string $action, $params)
     {
+
         return Injector::inst()->get($controllerClassName)
             ->Link($action) . '?' . http_build_query($params);
     }
@@ -300,13 +301,13 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         $var = '';
         if ($link) {
             DataObjectSorterRequirements::popup_link_requirements();
-
+            $linkClean = Convert::raw2att($link);
             $var = '
-                <a href="' . $link . '"
+                <a href="' . $linkClean . '"
                     class="' . $cssClasses . '"
                     data-width="800"
                     data-height="600"
-                    data-rel="window.open(\'' . $link . "', 'update" . $code . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left=20,top=20\'); return false;"
+                    data-rel="window.open(\'' . $linkClean . "', 'update" . Convert::raw2att($code) . '\',\'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=600,left=20,top=20\'); return false;"
                 ><span class="ui-button-text">' . $linkText . '</span></a>';
         }
 
