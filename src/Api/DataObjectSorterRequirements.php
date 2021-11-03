@@ -3,6 +3,7 @@
 namespace Sunnysideup\DataObjectSorter\Api;
 
 use SilverStripe\Control\Director;
+use SilverStripe\Control\Controller;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
@@ -10,6 +11,8 @@ use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
+
+use SilverStripe\Admin\LeftAndMain;
 
 class DataObjectSorterRequirements
 {
@@ -60,10 +63,12 @@ class DataObjectSorterRequirements
     public static function popup_link_requirements()
     {
         $done = self::get_popup_link_requirements_have_been_added();
-        $isCMS = ! (bool) Config::inst()->get(SSViewer::class, 'theme_enabled');
+        $isCMS = ! (bool) Config::inst()->get(SSViewer::class, 'theme_enabled') ||
+            Controller::curr() instanceof LeftAndMain;
         if ($done || $isCMS) {
             //do nothing
         } else {
+            die('sdf');
             self::set_popup_link_requirements_have_been_added(true);
             Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/jquery.simplemodal-1.4.4.js');
