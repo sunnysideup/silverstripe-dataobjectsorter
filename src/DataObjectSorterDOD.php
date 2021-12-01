@@ -52,7 +52,7 @@ class DataObjectSorterDOD extends DataExtension
             if (is_array($data) && count($data)) {
                 foreach ($data as $position => $id) {
                     $id = (int) $id;
-                    $object = $baseDataClass::get()->byID($id);
+                    $object = $baseDataClass::get_by_id($id);
                     //we add one because position 0 is not good.
                     $position = (int) $position + 1;
                     if ($object && $object->canEdit()) {

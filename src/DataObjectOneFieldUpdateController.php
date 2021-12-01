@@ -127,7 +127,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                 foreach ($ids as $id) {
                     if ((int) $id > 0) {
                         /** @var null|DataObject $obj */
-                        $obj = $className::get()->byID($id);
+                        $obj = $className::get_by_id($id);
                         if ($obj) {
                             if ($obj->hasDatabaseField($field)) {
                                 if ($obj->canEdit()) {

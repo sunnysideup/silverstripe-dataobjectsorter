@@ -336,7 +336,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         Versioned::set_reading_mode('Stage.Stage');
         $className = $this->SecureClassNameToBeUpdated();
         $recordId = $this->SecureRecordIdToBeUpdated();
-        $obj = $className::get()->byID($recordId);
+        $obj = $className::get_by_id($recordId);
         if (! $obj) {
             user_error('record could not be found!', E_USER_ERROR);
 
