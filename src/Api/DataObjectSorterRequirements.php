@@ -67,7 +67,6 @@ class DataObjectSorterRequirements
         if ($done || $isCMS) {
             //do nothing
         } else {
-            die('sdf');
             self::set_popup_link_requirements_have_been_added(true);
             Requirements::javascript('silverstripe/admin: thirdparty/jquery/jquery.js');
             Requirements::javascript('sunnysideup/dataobjectsorter: client/javascript/jquery.simplemodal-1.4.4.js');
