@@ -23,7 +23,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         'save' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
     ];
 
-    private static $fields_method = 'DosFields';
+    private static $fields_method = 'getFrontEndFields';
 
     /**
      * make sure to also change in routes if you change this link.

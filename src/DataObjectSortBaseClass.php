@@ -41,7 +41,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     private static $page_size = 1000;
 
-    private static $scaffold_form_method = 'DosFields';
+    private static $scaffold_form_method = 'getFrontEndFields';
 
     private static $url_handlers = [
         '$Action//$ID/$OtherID/$ThirdID/$FourthID/$FifthID' => 'handleAction',
@@ -268,7 +268,12 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         if (! self::$fields) {
             $method = $this->Config()->get('scaffold_form_method');
-            self::$fields = $obj->hasMethod($method) ? $obj->{$method}() : $obj->scaffoldFormFields();
+            if($obj->hasMethod('DosFields')) {
+                //legacy!!!
+                self::$fields = $obj->hasMethod($method) ? $obj->{$method}() : $obj->scaffoldFormFields();
+            } else {
+                self::$fields = $obj->hasMethod($method) ? $obj->{$method}() : $obj->scaffoldFormFields();
+            }
         }
 
         return self::$fields;
