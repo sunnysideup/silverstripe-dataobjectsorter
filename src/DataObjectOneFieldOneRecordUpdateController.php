@@ -85,6 +85,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         if ($obj instanceof HTTPResponse) {
             return $obj;
         }
+
         $field = $this->SecureFieldToBeUpdated();
         $FormField = $this->getFormField($obj, $field);
         $FormField->setValue($obj->{$field});
@@ -108,6 +109,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         if ($obj instanceof HTTPResponse) {
             return $obj;
         }
+
         $field = $this->SecureFieldToBeUpdated();
         $obj->{$field} = $data[$field];
         $obj->write();

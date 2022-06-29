@@ -123,7 +123,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $ids = trim($request->requestVar('id')) ? explode(',', $request->requestVar('id')) : [];
         $newValue = $request->requestVar('value');
         if (0 !== Member::currentUserID()) {
-            if (class_exists($className) && count($ids) > 0 && ($newValue || 0 === (int) $newValue)) {
+            if (class_exists($className) && [] !== $ids && ($newValue || 0 === (int) $newValue)) {
                 foreach ($ids as $id) {
                     if ((int) $id > 0) {
                         /** @var null|DataObject $obj */
@@ -139,6 +139,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                     } else {
                                         $obj->write();
                                     }
+
                                     if ($titleField && $obj->hasDatabaseField($titleField)) {
                                         $title = $obj->{$titleField};
                                     } elseif ($obj->hasMethod('Title')) {
@@ -146,6 +147,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                     } elseif ($obj->hasMethod('getTitle')) {
                                         $title = $obj->getTitle();
                                     }
+
                                     $newValueObject = $obj->dbObject($field);
                                     $newValueFancy = $newValueObject->hasMethod('Nice') ? $newValueObject->Nice() : $newValueObject->Raw();
                                     ++$updateCount;
@@ -163,12 +165,14 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                         }
                     }
                 }
+
                 if ($updateCount > 1) {
                     return "{$updateCount} records Updated";
                 }
 
                 return $updateMessage;
             }
+
             user_error("data object specified: '{$className}' or id count: '" . count($ids) . "' or newValue: '{$newValue}' is not valid", E_USER_ERROR);
         } else {
             user_error('you need to be logged in to make the changes', E_USER_ERROR);
@@ -198,6 +202,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                     }
                 }
             }
+
             self::$_objects = $arrayList;
             self::$_objects_without_field = $records;
         }

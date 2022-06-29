@@ -66,6 +66,7 @@ class DataObjectSorterDOD extends DataExtension
                                 $object->write();
                             }
                         }
+
                         //do nothing
                     } else {
                         return _t('DataObjectSorter.NOACCESS', 'You do not have access rights to make these changes.');

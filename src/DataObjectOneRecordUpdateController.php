@@ -77,10 +77,12 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         if ($obj instanceof HTTPResponse) {
             return $obj;
         }
+
         $formFields = $this->getFormFields($obj);
         if (! $formFields) {
             user_error('Form Fields could not be Found', E_USER_ERROR);
         }
+
         $formFields->push(new HiddenField('Table', 'Table', $this->SecureClassNameToBeUpdatedAsString()));
         $formFields->push(new HiddenField('Record', 'Record', $this->SecureRecordIdToBeUpdated()));
 

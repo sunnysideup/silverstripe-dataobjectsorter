@@ -210,9 +210,11 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                             $tobeExcludedArray[$obj->ID] = $obj->ID;
                         }
                     }
-                    if (count($tobeExcludedArray) > 0) {
+
+                    if ([] !== $tobeExcludedArray) {
                         $objects = $objects->exclude(['ID' => $tobeExcludedArray]);
                     }
+
                     $this->addRequirements($className);
                     self::$_children_cache_for_sorting = $objects;
                 } else {

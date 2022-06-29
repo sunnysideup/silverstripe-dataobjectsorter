@@ -14,6 +14,7 @@ class DataObjectOneFieldAddEditAllLink
         if (! class_exists($className)) {
             user_error('Could not find ' . $className . ' as ClassName.');
         }
+
         $dataFields = $feldList->dataFields();
         foreach ($dataFields as $formField) {
             if ($formField instanceof CheckboxField) {

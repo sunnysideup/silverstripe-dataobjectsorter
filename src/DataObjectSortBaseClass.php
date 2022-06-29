@@ -160,6 +160,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                 if (isset($_POST['Field'])) {
                     return addslashes($_POST['Field']);
                 }
+
                 $field = $this->getRequest()->param('OtherID');
 
                 if ($obj->hasDatabaseField($field)) {
@@ -167,6 +168,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
                     return $field;
                 }
+
                 $className = $this->SecureClassNameToBeUpdated();
                 user_error($field . ' does not exist on ' . $className, E_USER_ERROR);
             } else {
@@ -188,6 +190,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                 if (! isset($this->objectCache[$className])) {
                     $this->objectCache[$className] = DataObject::get_one($className);
                 }
+
                 $this->singletonToBeUpdated = $this->objectCache[$className];
             } else {
                 user_error('there is no table / classname specified', E_USER_ERROR);
@@ -208,12 +211,15 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             if (! $classNameString) {
                 $classNameString = $this->request->requestVar('Table');
             }
+
             if (! $classNameString) {
                 $classNameString = $this->request->requestVar('ClassName');
             }
+
             if (! class_exists($classNameString)) {
                 $classNameString = self::stringToClassName($classNameString);
             }
+
             if (class_exists($classNameString)) {
                 $this->classNameToBeUpdated = $classNameString;
             } else {
@@ -236,6 +242,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             if (! $this->recordID) {
                 $this->recordID = (int) $this->request->requestVar('id');
             }
+
             if (! $this->recordID) {
                 $this->recordID = (int) $this->getRequest()->param('OtherID');
             }
@@ -268,7 +275,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         if (! self::$fields) {
             $method = $this->Config()->get('scaffold_form_method');
-            if($obj->hasMethod('DosFields')) {
+            if ($obj->hasMethod('DosFields')) {
                 //legacy!!!
                 self::$fields = $obj->hasMethod($method) ? $obj->{$method}() : $obj->scaffoldFormFields();
             } else {
@@ -347,6 +354,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
             return $this->permissionFailureStandard('Could not find record, please login again.');
         }
+
         if (! $obj->canEdit()) {
             return $this->permissionFailureStandard();
         }
@@ -370,9 +378,11 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             } elseif (is_numeric($filterField)) {
                 $objects = $objects->filter(['ParentID' => $filterField]);
             }
+
             if ($where) {
                 $objects = $objects->where($where);
             }
+
             if ($sort) {
                 $objects = $objects->sort($sort);
             }

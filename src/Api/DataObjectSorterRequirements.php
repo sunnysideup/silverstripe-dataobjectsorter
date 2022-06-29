@@ -129,6 +129,7 @@ class DataObjectSorterRequirements
         if (! $className) {
             $className = DataObjectSorterRequirements::class;
         }
+
         Config::modify()->update(
             SSViewer::class,
             'theme_enabled',
