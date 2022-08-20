@@ -175,9 +175,9 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     /**
      * runs the actual sorting...
      *
-     * @return DataList - return dataobject set of items to be sorted
+     * @return DataList|null - return dataobject set of items to be sorted
      */
-    public function Children()
+    public function Children(): ?DataList
     {
         if (null === self::$_children_cache_for_sorting) {
             $objects = $this->getRecords();
