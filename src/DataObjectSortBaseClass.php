@@ -373,7 +373,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             $sort = (string) Convert::raw2sql(urldecode($this->request->requestVar('sort')));
             $objects = $className::get();
             if ($filterField && $filterValue) {
-                $filterValue = explode(',', $filterValue);
+                $filterValue = explode(',', (string) $filterValue);
                 $objects = $objects->filter([$filterField => $filterValue]);
             } elseif (is_numeric($filterField)) {
                 $objects = $objects->filter(['ParentID' => $filterField]);

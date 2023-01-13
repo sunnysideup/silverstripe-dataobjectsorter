@@ -120,7 +120,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $className = $this->SecureClassNameToBeUpdated();
         $field = $request->param('OtherID');
         $titleField = $request->requestVar('titlefield');
-        $ids = trim($request->requestVar('id')) ? explode(',', $request->requestVar('id')) : [];
+        $ids = trim($request->requestVar('id')) ? explode(',', (string) $request->requestVar('id')) : [];
         $newValue = $request->requestVar('value');
         if (0 !== Member::currentUserID()) {
             if (class_exists($className) && [] !== $ids && ($newValue || 0 === (int) $newValue)) {
