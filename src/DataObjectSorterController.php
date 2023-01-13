@@ -175,7 +175,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     /**
      * runs the actual sorting...
      *
-     * @return DataList|null - return dataobject set of items to be sorted
+     * @return null|DataList - return dataobject set of items to be sorted
      */
     public function Children(): ?DataList
     {
