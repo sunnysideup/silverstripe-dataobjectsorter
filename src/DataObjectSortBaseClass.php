@@ -367,10 +367,10 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         Versioned::set_reading_mode('Stage.Stage');
         $className = $this->SecureClassNameToBeUpdated();
         if ($className) {
-            $filterField = (string) Convert::raw2sql(urldecode($this->request->requestVar('filterField')));
-            $filterValue = (string) Convert::raw2sql(urldecode($this->request->requestVar('filterValue')));
-            $where = (string) Convert::raw2sql(urldecode($this->request->requestVar('where')));
-            $sort = (string) Convert::raw2sql(urldecode($this->request->requestVar('sort')));
+            $filterField = (string) Convert::raw2sql(urldecode( (string) $this->request->requestVar('filterField')));
+            $filterValue = (string) Convert::raw2sql(urldecode( (string) $this->request->requestVar('filterValue')));
+            $where = (string) Convert::raw2sql(urldecode( (string) $this->request->requestVar('where')));
+            $sort = (string) Convert::raw2sql(urldecode( (string) $this->request->requestVar('sort')));
             $objects = $className::get();
             if ($filterField && $filterValue) {
                 $filterValue = explode(',', (string) $filterValue);
