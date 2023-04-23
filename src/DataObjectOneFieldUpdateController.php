@@ -11,18 +11,8 @@ use SilverStripe\View\ArrayData;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
- *@author nicolaas [at] sunnysideup.co.nz
- *@todo:
- *  pagination
- *  use scaffolding method (of some sort) to get right field type
- * (and many other things)
+ * Class \Sunnysideup\DataObjectSorter\DataObjectOneFieldUpdateController
  *
- *@package: dataobjectsorter
- *@description: allows you to quickly review and update one field for all records
- * e.g. update price for all products
- * URL is like this
- * dataobjectonefieldupdate/update/$Action/$ID/$OtherID
- * dataobjectonefieldupdate/[show]/[updatefield]/[tablename]/[fieldname]
  */
 class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
 {

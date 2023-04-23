@@ -10,9 +10,8 @@ use SilverStripe\Forms\HiddenField;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
- *@author nicolaas [at] sunnysideup.co.nz
- *@package: dataobjectsorter
- *@description: allows you to edit one field in one record
+ * Class \Sunnysideup\DataObjectSorter\DataObjectOneFieldOneRecordUpdateController
+ *
  */
 class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClass
 {

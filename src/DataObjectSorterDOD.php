@@ -11,10 +11,10 @@ use SilverStripe\ORM\DataExtension;
 use SilverStripe\Versioned\Versioned;
 
 /**
- * @author nicolaas [at] sunnysideup.co.nz
- * @description: adds dataobject sorting functionality
+ * Class \Sunnysideup\DataObjectSorter\DataObjectSorterDOD
  *
- * @package: dataobjectsorter
+ * @property DataObjectSorterDOD $owner
+ * @property int $Sort
  */
 class DataObjectSorterDOD extends DataExtension
 {

@@ -16,6 +16,10 @@ use SilverStripe\Security\Security;
 use SilverStripe\Versioned\Versioned;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
+/**
+ * Class \Sunnysideup\DataObjectSorter\DataObjectSortBaseClass
+ *
+ */
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
     /**

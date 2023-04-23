@@ -10,10 +10,8 @@ use SilverStripe\Versioned\Versioned;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
- * @author nicolaas [at] sunnysideup.co.nz
- * @description: allows you to sort dataobjects, you need to provide them in this way: http://www.app.com/dataobjectsorter/[dataobjectname]/
+ * Class \Sunnysideup\DataObjectSorter\DataObjectSorterController
  *
- * @package: dataobjectsorter
  */
 class DataObjectSorterController extends DataObjectSortBaseClass
 {

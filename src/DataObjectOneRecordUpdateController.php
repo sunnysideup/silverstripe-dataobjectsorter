@@ -11,9 +11,8 @@ use SilverStripe\Forms\HiddenField;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
- *@author nicolaas [at] sunnysideup.co.nz
- *@package: dataobjectsorter
- *@description: allows you to edit one record
+ * Class \Sunnysideup\DataObjectSorter\DataObjectOneRecordUpdateController
+ *
  */
 class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 {
