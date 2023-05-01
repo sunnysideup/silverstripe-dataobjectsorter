@@ -130,7 +130,7 @@ class DataObjectSorterRequirements
             $className = DataObjectSorterRequirements::class;
         }
 
-        Config::modify()->update(
+        Config::modify()->merge(
             SSViewer::class,
             'theme_enabled',
             Config::inst()->get($className, 'run_through_theme')
