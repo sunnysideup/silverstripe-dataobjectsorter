@@ -6,6 +6,7 @@ use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Member;
+use SilverStripe\Security\Security;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ArrayData;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
@@ -112,7 +113,9 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $titleField = $request->requestVar('titlefield');
         $ids = trim($request->requestVar('id')) ? explode(',', (string) $request->requestVar('id')) : [];
         $newValue = $request->requestVar('value');
-        if (0 !== Member::currentUserID()) {
+        var_dump($newValue);
+        $currentUserID = (int) Security::getCurrentUser()?->ID;
+        if (0 !== $currentUserID) {
             if (class_exists($className) && [] !== $ids && ($newValue || 0 === (int) $newValue)) {
                 foreach ($ids as $id) {
                     if ((int) $id > 0) {

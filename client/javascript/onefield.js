@@ -18,7 +18,7 @@ if (
 
     ulSelector: '#DataObjectOneFieldUpdateUL',
 
-    inputSelector: '#DataObjectOneFieldUpdateUL input.updateField, #DataObjectOneFieldUpdateUL textarea.updateField, , #DataObjectOneFieldUpdateUL select.updateField',
+    inputSelector: '#DataObjectOneFieldUpdateUL input.updateField, #DataObjectOneFieldUpdateUL textarea.updateField, #DataObjectOneFieldUpdateUL select.updateField',
 
     feedbackSelector: '.DataObjectOneFieldUpdateFeedback',
 
@@ -33,31 +33,14 @@ if (
     fieldName: '',
 
     dirtyfixes: function () {
-      jQuery(this.inputSelector).each(
-        function (i) {
-          var typeClass = jQuery(this).attr('type')
-          if (typeClass == 'checkbox') {
-            jQuery(this).change(
-              function () {
-                if (jQuery(this).attr('checked')) {
-                  jQuery(this).attr('value', 1)
-                } else {
-                  jQuery(this).attr('value', 0)
-                }
-              }
-            )
-          }
-          jQuery(this).addClass(typeClass)
-        }
-      )
       var elementType = jQuery('#DataObjectOneFieldUpdateUL li span .updateField').first().prop('nodeName').toLowerCase()
       if (elementType == 'select') {
         var selectID = jQuery('#DataObjectOneFieldUpdateUL li span .updateField').first().attr('id')
-        jQuery('select#' + selectID).clone().attr({name: 'ApplyToAll', id: 'ApplyToAll'}).insertAfter('#ApplyToAllButton')
+        jQuery('select#' + selectID).clone().attr({ name: 'ApplyToAll', id: 'ApplyToAll' }).insertAfter('#ApplyToAllButton')
       } else {
         var inputType = jQuery('#DataObjectOneFieldUpdateUL li input').first().attr('type').toLowerCase()
         var inputValue = jQuery('#DataObjectOneFieldUpdateUL li input').first().val()
-        jQuery("<input type='" + inputType + "' />").attr({ value: inputValue, name: 'ApplyToAll', id: 'ApplyToAll'}).insertAfter('#ApplyToAllButton')
+        jQuery("<input type='" + inputType + "' />").attr({ value: inputValue, name: 'ApplyToAll', id: 'ApplyToAll' }).insertAfter('#ApplyToAllButton')
       }
     },
 
@@ -155,7 +138,7 @@ if (
             } else {
               elementType = jQuery('#ApplyToAll').attr('type').toLowerCase()
               if (elementType == 'checkbox') {
-                if (jQuery('#ApplyToAll').attr('checked')) {
+                if (jQuery('#ApplyToAll').is(':checked')) {
                   applyToAllValue = 1
                 } else {
                   applyToAllValue = 0
@@ -197,11 +180,7 @@ if (
       var id = nameArray[1]
       var value = jQuery(el).val()
       if (jQuery(el).attr('type') == 'checkbox') {
-        if (jQuery(el).attr('checked')) {
-          value = 1
-        } else {
-          value = 0
-        }
+        value = jQuery(el).is(':checked') ? 1 : 0;
       }
       return {
         'id': id,
