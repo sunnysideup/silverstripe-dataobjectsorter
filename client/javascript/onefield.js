@@ -138,21 +138,15 @@ if (
             } else {
               elementType = jQuery('#ApplyToAll').attr('type').toLowerCase()
               if (elementType == 'checkbox') {
-                if (jQuery('#ApplyToAll').is(':checked')) {
-                  applyToAllValue = 1
-                } else {
-                  applyToAllValue = 0
-                }
+                applyToAllValue = jQuery('#ApplyToAll').is(':checked') ? 1 : 0;
               }
               inputSelector = '#DataObjectOneFieldUpdateUL li:visible input'
               jQuery(inputSelector).each(
                 function (index, el) {
                   var currentInput = jQuery(el)
                   currentInput.val(applyToAllValue)
-                  if (jQuery('#ApplyToAll').attr('checked')) {
-                    currentInput.prop('checked', true)
-                  } else {
-                    currentInput.prop('checked', false)
+                  if(elementType === 'checkbox') {
+                    currentInput.prop('checked', applyToAllValue ? 'checked' : '')
                   }
                   var idAndValue = DataObjectOneFieldUpdate.retrieveDetailsFromInput(currentInput)
                   ids.push(idAndValue.id)

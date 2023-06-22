@@ -113,7 +113,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $titleField = $request->requestVar('titlefield');
         $ids = trim($request->requestVar('id')) ? explode(',', (string) $request->requestVar('id')) : [];
         $newValue = $request->requestVar('value');
-        var_dump($newValue);
         $currentUserID = (int) Security::getCurrentUser()?->ID;
         if (0 !== $currentUserID) {
             if (class_exists($className) && [] !== $ids && ($newValue || 0 === (int) $newValue)) {
@@ -160,7 +159,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                 }
 
                 if ($updateCount > 1) {
-                    return "{$updateCount} records Updated";
+                    return "{$updateCount} records updated";
                 }
 
                 return $updateMessage;
