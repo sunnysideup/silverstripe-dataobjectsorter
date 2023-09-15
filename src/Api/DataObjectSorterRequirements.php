@@ -119,7 +119,7 @@ class DataObjectSorterRequirements
                 ->Link($action)
         );
         Requirements::customScript(
-            'var ' . $varName . " = '" . $url . "'",
+            'var ' . $varName . " = '" . rtrim($url, '/').'/' . "'",
             $varName . 'URL'
         );
     }
@@ -130,10 +130,10 @@ class DataObjectSorterRequirements
             $className = DataObjectSorterRequirements::class;
         }
 
-        Config::modify()->merge(
+        Config::modify()->set(
             SSViewer::class,
             'theme_enabled',
-            Config::inst()->get($className, 'run_through_theme')
+            Config::inst()->get($className, 'run_through_theme') ? true : false
         );
     }
 }

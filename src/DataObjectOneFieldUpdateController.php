@@ -183,7 +183,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                 foreach ($records as $obj) {
                     if ($obj->canEdit()) {
                         $ids[$obj->ID] = $obj->ID;
-                        $obj->FormField = $obj->dbObject($field)->scaffoldFormField();
+                        $obj->FormField = $this->getFormField($obj, $field);
                         $obj->FormField->setName(self::classNameToString($obj->ClassName) . '/' . $obj->ID);
                         //3.0TODO Check that I work vvv.
                         $obj->FormField->addExtraClass('updateField');

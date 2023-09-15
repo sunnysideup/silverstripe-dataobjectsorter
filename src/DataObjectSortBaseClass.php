@@ -264,7 +264,12 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     protected function getFormField($obj, $fieldName)
     {
         if (! self::$field) {
-            self::$field = $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
+            if($obj->hasMethod('getFrontEndField')) {
+                self::$field = $obj->getFrontEndField($fieldName);
+            }
+            if(! self::$field) {
+                self::$field = $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
+            }
         }
 
         return self::$field;
@@ -279,11 +284,12 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         if (! self::$fields) {
             $method = $this->Config()->get('scaffold_form_method');
-            if ($obj->hasMethod('DosFields')) {
+            if ($obj->hasMethod($method)) {
                 //legacy!!!
-                self::$fields = $obj->hasMethod($method) ? $obj->{$method}() : $obj->scaffoldFormFields();
-            } else {
-                self::$fields = $obj->hasMethod($method) ? $obj->{$method}() : $obj->scaffoldFormFields();
+                self::$fields = $obj->$method();
+            }
+            if(! self::$fields) {
+                self::$fields = $obj->scaffoldFormFields();
             }
         }
 
@@ -371,10 +377,10 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         Versioned::set_reading_mode('Stage.Stage');
         $className = $this->SecureClassNameToBeUpdated();
         if ($className) {
-            $filterField = (string) Convert::raw2sql(urldecode( (string) $this->request->requestVar('filterField')));
-            $filterValue = (string) Convert::raw2sql(urldecode( (string) $this->request->requestVar('filterValue')));
-            $where = (string) Convert::raw2sql(urldecode( (string) $this->request->requestVar('where')));
-            $sort = (string) Convert::raw2sql(urldecode( (string) $this->request->requestVar('sort')));
+            $filterField = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('filterField')));
+            $filterValue = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('filterValue')));
+            $where = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('where')));
+            $sort = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('sort')));
             $objects = $className::get();
             if ($filterField && $filterValue) {
                 $filterValue = explode(',', (string) $filterValue);
