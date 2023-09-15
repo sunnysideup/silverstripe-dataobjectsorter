@@ -272,7 +272,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             }
         }
 
-        return self::$field;
+        // clone is crucial!
+        return clone self::$field;
     }
 
     /**
