@@ -153,7 +153,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                 user_error('field does not exist', E_USER_ERROR);
                             }
                         } else {
-                            user_error("could not find record: {${$className}}, {$id} ", E_USER_ERROR);
+                            user_error("could not find record: {$className}, {$id} ", E_USER_ERROR);
                         }
                     }
                 }

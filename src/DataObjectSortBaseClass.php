@@ -176,7 +176,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                 $className = $this->SecureClassNameToBeUpdated();
                 user_error($field . ' does not exist on ' . $className, E_USER_ERROR);
             } else {
-                user_error('there is no table specified', E_USER_ERROR);
+                user_error('there is no class name specified', E_USER_ERROR);
             }
         }
 
