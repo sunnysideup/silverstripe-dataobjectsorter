@@ -91,3 +91,7 @@
     border: 1px solid #3cb0fd!important;
 }
 
+#NoRecordsCanBeFound {
+  font-size: 32px;
+  line-height: 100vh;
+}

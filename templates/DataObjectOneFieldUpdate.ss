@@ -28,5 +28,5 @@
 </form>
 <% include DataObjectsToBeUpdatedPagination %>
 <% else %>
-<p>No records can be found.</p>
+<p id="NoRecordsCanBeFound">No records can be found.</p>
 <% end_if %>

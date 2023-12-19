@@ -88,9 +88,6 @@ if (
           var ids = new Array()
           ids.push(id)
           jQuery(el).closest('li.fieldHolder').addClass('runningUpdate')
-          jQuery(DataObjectOneFieldUpdate.feedbackSelector).html(
-            'Running new update'
-          )
           if (parseInt(id)) {
             if (DataObjectOneFieldUpdate.fieldName) {
               jQuery(el).closest('li.fieldHolder').addClass('loading')
@@ -213,17 +210,22 @@ if (
     },
 
     updateServer: function (ids, value, elementSelector) {
+      jQuery(DataObjectOneFieldUpdate.feedbackSelector)
+        .html('Running new update')
+        .addClass('loading')
       var url =
         DataObjectOneFieldUpdateURL +
         this.tableName +
         '/' +
         this.fieldName +
         '/?value=' +
-        escape(value) +
+        encodeURIComponent(value) +
         '&id=' +
         ids.join()
       jQuery.get(url, {}, function (data) {
-        jQuery(DataObjectOneFieldUpdate.feedbackSelector).html(data)
+        jQuery(DataObjectOneFieldUpdate.feedbackSelector)
+          .html(data)
+          .removeClass('loading')
         jQuery(elementSelector).closest('li.fieldHolder').addClass('updated')
         jQuery(elementSelector).closest('li.fieldHolder').removeClass('loading')
         jQuery(elementSelector)
