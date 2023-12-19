@@ -78,7 +78,7 @@
         #DataObjectOneFieldUpdateUL li:hover {background-color: #ddd; border-radius: 3px;}
         #DataObjectOneFieldUpdateUL li input, #DataObjectOneFieldUpdateUL li select { float: right;  height: 32px; padding: 0 5px; }
         #DataObjectOneFieldUpdateUL li input, #DataObjectOneFieldUpdateUL li select, #DataObjectOneFieldUpdateUL li textarea {width: auto; border: 1px solid #999!important; border-radius: 3px;}
-            #DataObjectOneFieldUpdateUL li input.checkbox {float: right; width: auto;}
+            #DataObjectOneFieldUpdateUL li input.checkbox {float: right; width: auto; height: auto;}
 
 #FilterAndApplyToAllInputs input:focus,
 #FilterAndApplyToAllInputs select:focus,
