@@ -46,12 +46,13 @@
 #FilterAndApplyToAllInputs select {
     float: right;
     width: auto;
-    height: 32px;
     border: 1px solid #999!important;
     border-radius: 3px;
-    padding: 0 5px;
+    padding: 6px 5px;
 }
-
+#ApplyToAll[type="checkbox"] {
+  margin-top: 10px;
+}
 #ApplyToAllButton {
     float: right;
     margin-left: 5px;
@@ -90,5 +91,3 @@
     border: 1px solid #3cb0fd!important;
 }
 
-.loading {background-image: url(../images/loading.gif); background-position: right top; background-repeat: no-repeat; background-color: #ccc;}
-    .loading input {background-color: #ccc;}
