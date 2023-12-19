@@ -1,13 +1,12 @@
 <% if DataObjectsToBeUpdated %>
 
-<h1 class="DataObjectOneFieldUpdateFeedback">please update fields below (<em>$SecureFieldToBeUpdatedNice</em> in <em>$HumanReadableTableName</em>) - NB: there is no undo!</h1>
+<h1 class="DataObjectOneFieldUpdateFeedback">Edit <em><u>$SecureFieldToBeUpdatedNice</u></em> in <em><u>$HumanReadableTableName</u></em></h1>
 <div id="FilterAndApplyToAllInputs">
     <div>
-        <label for="TextMatchFilter">Filter current page:</label>
+        <label for="TextMatchFilter">Filter:</label>
         <input type="text" id="TextMatchFilter" name="TextMatchFilter"/>
     </div>
     <div>
-        <label for="ApplyToAll">Apply the following value to all visible fields:</label>
         <a href="#" id="ApplyToAllButton">APPLY TO ALL</a>
     </div>
 </div>
