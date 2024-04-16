@@ -139,7 +139,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                     $updateMessage .= "
                                         Record updated:
                                         <i class=\"fieldTitle\">{$this->SecureFieldToBeUpdatedNice()}</i>
-                                        for <i class=\"recordTitle\">" . $title . '</i>
+                                        for <u><i class=\"recordTitle\">" . $title . '</i></u>
                                         updated to <i class="newValue">' . $newValueFancy . '</i><br />';
                                 }
                             } else {
