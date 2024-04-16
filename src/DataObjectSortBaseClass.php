@@ -413,7 +413,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected function getTitleForObject($obj, string $titleField)
     {
-        $titleFieldWithoutGet = $this->removePrefix('get', '', $titleField);
+        $titleFieldWithoutGet = $this->removePrefix('get', $titleField);
         $titleFieldWithGet = 'get'.$titleFieldWithoutGet;
         $castedVariables = Config::inst()->get($obj->ClassName, 'casting');
         if ($titleField && $obj->hasDatabaseField($titleField)) {
