@@ -224,21 +224,4 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         );
     }
 
-    protected function getTitleForObject($obj, string $titleField)
-    {
-        $titleFieldWithGet = 'get'.$titleField;
-        if ($titleField && $obj->hasDatabaseField($titleField)) {
-            $title = $obj->{$titleField};
-        } elseif ($obj->hasMethod($titleField)) {
-            $title = $obj->$titleField();
-        } elseif ($obj->hasMethod($titleFieldWithGet)) {
-            $title = $obj->$titleFieldWithGet();
-        } elseif ($obj->hasMethod('getTitle')) {
-            $title = $obj->getTitle();
-        } elseif ($obj->hasMethod('Title')) {
-            $title = $obj->Title();
-        }
-        return $title;
-
-    }
 }

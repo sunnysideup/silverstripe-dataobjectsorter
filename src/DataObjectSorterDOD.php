@@ -8,6 +8,7 @@ use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
 use SilverStripe\ORM\DataExtension;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\Versioned\Versioned;
 
 /**
@@ -47,7 +48,8 @@ class DataObjectSorterDOD extends DataExtension
     public function dodataobjectsort($data)
     {
         $sortField = $this->SortFieldForDataObjectSorter();
-        $baseDataClass = ClassInfo::baseDataClass($this->getOwner()->ClassName);
+        $schema = DataObject::getSchema();
+        $baseDataClass = $schema->baseDataClass(get_class($this->getOwner()));
         if ('' !== $baseDataClass) {
             if (is_array($data) && count($data)) {
                 foreach ($data as $position => $id) {
