@@ -110,7 +110,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $updateCount = 0;
         $className = $this->SecureClassNameToBeUpdated();
         $field = $request->param('OtherID');
-        $titleField = $request->requestVar('titleField');
+        $titleField = (string) $request->requestVar('titleField');
         $ids = trim($request->requestVar('id')) ? explode(',', (string) $request->requestVar('id')) : [];
         $newValue = $request->requestVar('value');
         $currentUserID = (int) Security::getCurrentUser()?->ID;
