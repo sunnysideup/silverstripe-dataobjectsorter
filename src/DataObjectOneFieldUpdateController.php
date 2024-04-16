@@ -75,7 +75,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         ?string $linkText = 'click here to edit',
         ?string $titleField = 'Title'
     ): string {
-        $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField = 'Title');
+        $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField);
 
         return self::link_html_maker(
             $link,
@@ -93,7 +93,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         ?string $linkText = 'click here to edit',
         ?string $titleField = 'Title'
     ): string {
-        $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField = 'Title');
+        $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField);
 
         return self::button_maker(
             $link,
@@ -110,7 +110,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $updateCount = 0;
         $className = $this->SecureClassNameToBeUpdated();
         $field = $request->param('OtherID');
-        $titleField = $request->requestVar('titlefield');
+        $titleField = $request->requestVar('titleField');
         $ids = trim($request->requestVar('id')) ? explode(',', (string) $request->requestVar('id')) : [];
         $newValue = $request->requestVar('value');
         $currentUserID = (int) Security::getCurrentUser()?->ID;
@@ -131,14 +131,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                     } else {
                                         $obj->write();
                                     }
-
-                                    if ($titleField && $obj->hasDatabaseField($titleField)) {
-                                        $title = $obj->{$titleField};
-                                    } elseif ($obj->hasMethod('Title')) {
-                                        $title = $obj->Title();
-                                    } elseif ($obj->hasMethod('getTitle')) {
-                                        $title = $obj->getTitle();
-                                    }
+                                    $title = $this->getTitleForObject($obj, $titleField);
 
                                     $newValueObject = $obj->dbObject($field);
                                     $newValueFancy = $newValueObject->hasMethod('Nice') ? $newValueObject->Nice() : $newValueObject->Raw();
@@ -190,7 +183,8 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                         $obj->FormField->addExtraClass('updateField');
                         $obj->FieldToBeUpdatedValue = $obj->{$field};
                         $obj->FormField->setValue($obj->{$field});
-                        $title = $obj->getTitle();
+                        $titleField = $this->request->requestVar('titleField');
+                        $title = $this->getTitleForObject($obj, $titleField);
                         $arrayList->push(new ArrayData(['FormField' => $obj->FormField, 'MyTitle' => $title]));
                     }
                 }
@@ -228,5 +222,23 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             DataObjectOneFieldUpdateController::class,
             'DataObjectOneFieldUpdateURL'
         );
+    }
+
+    protected function getTitleForObject($obj, string $titleField)
+    {
+        $titleFieldWithGet = 'get'.$titleField;
+        if ($titleField && $obj->hasDatabaseField($titleField)) {
+            $title = $obj->{$titleField};
+        } elseif ($obj->hasMethod($titleField)) {
+            $title = $obj->$titleField();
+        } elseif ($obj->hasMethod($titleFieldWithGet)) {
+            $title = $obj->$titleFieldWithGet();
+        } elseif ($obj->hasMethod('getTitle')) {
+            $title = $obj->getTitle();
+        } elseif ($obj->hasMethod('Title')) {
+            $title = $obj->Title();
+        }
+        return $title;
+
     }
 }

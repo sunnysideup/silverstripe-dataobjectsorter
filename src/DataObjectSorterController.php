@@ -195,10 +195,10 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                                     $obj->SortTitle = $obj->{$method}();
                                 } else {
                                     $method = 'SortTitle';
+                                    $obj->SortTitle = $this->getTitleForObject($obj, $method);
                                     if ($obj->hasMethod($method)) {
-                                        $obj->SortTitle = $obj->{$method}();
                                     } elseif ($obj->hasDatabaseField($titleField)) {
-                                        $obj->SortTitle = $obj->{$titleField};
+                                        $obj->SortTitle = $this->getTitleForObject($obj, $titleField);
                                     }
                                 }
                             } else {

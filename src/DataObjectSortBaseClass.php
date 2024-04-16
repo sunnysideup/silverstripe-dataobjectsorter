@@ -409,4 +409,37 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
         return $records;
     }
+
+
+    protected function getTitleForObject($obj, string $titleField)
+    {
+        $titleFieldWithoutGet = $this->removePrefix('get', '', $titleField);
+        $titleFieldWithGet = 'get'.$titleFieldWithoutGet;
+        $castedVariables = Config::inst()->get($obj->ClassName, 'casting');
+        if ($titleField && $obj->hasDatabaseField($titleField)) {
+            $title = $obj->{$titleField};
+        } elseif (! empty($castedVariables[$titleFieldWithoutGet])) {
+            if ($obj->hasMethod($titleFieldWithoutGet)) {
+                $title = $obj->$titleFieldWithoutGet();
+            } else {
+                $title = $obj->$titleFieldWithGet();
+            }
+        } elseif ($obj->hasMethod('getTitle')) {
+            $title = $obj->getTitle();
+        } elseif ($obj->hasMethod('Title')) {
+            $title = $obj->Title();
+        }
+        return $title;
+
+    }
+
+    protected function removePrefix(string $prefix, string $string): string
+    {
+        // Check if the string starts with the prefix
+        if (strpos($string, $prefix) === 0) {
+            // Remove the prefix by slicing the string
+            return substr($string, strlen($prefix));
+        }
+        return $string; // Return the original string if prefix not at start
+    }
 }
