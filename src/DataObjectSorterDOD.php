@@ -14,7 +14,7 @@ use SilverStripe\Versioned\Versioned;
 /**
  * Class \Sunnysideup\DataObjectSorter\DataObjectSorterDOD
  *
- * @property \Sunnysideup\DataObjectSorter\DataObjectSorterDOD $owner
+ * @property DataObjectSorterDOD $owner
  * @property int $Sort
  */
 class DataObjectSorterDOD extends DataExtension
