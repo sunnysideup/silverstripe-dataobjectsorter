@@ -4,7 +4,7 @@
 </div>
 <ul id="DataObjectSorterList">
 <% loop Children  %>
-    <li id="dos_{$ID}"><div class="sortHandle"><img src="$resourceURL('sunnysideup/dataobjectsorter:client/images/arrow.png')" alt="move" width="16" height="16" class="moveMe" />$Title</div></li>
+    <li id="dos_{$ID}"><div class="sortHandle"><img loading="lazy" src="$resourceURL('sunnysideup/dataobjectsorter:client/images/arrow.png')" alt="move" width="16" height="16" class="moveMe" />$Title</div></li>
 <% end_loop  %>
 </ul>
 <% else  %>
