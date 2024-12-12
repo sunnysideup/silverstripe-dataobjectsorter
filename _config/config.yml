@@ -3,8 +3,20 @@ name: DataObjectSorter
 ---
 
 SilverStripe\Admin\LeftAndMain:
-    extra_requirements_javascript:
-        - 'sunnysideup/dataobjectsorter: client/javascript/jquery.simplemodal-1.4.4.js'
-        - 'sunnysideup/dataobjectsorter: client/javascript/modalpopup.js'
-    extra_requirements_themedCss:
-        - client/css/modalpopup
+  extra_requirements_javascript:
+    - 'sunnysideup/dataobjectsorter: client/javascript/jquery.simplemodal-1.4.4.js'
+    - 'sunnysideup/dataobjectsorter: client/javascript/modalpopup.js'
+  extra_requirements_themedCss:
+    - client/css/modalpopup
+
+---
+name: dataobjectsorter_EDIT_ALL
+after:
+  - '*'
+only:
+  envorconstant:
+    'SS_SHOW_EDIT_ALL_LINKS': true
+---
+SilverStripe\ORM\DataObject:
+  extensions:
+    - Sunnysideup\DataObjectSorter\Extensions\DataObjectEditAnythingExtension

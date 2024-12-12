@@ -7,7 +7,7 @@ use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\ORM\DataExtension;
+use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Versioned\Versioned;
 
@@ -17,7 +17,7 @@ use SilverStripe\Versioned\Versioned;
  * @property DataObjectSorterDOD $owner
  * @property int $Sort
  */
-class DataObjectSorterDOD extends DataExtension
+class DataObjectSorterDOD extends Extension
 {
     /**
      * @var string
