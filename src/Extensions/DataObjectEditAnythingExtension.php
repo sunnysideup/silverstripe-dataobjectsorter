@@ -13,7 +13,9 @@ use SilverStripe\Versioned\Versioned;
 use Sunnysideup\DataObjectSorter\DataObjectOneFieldUpdateController;
 
 /**
+ * Class \Sunnysideup\DataObjectSorter\Extensions\DataObjectEditAnythingExtension
  *
+ * @property DataObjectEditAnythingExtension $owner
  */
 class DataObjectEditAnythingExtension extends Extension
 {
