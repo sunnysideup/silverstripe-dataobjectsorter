@@ -11,9 +11,14 @@ use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBCurrency;
+use SilverStripe\ORM\FieldType\DBDate;
+use SilverStripe\ORM\FieldType\DBDatetime;
+use SilverStripe\ORM\FieldType\DBFloat;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\FieldType\DBHTMLVarchar;
 use SilverStripe\ORM\FieldType\DBInt;
+use SilverStripe\ORM\FieldType\DBPercentage;
+use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\ORM\FieldType\DBVarchar;
 use SilverStripe\Versioned\Versioned;
 use Sunnysideup\DataObjectSorter\DataObjectOneFieldUpdateController;
@@ -27,18 +32,34 @@ class DataObjectEditAnythingExtension extends Extension
 {
 
     private static $included_field_types_for_quick_edit = [
-        'Varchar',
-        DBVarchar::class,
+        // 'Varchar',
+        // DBVarchar::class,
 
-        'Int',
-        DBInt::class,
+        // 'Int',
+        // DBInt::class,
 
-        'Boolean',
-        DBBoolean::class,
+        // 'Float',
+        // DBFloat::class,
 
-        'Currency',
-        DBCurrency::class,
+        // 'percentage',
+        // DBPercentage::class,
+
+        // 'Boolean',
+        // DBBoolean::class,
+
+        // 'Currency',
+        // DBCurrency::class,
+
+        // 'Date',
+        // DBDate::class,
+
+        // 'Datetime',
+        // DBDatetime::class,
+
+        // 'Text',
+        // DBText::class,
     ];
+
     private static $excluded_field_types_for_quick_edit = [
         'HTMLText',
         'HTMLVarchar',
