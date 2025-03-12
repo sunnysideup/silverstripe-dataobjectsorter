@@ -8,6 +8,7 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
 use SilverStripe\Forms\FormAction;
 use SilverStripe\Forms\HiddenField;
+use SilverStripe\ORM\DataObject;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
@@ -17,9 +18,9 @@ use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 {
     private static $allowed_actions = [
-        'onerecordform' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
-        'show' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
-        'save' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+        'OneRecordForm' => DataObjectSortBaseClass::CAN_DO_STUFF,
+        'show' => DataObjectSortBaseClass::CAN_DO_STUFF,
+        'save' => DataObjectSortBaseClass::CAN_DO_STUFF,
     ];
 
     private static $fields_method = 'getFrontEndFields';
@@ -70,7 +71,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         );
     }
 
-    public function onerecordform()
+    public function OneRecordForm()
     {
         $obj = $this->getRecordAndCheckPermissions();
         if ($obj instanceof HTTPResponse) {
@@ -98,8 +99,9 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 
     public function save($data, $form)
     {
+        //important security check
         $obj = $this->getRecordAndCheckPermissions();
-        if ($obj instanceof HTTPResponse) {
+        if (! ($obj instanceof DataObject)) {
             return $obj;
         }
 
@@ -111,8 +113,9 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 
     public function show()
     {
+        //important security check
         $obj = $this->getRecordAndCheckPermissions();
-        if ($obj instanceof HTTPResponse) {
+        if (! ($obj instanceof DataObject)) {
             return $obj;
         }
 

@@ -18,8 +18,8 @@ use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
 {
     private static $allowed_actions = [
-        'updatefield' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
-        'show' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+        'updatefield' => DataObjectSortBaseClass::CAN_DO_STUFF,
+        'show' => DataObjectSortBaseClass::CAN_DO_STUFF,
     ];
 
     /**
@@ -122,6 +122,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                         $obj = $className::get_by_id($id);
                         if ($obj) {
                             if ($obj->hasDatabaseField($field)) {
+                                // important security check!
                                 if ($obj->canEdit()) {
                                     $obj->{$field} = $newValue;
                                     $title = 'no title for record';
@@ -174,6 +175,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             $arrayList = ArrayList::create();
             if ($records->exists()) {
                 foreach ($records as $obj) {
+                    // important security check!
                     if ($obj->canEdit()) {
                         $ids[$obj->ID] = $obj->ID;
                         // important!
@@ -223,5 +225,4 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
             'DataObjectOneFieldUpdateURL'
         );
     }
-
 }

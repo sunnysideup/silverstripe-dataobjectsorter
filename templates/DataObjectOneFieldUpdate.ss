@@ -1,4 +1,4 @@
-<% if DataObjectsToBeUpdated %>
+<% if $DataObjectsToBeUpdated %>
 
 <h1 class="DataObjectOneFieldUpdateFeedback">Edit <em><u>$SecureFieldToBeUpdatedNice</u></em> in <em><u>$HumanReadableTableName</u></em></h1>
 <div id="FilterAndApplyToAllInputs">
@@ -16,7 +16,7 @@
     <input type="hidden" name="field" id="DataObjectOneFieldUpdateFieldName" value="$SecureFieldToBeUpdated" />
     <input type="hidden" name="table" id="DataObjectOneFieldUpdateTableName" value="$SecureClassNameToBeUpdatedAsString" />
     <ul id="DataObjectOneFieldUpdateUL">
-    <% loop DataObjectsToBeUpdated %>
+    <% loop $DataObjectsToBeUpdated %>
         <li class="fieldHolder">
             <span>
                 $FormField

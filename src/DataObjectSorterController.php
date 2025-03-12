@@ -19,8 +19,8 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      * standard SS variable.
      */
     private static $allowed_actions = [
-        'sort' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
-        'dosort' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+        'sort' => DataObjectSortBaseClass::CAN_DO_STUFF,
+        'dosort' => DataObjectSortBaseClass::CAN_DO_STUFF,
     ];
 
     /**

@@ -52,7 +52,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     ];
 
     private static $allowed_actions = [
-        'show' => 'DATA_OBJECT_SORT_AND_EDIT_PERMISSION',
+        'show' => DataObjectSortBaseClass::CAN_DO_STUFF,
     ];
 
     private static $field;
@@ -151,7 +151,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         // Only administrators can run this method
         parent::init();
-        if (! Permission::check('DATA_OBJECT_SORT_AND_EDIT_PERMISSION')) {
+        if (! Permission::check(DataObjectSortBaseClass::CAN_DO_STUFF)) {
             return $this->permissionFailureStandard();
         }
     }
@@ -264,10 +264,10 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     protected function getFormField($obj, $fieldName)
     {
         if (! self::$field) {
-            if($obj->hasMethod('getFrontEndField')) {
+            if ($obj->hasMethod('getFrontEndField')) {
                 self::$field = $obj->getFrontEndField($fieldName);
             }
-            if(! self::$field) {
+            if (! self::$field) {
                 self::$field = $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
             }
         }
@@ -289,7 +289,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                 //legacy!!!
                 self::$fields = $obj->$method();
             }
-            if(! self::$fields) {
+            if (! self::$fields) {
                 self::$fields = $obj->scaffoldFormFields();
             }
         }
@@ -363,7 +363,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if (! $obj) {
             user_error('record could not be found!', E_USER_ERROR);
 
-            return $this->permissionFailureStandard('Could not find record, please login again.');
+            return $this->permissionFailureStandard('Could not find record.');
         }
 
         if (! $obj->canEdit()) {
@@ -415,7 +415,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         $titleField = $titleField ?: 'Title';
         $titleFieldWithoutGet = $this->removePrefix('get', $titleField);
-        $titleFieldWithGet = 'get'.$titleFieldWithoutGet;
+        $titleFieldWithGet = 'get' . $titleFieldWithoutGet;
         $castedVariables = Config::inst()->get($obj->ClassName, 'casting');
         if ($titleField && $obj->hasDatabaseField($titleField)) {
             $title = $obj->{$titleField};
@@ -431,7 +431,6 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             $title = $obj->Title();
         }
         return $title;
-
     }
 
     protected function removePrefix(string $prefix, string $string): string

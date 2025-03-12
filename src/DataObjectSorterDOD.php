@@ -57,6 +57,7 @@ class DataObjectSorterDOD extends Extension
                     $object = $baseDataClass::get_by_id($id);
                     //we add one because position 0 is not good.
                     $position = (int) $position + 1;
+                    //important security check
                     if ($object && $object->canEdit()) {
                         if ($position !== $object->{$sortField}) {
                             $object->{$sortField} = $position;
