@@ -74,20 +74,17 @@ class DataObjectEditAnythingExtension extends Extension
         $excludeFields = $owner->config()->get('excluded_field_types_for_quick_edit');
         $includeFields = $owner->config()->get('included_field_types_for_quick_edit');
         foreach ($dbFields as $dbField => $dbType) {
-            if (!empty($excludeFields) && in_array($dbField, $excludeFields)) {
+            if (
+                (
+                    !empty($excludeFields) &&
+                    in_array(true, array_map(fn($field) => stripos($dbType, $field) === 0, $excludeFields), true)
+                ) ||
+                (
+                    !empty($includeFields) &&
+                    !in_array(true, array_map(fn($field) => stripos($dbType, $field) === 0, $includeFields), true)
+                )
+            ) {
                 continue;
-            }
-            if (!empty($includeFields)) {
-                $includeField = false;
-                foreach ($includeFields as $includeField) {
-                    if (stripos($dbType, $includeField) === 0) {
-                        $includeField = true;
-                        break;
-                    }
-                }
-                if (!$includeField) {
-                    continue;
-                }
             }
             $myFormField = $fields->dataFieldByName($dbField);
             if ($myFormField) {
