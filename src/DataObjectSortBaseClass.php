@@ -380,8 +380,10 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if ($className) {
             $filterField = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('filterField')));
             $filterValue = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('filterValue')));
-            $where = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('where')));
-            $sort = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('sort')));
+            $where = $this->request->requestVar('where');
+            $sort = $this->request->requestVar('sort');
+            $where = Convert::raw2sql($where);
+            $sort = Convert::raw2sql($sort);
             $objects = $className::get();
             if ($filterField && $filterValue) {
                 $filterValue = explode(',', (string) $filterValue);
@@ -391,7 +393,11 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             }
 
             if ($where) {
-                $objects = $objects->where($where);
+                if (is_array($where)) {
+                    $objects = $objects->filter($where);
+                } else {
+                    $objects = $objects->where($where);
+                }
             }
 
             if ($sort) {
@@ -441,5 +447,77 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             return substr($string, strlen($prefix));
         }
         return $string; // Return the original string if prefix not at start
+    }
+
+    protected static function turnStateIntoFilterAndSort($className, mixed $filterOriginal, mixed $sortOriginal): array
+    {
+        $filter = [];
+        $sort = [];
+        $filterSortCache = self::getDecodedGridState($className);
+        $filter = $filterSortCache['filter'];
+        $sort = $filterSortCache['sort'];
+
+        if (is_array($filterOriginal)) {
+            $filter = array_merge($filter, $filterOriginal);
+        } elseif ($filterOriginal) {
+            $filter = $filterOriginal;
+        }
+        if (is_array($sortOriginal)) {
+            $sort = array_merge($sort, $sortOriginal);
+        } elseif ($sortOriginal) {
+            $sort = $sortOriginal;
+        }
+
+        return ['filter' => $filter, 'sort' => $sort];
+    }
+
+
+    protected static $filterSortCachePerClassName = [];
+
+
+    protected static function getDecodedGridState(string $className): array
+    {
+        if (!isset($filterSortCachePerClassName[$className])) {
+            $state = [];
+            $filter = [];
+            $sort = [];
+            foreach ($_GET as $key => $value) {
+                // Match keys that start with "gridState-" and end with "-0"
+                if (preg_match('/^gridState-(.*)-0$/', $key, $matches)) {
+                    $className = str_replace('-', '\\', $matches[1]); // Convert to namespace format
+
+                    if (class_exists($className)) {
+                        $jsonString = urldecode($value);
+                        $decodedData = json_decode($jsonString, true);
+
+                        if (is_array($decodedData)) {
+                            $state[$className] = $decodedData;
+                        }
+                    }
+                }
+            }
+            if (isset($state[$className])) {
+                $state = $state[$className];
+                if (isset($state['GridFieldFilterHeader']['Columns'])) {
+                    $filter = $state['GridFieldFilterHeader']['Columns'];
+                }
+                if (isset($state['GridFieldSortableHeader']['SortColumn'])) {
+                    $sort = $state['GridFieldSortableHeader']['SortColumn'];
+                }
+                foreach ($filter as $key => $value) {
+                    $filter[$key . ':PartialMatch'] = Convert::raw2sql($value);
+                    unset($filter[$key]);
+                }
+                if (!is_array($sort)) {
+                    $sort = [$sort];
+                }
+                foreach ($sort as $key => $value) {
+                    $sort[$value] = 'ASC';
+                    unset($sort[$key]);
+                }
+            }
+            $filterSortCachePerClassName[$className] = ['filter' => $filter, 'sort' => $sort];
+        }
+        return $filterSortCachePerClassName[$className];
     }
 }

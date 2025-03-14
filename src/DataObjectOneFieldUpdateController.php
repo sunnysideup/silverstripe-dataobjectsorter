@@ -44,7 +44,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
      *
      * @return string
      */
-    public static function popup_link_only(string $className, string $fieldName, ?string $where = '', ?string $sort = '', ?string $titleField = 'Title')
+    public static function popup_link_only(string $className, string $fieldName, mixed $where = '', mixed $sort = '', ?string $titleField = 'Title')
     {
         $params = self::params_builder(
             [
@@ -70,13 +70,13 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     public static function popup_link(
         string $className,
         string $fieldName,
-        ?string $where = '',
-        ?string $sort = '',
+        mixed $where = '',
+        mixed $sort = '',
         ?string $linkText = 'click here to edit',
         ?string $titleField = 'Title'
     ): string {
-        $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField);
-
+        $state = self::turnStateIntoFilterAndSort($className, $where, $sort);
+        $link = self::popup_link_only($className, $fieldName, $state['filter'], $state['sort'], $titleField);
         return self::link_html_maker(
             $link,
             'modalPopUp modal-popup',

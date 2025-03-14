@@ -1,94 +1,133 @@
 .DataObjectOneFieldUpdateFeedback {
-    box-sizing: border-box;
-    position: fixed;
-    border-radius: 3px 3px 0 0;
-    background-color: #eee;
-    top: 0;
-    padding: 1rem 0.7rem 0 0.7rem;
-    font-size: 24px;
-    line-height: 1;
-    height: 64px;
-    left: 0;
-    right: 0;
-    margin: 0;
-    overflow: hidden;
-    text-align: center;
+  box-sizing: border-box;
+  position: fixed;
+  border-radius: 3px 3px 0 0;
+  background-color: #eee;
+  top: 0;
+  padding: 1rem 0.7rem 0 0.7rem;
+  font-size: 24px;
+  line-height: 1;
+  height: 64px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  overflow: hidden;
+  text-align: center;
 }
 
 #FilterAndApplyToAllInputs {
-    position: fixed;
-    top: 64px;
-    left: 0;
-    right: 0;
-    margin: 0;
-    background-color: #EEE;
-    border-bottom: 1px solid #333;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  margin: 0;
+  background-color: #EEE;
+  border-bottom: 1px solid #333;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 #FilterAndApplyToAllInputs div {
-    float:left;
-    box-sizing: border-box;
-    width: auto;
-    padding: 0.7em;
+  float: left;
+  box-sizing: border-box;
+  width: auto;
+  padding: 0.7em;
 }
 
 #FilterAndApplyToAllInputs label {
-    display: inline-block;
-    margin-right: 5px;
-    padding: 6px 0;
-    font-weight: bold;
+  display: inline-block;
+  margin-right: 5px;
+  padding: 6px 0;
+  font-weight: bold;
 }
 
 #FilterAndApplyToAllInputs input,
 #FilterAndApplyToAllInputs select {
-    float: right;
-    width: auto;
-    border: 1px solid #999!important;
-    border-radius: 3px;
-    padding: 6px 5px;
+  float: right;
+  width: auto;
+  border: 1px solid #999 !important;
+  border-radius: 3px;
+  padding: 6px 5px;
 }
+
 #ApplyToAll[type="checkbox"] {
   margin-top: 10px;
 }
+
 #ApplyToAllButton {
-    float: right;
-    margin-left: 5px;
-    padding: 9px 10px;
-    background: #3498db;
-    border-radius: 7px;
-    color: #fff;
-    font-size: 12px;
-    text-decoration: none;
+  float: right;
+  margin-left: 5px;
+  padding: 9px 10px;
+  background: #3498db;
+  border-radius: 7px;
+  color: #fff;
+  font-size: 12px;
+  text-decoration: none;
 }
 
 #ApplyToAllButton:hover {
-    background: #3cb0fd;
-    text-decoration: none;
+  background: #3cb0fd;
+  text-decoration: none;
 }
 
 #tokenEffortForm {
-    padding-top: 130px;
+  padding-top: 130px;
 }
 
-#DataObjectOneFieldUpdateUL {list-style: none; padding: 0;}
-    #DataObjectOneFieldUpdateUL li { height: auto; overflow: auto; list-style: none; border-bottom: 1px solid #ddd; margin: 0 -0.5em; padding: 0.7em; }
-        #DataObjectOneFieldUpdateUL li:hover {background-color: #ddd; border-radius: 3px;}
-        #DataObjectOneFieldUpdateUL li input, #DataObjectOneFieldUpdateUL li select { float: right;  height: 32px; padding: 0 5px; }
-        #DataObjectOneFieldUpdateUL li input, #DataObjectOneFieldUpdateUL li select, #DataObjectOneFieldUpdateUL li textarea {width: auto; border: 1px solid #999!important; border-radius: 3px;}
-            #DataObjectOneFieldUpdateUL li input.checkbox {float: right; width: auto; height: auto;}
+#DataObjectOneFieldUpdateUL {
+  list-style: none;
+  padding: 0;
+}
+
+#DataObjectOneFieldUpdateUL li {
+  height: auto;
+  overflow: auto;
+  list-style: none;
+  border-bottom: 1px solid #ddd;
+  margin: 0 -0.5em;
+  padding: 0.7em;
+}
+
+#DataObjectOneFieldUpdateUL li:hover {
+  background-color: #ddd;
+  border-radius: 3px;
+}
+
+#DataObjectOneFieldUpdateUL li input,
+#DataObjectOneFieldUpdateUL li select {
+  float: right;
+  height: 32px;
+  padding: 0 5px;
+}
+
+#DataObjectOneFieldUpdateUL li input,
+#DataObjectOneFieldUpdateUL li select,
+#DataObjectOneFieldUpdateUL li textarea {
+  width: auto;
+  border: 1px solid #999 !important;
+  border-radius: 3px;
+}
+
+#DataObjectOneFieldUpdateUL li input.checkbox {
+  float: right;
+  width: auto;
+  height: auto;
+}
+
+#DataObjectOneFieldUpdateUL li input.text {
+  width: 20em;
+}
 
 #FilterAndApplyToAllInputs input:focus,
 #FilterAndApplyToAllInputs select:focus,
 #FilterAndApplyToAllInputs textarea:focus,
 #DataObjectOneFieldUpdateUL li input:focus,
 #DataObjectOneFieldUpdateUL li select:focus,
-#DataObjectOneFieldUpdateUL li textarea:focus{
-    outline: none;
-    box-shadow: 0 0 5px #3cb0fd!important;
-    border: 1px solid #3cb0fd!important;
+#DataObjectOneFieldUpdateUL li textarea:focus {
+  outline: none;
+  box-shadow: 0 0 5px #3cb0fd !important;
+  border: 1px solid #3cb0fd !important;
 }
 
 #NoRecordsCanBeFound {
