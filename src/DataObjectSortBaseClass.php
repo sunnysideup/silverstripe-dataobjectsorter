@@ -451,26 +451,15 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected static function turnStateIntoFilterAndSort($className, mixed $filterOriginal, mixed $sortOriginal): array
     {
-        $filter = [];
-        $sort = [];
         $filterSortCache = self::getDecodedGridState($className);
-        $filter = $filterSortCache['filter'];
-        $sort = $filterSortCache['sort'];
 
-        if (is_array($filterOriginal)) {
-            $filter = array_merge($filter, $filterOriginal);
-        } elseif ($filterOriginal) {
-            $filter = $filterOriginal;
-        }
-        if (is_array($sortOriginal)) {
-            $sort = array_merge($sort, $sortOriginal);
-        } elseif ($sortOriginal) {
-            $sort = $sortOriginal;
-        }
+        $filter = is_array($filterOriginal) ?
+            array_merge($filterSortCache['filter'], $filterOriginal) : ($filterOriginal ?: $filterSortCache['filter']);
+        $sort = is_array($sortOriginal) ?
+            array_merge($filterSortCache['sort'], $sortOriginal) : ($sortOriginal ?: $filterSortCache['sort']);
 
-        return ['filter' => $filter, 'sort' => $sort];
+        return compact('filter', 'sort');
     }
-
 
     protected static $filterSortCachePerClassName = [];
 
