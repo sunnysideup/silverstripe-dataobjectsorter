@@ -498,6 +498,9 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                     $sort = $state['GridFieldSortableHeader']['SortColumn'];
                 }
                 $fields = DataObject::getSchema()->databaseFields($className);
+                $fields['q'] = '';
+
+                //todo - deal with q!
                 foreach ($filter as $key => $value) {
                     if (!isset($fields[$key])) {
                         unset($filter[$key]);
