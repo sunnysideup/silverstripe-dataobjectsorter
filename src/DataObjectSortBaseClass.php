@@ -470,7 +470,11 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             $state = [];
             $filter = [];
             $sort = [];
-            foreach ($_GET as $key => $value) {
+            $getVars = Controller::curr()?->getRequest()?->getVars();
+            if (!is_array($getVars)) {
+                $getVars = [];
+            }
+            foreach ($getVars as $key => $value) {
                 // Match keys that start with "gridState-" and end with "-0"
                 if (preg_match('/^gridState-(.*)-0$/', $key, $matches)) {
                     $className = str_replace('-', '\\', $matches[1]); // Convert to namespace format
@@ -493,14 +497,22 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                 if (isset($state['GridFieldSortableHeader']['SortColumn'])) {
                     $sort = $state['GridFieldSortableHeader']['SortColumn'];
                 }
+                $fields = DataObject::getSchema()->databaseFields($className);
                 foreach ($filter as $key => $value) {
-                    $filter[$key . ':PartialMatch'] = Convert::raw2sql($value);
-                    unset($filter[$key]);
+                    if (!isset($fields[$key])) {
+                        unset($filter[$key]);
+                    } else {
+                        $filter[$key . ':PartialMatch'] = Convert::raw2sql($value);
+                        unset($filter[$key]);
+                    }
                 }
                 if (!is_array($sort)) {
                     $sort = [$sort];
                 }
                 foreach ($sort as $key => $value) {
+                    if (!isset($fields[$value])) {
+                        unset($sort[$key]);
+                    }
                     $sort[$value] = 'ASC';
                     unset($sort[$key]);
                 }

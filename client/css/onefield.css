@@ -116,7 +116,7 @@
 }
 
 #DataObjectOneFieldUpdateUL li input.text {
-  width: 20em;
+  min-width: 50%;
 }
 
 #FilterAndApplyToAllInputs input:focus,
