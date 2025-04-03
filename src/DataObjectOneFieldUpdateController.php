@@ -126,12 +126,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                 if ($obj->canEdit()) {
                                     $obj->{$field} = $newValue;
                                     $title = 'no title for record';
-                                    if ($obj instanceof SiteTree) {
-                                        $obj->writeToStage(Versioned::DRAFT);
-                                        $obj->publishRecursive();
-                                    } else {
-                                        $obj->write();
-                                    }
+                                    $this->writeAndPublish($obj);
                                     $title = $this->getTitleForObject($obj, $titleField);
 
                                     $newValueObject = $obj->dbObject($field);

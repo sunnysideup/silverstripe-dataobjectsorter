@@ -106,7 +106,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         }
 
         $form->saveInto($obj);
-        $obj->write();
+        $this->writeAndPublish($obj);
 
         return '<script>window.parent.jQuery.modal.close(true)</script>';
     }

@@ -61,12 +61,18 @@ class DataObjectSorterDOD extends Extension
                     if ($object && $object->canEdit()) {
                         if ($position !== $object->{$sortField}) {
                             $object->{$sortField} = $position;
-                            //hack for site tree
-                            if ($object instanceof SiteTree) {
-                                $object->writeToStage(Versioned::DRAFT);
+                            $isPublished = false;
+                            if ($object->hasMethod('isPublished')) {
+                                $isPublished = $object->isPublished();
+                                if ($object->hasMethod('isModifiedOnDraft')) {
+                                    if ($object->isModifiedOnDraft()) {
+                                        $isPublished = false;
+                                    }
+                                }
+                            }
+                            $object->write();
+                            if ($isPublished) {
                                 $object->publishRecursive();
-                            } else {
-                                $object->write();
                             }
                         }
 

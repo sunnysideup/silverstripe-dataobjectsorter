@@ -112,7 +112,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
 
         $field = $this->SecureFieldToBeUpdated();
         $obj->{$field} = $data[$field];
-        $obj->write();
+        $this->writeAndPublish($obj);
 
         return 'DONE';
     }

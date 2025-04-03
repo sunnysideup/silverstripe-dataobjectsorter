@@ -524,4 +524,21 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         }
         return $filterSortCachePerClassName[$className];
     }
+
+    protected function writeAndPublish($obj)
+    {
+        $isPublished = false;
+        if ($obj->hasMethod('isPublished')) {
+            $isPublished = $obj->isPublished();
+            if ($obj->hasMethod('isModifiedOnDraft')) {
+                if ($obj->isModifiedOnDraft()) {
+                    $isPublished = false;
+                }
+            }
+        }
+        $obj->write();
+        if ($isPublished) {
+            $obj->publishRecursive();
+        }
+    }
 }
