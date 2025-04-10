@@ -78,7 +78,14 @@ class DataObjectEditAnythingExtension extends Extension
             if (
                 (
                     !empty($excludeFields) &&
-                    in_array(true, array_map(fn($field) => stripos($dbType, $field) === 0, $excludeFields), true)
+                    in_array(
+                        true,
+                        array_map(
+                            fn($field) => stripos($dbType, $field) === 0,
+                            $excludeFields
+                        ),
+                        true
+                    )
                 ) ||
                 (
                     !empty($includeFields) &&
@@ -97,7 +104,7 @@ class DataObjectEditAnythingExtension extends Extension
                 }
                 $getMethod = 'getRightTitle';
                 $setMethod = 'setRightTitle';
-                if (!$myFormField->hasMethod('getRightTitle')) {
+                if ($myFormField->hasMethod('getRightTitle') !== true) {
                     $getMethod = 'getDescription';
                     $setMethod = 'setDescription';
                 }
