@@ -3,8 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!ul) return
 
   const feedback = document.querySelector('.DataObjectOneFieldUpdateFeedback')
-  const fieldNameInput = document.querySelector('#DataObjectOneFieldUpdateFieldName')
-  const tableNameInput = document.querySelector('#DataObjectOneFieldUpdateTableName')
+  const fieldNameInput = document.querySelector(
+    '#DataObjectOneFieldUpdateFieldName'
+  )
+  const tableNameInput = document.querySelector(
+    '#DataObjectOneFieldUpdateTableName'
+  )
 
   const tableName = tableNameInput?.value || ''
   const fieldName = fieldNameInput?.value || ''
@@ -20,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (el.nodeName.toLowerCase() !== 'select') {
       clone.type = el.type
-      clone.value = el.value
+      clone.value = ''
     }
 
     document.getElementById('ApplyToAllButton')?.after(clone)
@@ -42,7 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
       feedback.classList.add('loading')
     }
 
-    const url = `${DataObjectOneFieldUpdateURL}${tableName}/${fieldName}/?value=${encodeURIComponent(value)}&id=${ids.join()}`
+    const url = `${DataObjectOneFieldUpdateURL}${tableName}/${fieldName}/?value=${encodeURIComponent(
+      value
+    )}&id=${ids.join()}`
 
     fetch(url)
       .then(res => res.text())
@@ -51,9 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
           feedback.innerHTML = data
           feedback.classList.remove('loading')
         }
-        const elements = typeof elementSelector === 'string'
-          ? document.querySelectorAll(elementSelector)
-          : [elementSelector]
+        const elements =
+          typeof elementSelector === 'string'
+            ? document.querySelectorAll(elementSelector)
+            : [elementSelector]
         elements.forEach(el => {
           const holder = el.closest('li.fieldHolder')
           if (holder) {
@@ -65,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const setupChangeListener = () => {
-    const inputs = ul.querySelectorAll('input.updateField, textarea.updateField, select.updateField')
+    const inputs = ul.querySelectorAll(
+      'input.updateField, textarea.updateField, select.updateField'
+    )
     inputs.forEach(el => {
       el.closest('li.fieldHolder')?.classList.add('readyForAction')
       el.addEventListener('change', () => {
@@ -110,7 +119,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btn.addEventListener('click', e => {
       e.preventDefault()
-      if (!confirm('Are you sure you would like to apply the selected value to all visible elements?')) return
+      if (
+        !confirm(
+          'Are you sure you would like to apply the selected value to all visible elements?'
+        )
+      )
+        return
 
       const applyToAll = document.getElementById('ApplyToAll')
       if (!applyToAll) return
@@ -121,11 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let selector = ''
       if (type === 'select') {
-        selector = '#DataObjectOneFieldUpdateUL li:not([style*="display: none"]) select'
+        selector =
+          '#DataObjectOneFieldUpdateUL li:not([style*="display: none"]) select'
       } else {
         const inputType = applyToAll.type.toLowerCase()
         if (inputType === 'checkbox') value = applyToAll.checked ? 1 : 0
-        selector = '#DataObjectOneFieldUpdateUL li:not([style*="display: none"]) input'
+        selector =
+          '#DataObjectOneFieldUpdateUL li:not([style*="display: none"]) input'
       }
 
       document.querySelectorAll(selector).forEach(el => {
@@ -149,4 +165,3 @@ document.addEventListener('DOMContentLoaded', () => {
   setupFilter()
   setupApplyAll()
 })
-

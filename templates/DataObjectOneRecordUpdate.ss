@@ -8,6 +8,7 @@ $MetaTags
 </head>
 
 <body class="typography">
+    <% if $CustomTitle %><h1>$CustomTitle</h1><% end_if %>
     $OneRecordForm
 </body>
 

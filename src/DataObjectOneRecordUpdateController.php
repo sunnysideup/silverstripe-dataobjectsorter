@@ -32,27 +32,34 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
      */
     private static $url_segment = 'dataobjectonerecordupdate';
 
-    public static function popup_link_only(string $className, int $recordID): string
+    public static function popup_link_only(string $className, int $recordID, ?string $linkText = null): string
     {
         return self::link_only_maker(
             DataObjectOneRecordUpdateController::class,
             'show/' . self::classNameToString($className),
-            ['id' => $recordID]
+            ['id' => $recordID, 'linkText' => $linkText]
         );
     }
 
     public static function popup_link(
         string $className,
         int $recordID,
-        ?string $linkText = 'click here to edit'
+        ?string $linkText = null
     ): string {
-        $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID);
-
+        if ($linkText) {
+            $myLinkText = $linkText;
+        } else {
+            $myLinkText = _t(
+                'Sunnysideup\DataObjectSorter.DataObjectOneRecordUpdateController.CLICKHERETOEDIT',
+                'edit this record'
+            );
+        }
+        $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID, $linkText);
         return self::link_html_maker(
             $link,
             'modalPopUp modal-popup',
             'oneRecord' . self::classNameToString($className) . $recordID,
-            $linkText
+            $myLinkText
         );
     }
 
@@ -61,13 +68,21 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         int $recordID,
         ?string $linkText = 'click here to edit'
     ): string {
-        $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID);
+        if ($linkText) {
+            $myLinkText = $linkText;
+        } else {
+            $myLinkText = _t(
+                'Sunnysideup\DataObjectSorter.DataObjectOneRecordUpdateController.CLICKHERETOEDIT',
+                'edit this record'
+            );
+        }
+        $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID, $linkText);
 
         return self::button_maker(
             $link,
             'modalPopUp modal-popup',
             'oneRecord' . self::classNameToString($className) . $recordID,
-            $linkText
+            $myLinkText
         );
     }
 

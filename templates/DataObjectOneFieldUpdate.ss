@@ -1,6 +1,15 @@
 <% if $DataObjectsToBeUpdated %>
 
-<h1 class="DataObjectOneFieldUpdateFeedback">Edit <em><u>$SecureFieldToBeUpdatedNice</u></em> in <em><u>$HumanReadableTableName</u></em></h1>
+<h1 class="DataObjectOneFieldUpdateFeedback">
+    <% if $CustomTitle %>
+        $CustomTitle
+    <% else %>
+        Edit
+        <em><u>$SecureFieldToBeUpdatedNice</u></em>
+        for <% if $IsFiltered %>Selected<% else %>All<% end_if %>
+        <em><u>$HumanReadableObjectNamePlural</u></em>
+    <% end_if %>
+</h1>
 <div id="FilterAndApplyToAllInputs">
     <div>
         <label for="TextMatchFilter">Filter:</label>

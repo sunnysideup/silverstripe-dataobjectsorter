@@ -54,13 +54,15 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         string $className,
         $filterField = '',
         ?string $filterValue = '',
-        ?string $titleField = ''
+        ?string $titleField = '',
+        ?string $linkText = '',
     ) {
         $params = self::params_builder(
             [
                 'filterField' => $filterField,
                 'filterValue' => $filterValue,
                 'titleField' => $titleField,
+                'linkText' => $linkText,
             ]
         );
 
@@ -94,16 +96,24 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         string $className,
         $filterField = '',
         ?string $filterValue = '',
-        ?string $linkText = 'sort this list',
+        ?string $linkText = null,
         ?string $titleField = ''
     ) {
-        $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
+        if ($linkText) {
+            $myLinkText = $linkText;
+        } else {
+            $myLinkText = _t(
+                'Sunnysideup\DataObjectSorter.DataObjectSorterController.CLICKHERETOEDIT',
+                'sort this list'
+            );
+        }
+        $link = self::popup_link_only($className, $filterField, $filterValue, $titleField, $linkText);
 
         return self::link_html_maker(
             $link,
             'modalPopUp modal-popup',
             'sortlistFor' . self::classNameToString($className) . $filterField . $filterValue,
-            $linkText
+            $myLinkText
         );
     }
 
@@ -133,13 +143,21 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         ?string $linkText = 'sort this list',
         ?string $titleField = ''
     ) {
-        $link = self::popup_link_only($className, $filterField, $filterValue, $titleField);
+        if ($linkText) {
+            $myLinkText = $linkText;
+        } else {
+            $myLinkText = _t(
+                'Sunnysideup\DataObjectSorter.DataObjectSorterController.CLICKHERETOEDIT',
+                'sort this list'
+            );
+        }
+        $link = self::popup_link_only($className, $filterField, $filterValue, $titleField, $linkText);
 
         return self::button_maker(
             $link,
             'modalPopUp modal-popup',
             'sortlistFor' . self::classNameToString($className) . $filterField . $filterValue,
-            $linkText
+            $myLinkText
         );
     }
 

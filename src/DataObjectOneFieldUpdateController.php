@@ -44,13 +44,20 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
      *
      * @return string
      */
-    public static function popup_link_only(string $className, string $fieldName, mixed $where = '', mixed $sort = '', ?string $titleField = 'Title')
-    {
+    public static function popup_link_only(
+        string $className,
+        string $fieldName,
+        mixed $where = '',
+        mixed $sort = '',
+        ?string $titleField = 'Title',
+        ?string $linkText = null
+    ) {
         $params = self::params_builder(
             [
                 'where' => $where,
                 'sort' => $sort,
                 'titleField' => $titleField,
+                'linkText' => $linkText,
             ]
         );
 
@@ -72,16 +79,24 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         string $fieldName,
         mixed $where = '',
         mixed $sort = '',
-        ?string $linkText = 'click here to edit',
+        ?string $linkText = null,
         ?string $titleField = 'Title'
     ): string {
+        if ($linkText) {
+            $myLinkText = $linkText;
+        } else {
+            $myLinkText = _t(
+                'Sunnysideup\DataObjectSorter.DataObjectOneFieldUpdateController.CLICKHERETOEDIT',
+                'edit this field across records'
+            );
+        }
         $state = self::turnStateIntoFilterAndSort($className, $where, $sort);
-        $link = self::popup_link_only($className, $fieldName, $state['filter'], $state['sort'], $titleField);
+        $link = self::popup_link_only($className, $fieldName, $state['filter'], $state['sort'], $titleField, $linkText);
         return self::link_html_maker(
             $link,
             'modalPopUp modal-popup',
             'editOne' . self::classNameToString($className) . $fieldName,
-            $linkText
+            $myLinkText
         );
     }
 
@@ -91,15 +106,23 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         ?string $where = '',
         ?string $sort = '',
         ?string $linkText = 'click here to edit',
-        ?string $titleField = 'Title'
+        ?string $titleField = 'Title',
     ): string {
-        $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField);
+        if ($linkText) {
+            $myLinkText = $linkText;
+        } else {
+            $myLinkText = _t(
+                'Sunnysideup\DataObjectSorter.DataObjectOneFieldUpdateController.CLICKHERETOEDIT',
+                'click here to edit'
+            );
+        }
 
+        $link = self::popup_link_only($className, $fieldName, $where, $sort, $titleField, $linkText);
         return self::button_maker(
             $link,
             'modalPopUp modal-popup',
             'editOne' . self::classNameToString($className) . $fieldName,
-            $linkText
+            $myLinkText
         );
     }
 
@@ -125,7 +148,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                 // important security check!
                                 if ($obj->canEdit()) {
                                     $obj->{$field} = $newValue;
-                                    $title = 'no title for record';
                                     $this->writeAndPublish($obj);
                                     $title = $this->getTitleForObject($obj, $titleField);
 

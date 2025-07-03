@@ -297,9 +297,9 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return self::$fields;
     }
 
-    protected function HumanReadableTableName(): string
+    protected function HumanReadableObjectNamePlural(): string
     {
-        return \Singleton($this->SecureClassNameToBeUpdated())->plural_name();
+        return Injector::inst()->get($this->SecureClassNameToBeUpdated())->plural_name();
     }
 
     protected static function classNameToString(string $className): string
@@ -371,6 +371,22 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         }
 
         return $obj;
+    }
+
+    public function IsFiltered(): bool
+    {
+        if ($this->request->requestVar('filter') || $this->request->requestVar('filterField')) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getCustomTitle(): ?string
+    {
+        if ($this->request->requestVar('linkText')) {
+            return Convert::raw2xml($this->request->requestVar('linkText'));
+        }
+        return null;
     }
 
     protected function getRecords()
