@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
 <title>Edit $Title</title>
 <% base_tag %>
 $MetaTags
