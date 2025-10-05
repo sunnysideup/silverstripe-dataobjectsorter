@@ -384,7 +384,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     public function getCustomTitle(): ?string
     {
         if ($this->request->requestVar('linkText')) {
-            return Convert::raw2xml($this->request->requestVar('linkText'));
+            return $this->request->requestVar('linkText');
         }
         return null;
     }
