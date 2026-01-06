@@ -9,6 +9,7 @@ use SilverStripe\Core\Convert;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\DataObjectInterface;
 use SilverStripe\ORM\PaginatedList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
@@ -539,20 +540,30 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return $filterSortCachePerClassName[$className];
     }
 
+    /**
+     *
+     *
+     * @param DataObjectInterface  $obj
+     * @return void
+     */
     protected function writeAndPublish($obj)
     {
         $isPublished = false;
-        if ($obj->hasMethod('isPublished')) {
-            $isPublished = $obj->isPublished();
-            if ($obj->hasMethod('isModifiedOnDraft')) {
-                if ($obj->isModifiedOnDraft()) {
-                    $isPublished = false;
+        if ($obj instanceof DataObject) {
+            if ($obj->hasMethod('isPublished')) {
+                $isPublished = $obj->isPublished();
+                if ($obj->hasMethod('isModifiedOnDraft')) {
+                    if ($obj->isModifiedOnDraft()) {
+                        $isPublished = false;
+                    }
                 }
             }
-        }
-        $obj->write();
-        if ($isPublished) {
-            $obj->publishRecursive();
+            $obj->write();
+            if ($isPublished) {
+                $obj->publishRecursive();
+            }
+        } else {
+            user_error('object is not a DataObject and cannot be written and published', E_USER_WARNING);
         }
     }
 }
