@@ -177,11 +177,10 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     public function dosort($request)
     {
         Versioned::set_reading_mode('Stage.Stage');
-        $class = $request->param('ID');
+        $request->param('ID');
         $obj = $this->SecureSingletonToBeUpdated();
         if ($obj) {
             return $obj->dodataobjectsort($request->requestVar('dos'));
-            user_error("{$class} does not exist", E_USER_WARNING);
         } else {
             user_error('Please make sure to provide a class to sort e.g. /dataobjectsorter/MyLongList - where MyLongList is the DataObject you want to sort.', E_USER_WARNING);
         }
@@ -206,7 +205,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                 if ($objects->exists()) {
                     foreach ($objects as $obj) {
                         if ($obj->canEdit()) {
-                            if ($titleField) {
+                            if ($titleField !== '' && $titleField !== '0') {
                                 $method = 'getSortTitle';
                                 if ($obj->hasMethod($method)) {
                                     $obj->SortTitle = $obj->{$method}();
@@ -247,8 +246,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
     {
         DataObjectSorterRequirements::theme_fix();
         parent::init();
-        if (Director::is_ajax()) {
-        } else {
+        if (! Director::is_ajax()) {
             DataObjectSorterRequirements::popup_requirements('sorter');
         }
     }

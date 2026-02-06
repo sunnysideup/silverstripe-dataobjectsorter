@@ -133,7 +133,7 @@ class DataObjectSorterRequirements
         Config::modify()->set(
             SSViewer::class,
             'theme_enabled',
-            Config::inst()->get($className, 'run_through_theme') ? true : false
+            (bool) Config::inst()->get($className, 'run_through_theme')
         );
     }
 }

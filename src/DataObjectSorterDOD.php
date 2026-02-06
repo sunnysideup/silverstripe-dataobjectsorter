@@ -62,10 +62,8 @@ class DataObjectSorterDOD extends Extension
                             $isPublished = false;
                             if ($object->hasMethod('isPublished')) {
                                 $isPublished = $object->isPublished();
-                                if ($object->hasMethod('isModifiedOnDraft')) {
-                                    if ($object->isModifiedOnDraft()) {
-                                        $isPublished = false;
-                                    }
+                                if ($object->hasMethod('isModifiedOnDraft') && $object->isModifiedOnDraft()) {
+                                    $isPublished = false;
                                 }
                             }
                             $object->write();

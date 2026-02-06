@@ -243,11 +243,11 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         if (! $this->recordID) {
             $this->recordID = (int) $this->request->requestVar('Record');
-            if (! $this->recordID) {
+            if ($this->recordID === 0) {
                 $this->recordID = (int) $this->request->requestVar('id');
             }
 
-            if (! $this->recordID) {
+            if ($this->recordID === 0) {
                 $this->recordID = (int) $this->getRequest()->param('OtherID');
             }
         }
@@ -321,7 +321,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     protected static function link_html_maker(string $link, string $cssClasses, string $code, string $linkText): string
     {
         $var = '';
-        if ($link) {
+        if ($link !== '' && $link !== '0') {
             DataObjectSorterRequirements::popup_link_requirements();
             $linkClean = Convert::raw2att($link);
             $var = '
@@ -375,10 +375,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     public function IsFiltered(): bool
     {
-        if ($this->request->requestVar('filter') || $this->request->requestVar('filterField')) {
-            return true;
-        }
-        return false;
+        return $this->request->requestVar('filter') || $this->request->requestVar('filterField');
     }
 
     public function getCustomTitle(): ?string
@@ -393,7 +390,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     {
         Versioned::set_reading_mode('Stage.Stage');
         $className = $this->SecureClassNameToBeUpdated();
-        if ($className) {
+        if ($className !== '' && $className !== '0') {
             $filterField = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('filterField')));
             $filterValue = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('filterValue')));
             $where = $this->request->requestVar('where');
@@ -407,11 +404,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             }
 
             if ($where) {
-                if (is_array($where)) {
-                    $objects = $objects->filter($where);
-                } else {
-                    $objects = $objects->where($where);
-                }
+                $objects = is_array($where) ? $objects->filter($where) : $objects->where($where);
             }
 
             if ($sort) {
@@ -439,11 +432,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if ($titleField && $obj->hasDatabaseField($titleField)) {
             $title = $obj->{$titleField};
         } elseif (! empty($castedVariables[$titleFieldWithoutGet])) {
-            if ($obj->hasMethod($titleFieldWithoutGet)) {
-                $title = $obj->$titleFieldWithoutGet();
-            } else {
-                $title = $obj->$titleFieldWithGet();
-            }
+            $title = $obj->hasMethod($titleFieldWithoutGet) ? $obj->$titleFieldWithoutGet() : $obj->$titleFieldWithGet();
         } elseif ($obj->hasMethod('getTitle')) {
             $title = $obj->getTitle();
         } elseif ($obj->hasMethod('Title')) {
@@ -471,7 +460,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         $sort = is_array($sortOriginal) ?
             array_merge($filterSortCache['sort'], $sortOriginal) : ($sortOriginal ?: $filterSortCache['sort']);
 
-        return compact('filter', 'sort');
+        return ['filter' => $filter, 'sort' => $sort];
     }
 
     protected static $filterSortCachePerClassName = [];
@@ -546,10 +535,8 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if ($obj instanceof DataObject) {
             if ($obj->hasMethod('isPublished')) {
                 $isPublished = $obj->isPublished();
-                if ($obj->hasMethod('isModifiedOnDraft')) {
-                    if ($obj->isModifiedOnDraft()) {
-                        $isPublished = false;
-                    }
+                if ($obj->hasMethod('isModifiedOnDraft') && $obj->isModifiedOnDraft()) {
+                    $isPublished = false;
                 }
             }
             $obj->write();

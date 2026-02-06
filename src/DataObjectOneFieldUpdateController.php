@@ -128,7 +128,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $className = $this->SecureClassNameToBeUpdated();
         $field = $request->param('OtherID');
         $titleField = (string) $request->requestVar('titleField');
-        $ids = trim($request->requestVar('id')) ? explode(',', (string) $request->requestVar('id')) : [];
+        $ids = trim($request->requestVar('id')) !== '' && trim($request->requestVar('id')) !== '0' ? explode(',', (string) $request->requestVar('id')) : [];
         $newValue = $request->requestVar('value');
         $currentUserID = (int) Security::getCurrentUser()?->ID;
         if (0 !== $currentUserID) {
@@ -174,6 +174,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         } else {
             user_error('you need to be logged in to make the changes', E_USER_ERROR);
         }
+        return null;
     }
 
     //used in template
