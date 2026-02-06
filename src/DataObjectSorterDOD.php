@@ -3,13 +3,11 @@
 namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Config\Config;
+use SilverStripe\Core\Extension;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\Core\Extension;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Versioned\Versioned;
 
 /**
  * Class \Sunnysideup\DataObjectSorter\DataObjectSorterDOD

@@ -19,7 +19,6 @@ use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  * Class \Sunnysideup\DataObjectSorter\DataObjectSortBaseClass
- *
  */
 class DataObjectSortBaseClass extends Controller implements PermissionProvider
 {
@@ -431,7 +430,6 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return $records;
     }
 
-
     protected function getTitleForObject($obj, ?string $titleField)
     {
         $titleField = $titleField ?: 'Title';
@@ -478,15 +476,14 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected static $filterSortCachePerClassName = [];
 
-
     protected static function getDecodedGridState(string $className): array
     {
-        if (!isset($filterSortCachePerClassName[$className])) {
+        if (! isset($filterSortCachePerClassName[$className])) {
             $state = [];
             $filter = [];
             $sort = [];
             $getVars = Controller::curr()?->getRequest()?->getVars();
-            if (!is_array($getVars)) {
+            if (! is_array($getVars)) {
                 $getVars = [];
             }
             foreach ($getVars as $key => $value) {
@@ -517,18 +514,18 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
                 //todo - deal with q!
                 foreach ($filter as $key => $value) {
-                    if (!isset($fields[$key])) {
+                    if (! isset($fields[$key])) {
                         unset($filter[$key]);
                     } else {
                         $filter[$key . ':PartialMatch'] = Convert::raw2sql($value);
                         unset($filter[$key]);
                     }
                 }
-                if (!is_array($sort)) {
+                if (! is_array($sort)) {
                     $sort = [$sort];
                 }
                 foreach ($sort as $key => $value) {
-                    if (!isset($fields[$value])) {
+                    if (! isset($fields[$value])) {
                         unset($sort[$key]);
                     }
                     $sort[$value] = 'ASC';
@@ -541,10 +538,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
     }
 
     /**
-     *
-     *
      * @param DataObjectInterface  $obj
-     * @return void
      */
     protected function writeAndPublish($obj)
     {

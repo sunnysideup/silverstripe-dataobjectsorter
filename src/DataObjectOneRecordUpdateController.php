@@ -13,7 +13,6 @@ use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  * Class \Sunnysideup\DataObjectSorter\DataObjectOneRecordUpdateController
- *
  */
 class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 {
@@ -37,7 +36,10 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         return self::link_only_maker(
             DataObjectOneRecordUpdateController::class,
             'show/' . self::classNameToString($className),
-            ['id' => $recordID, 'linkText' => $linkText]
+            [
+                'id' => $recordID,
+                'linkText' => $linkText,
+            ]
         );
     }
 

@@ -2,10 +2,8 @@
 
 namespace Sunnysideup\DataObjectSorter;
 
-use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
-use SilverStripe\Security\Member;
 use SilverStripe\Security\Security;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ArrayData;
@@ -13,7 +11,6 @@ use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  * Class \Sunnysideup\DataObjectSorter\DataObjectOneFieldUpdateController
- *
  */
 class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
 {
@@ -40,7 +37,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     /**
      * @param string $where
      * @param string $sort
-     * @param string $titleField
      *
      * @return string
      */
@@ -71,8 +67,6 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
     /**
      * @param string $where
      * @param string $sort
-     * @param string $linkText
-     * @param string $titleField
      */
     public static function popup_link(
         string $className,

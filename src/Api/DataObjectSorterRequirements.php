@@ -119,7 +119,7 @@ class DataObjectSorterRequirements
                 ->Link($action)
         );
         Requirements::customScript(
-            'var ' . $varName . " = '" . rtrim($url, '/').'/' . "'",
+            'var ' . $varName . " = '" . rtrim($url, '/') . '/' . "'",
             $varName . 'URL'
         );
     }

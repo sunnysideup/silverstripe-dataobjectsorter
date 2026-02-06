@@ -2,14 +2,8 @@
 
 namespace Sunnysideup\DataObjectSorter\Extensions;
 
-use SilverStripe\CMS\Model\SiteTree;
-use SilverStripe\Control\Controller;
-use SilverStripe\Core\ClassInfo;
-use SilverStripe\Core\Config\Config;
-use SilverStripe\Forms\FieldList;
-use SilverStripe\Forms\LiteralField;
 use SilverStripe\Core\Extension;
-use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\FieldType\DBBoolean;
 use SilverStripe\ORM\FieldType\DBCurrency;
 use SilverStripe\ORM\FieldType\DBDate;
@@ -21,7 +15,6 @@ use SilverStripe\ORM\FieldType\DBInt;
 use SilverStripe\ORM\FieldType\DBPercentage;
 use SilverStripe\ORM\FieldType\DBText;
 use SilverStripe\ORM\FieldType\DBVarchar;
-use SilverStripe\Versioned\Versioned;
 use Sunnysideup\DataObjectSorter\DataObjectOneFieldUpdateController;
 
 /**
@@ -31,7 +24,6 @@ use Sunnysideup\DataObjectSorter\DataObjectOneFieldUpdateController;
  */
 class DataObjectEditAnythingExtension extends Extension
 {
-
     private static $included_field_types_for_quick_edit = [
         // 'Varchar',
         // DBVarchar::class,
@@ -77,19 +69,19 @@ class DataObjectEditAnythingExtension extends Extension
         foreach ($dbFields as $dbField => $dbType) {
             if (
                 (
-                    !empty($excludeFields) &&
+                    ! empty($excludeFields) &&
                     in_array(
                         true,
                         array_map(
-                            fn($field) => stripos($dbType, $field) === 0,
+                            fn ($field) => stripos($dbType, $field) === 0,
                             $excludeFields
                         ),
                         true
                     )
                 ) ||
                 (
-                    !empty($includeFields) &&
-                    !in_array(true, array_map(fn($field) => stripos($dbType, $field) === 0, $includeFields), true)
+                    ! empty($includeFields) &&
+                    ! in_array(true, array_map(fn ($field) => stripos($dbType, $field) === 0, $includeFields), true)
                 )
             ) {
                 continue;
