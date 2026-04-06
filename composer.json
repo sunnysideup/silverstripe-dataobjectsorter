@@ -28,7 +28,7 @@
   },
   "suggest": {
     "fullscreeninteractive/silverstripe-manyfield": "alternative solution"
-  },  
+  },
   "extra": {
     "expose": [
       "client"
