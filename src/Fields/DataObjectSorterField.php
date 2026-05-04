@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\DataObjectSorter\Fields;
 
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\ORM\ArrayList;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**

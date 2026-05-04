@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\DataObjectSorter;
 
+use SilverStripe\Model\List\PaginatedList;
 use SilverStripe\Forms\FormField;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPResponse;
@@ -11,7 +12,6 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataObjectInterface;
-use SilverStripe\ORM\PaginatedList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;

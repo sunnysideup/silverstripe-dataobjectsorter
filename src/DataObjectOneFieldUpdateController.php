@@ -2,12 +2,12 @@
 
 namespace Sunnysideup\DataObjectSorter;
 
+use SilverStripe\Model\List\ArrayList;
+use SilverStripe\Model\ArrayData;
 use SilverStripe\ORM\DataList;
-use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Security;
 use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\ArrayData;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
