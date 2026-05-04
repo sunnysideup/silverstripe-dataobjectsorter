@@ -17,8 +17,9 @@ class DataObjectSorterField extends LiteralField
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $objects = $className::get();
-        $arrayList = new ArrayList();
+        $arrayList = ArrayList::create();
         $arrayList->Children = $objects;
+
         $content = $this->customise($arrayList)->renderWith(DataObjectSorterField::class);
         parent::__construct($name, $content);
     }

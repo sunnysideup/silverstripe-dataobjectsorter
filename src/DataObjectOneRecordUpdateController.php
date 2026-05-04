@@ -56,6 +56,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
                 'edit this record'
             );
         }
+
         $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID, $linkText);
         return self::link_html_maker(
             $link,
@@ -78,6 +79,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
                 'edit this record'
             );
         }
+
         $link = DataObjectOneRecordUpdateController::popup_link_only($className, $recordID, $linkText);
 
         return self::button_maker(
@@ -100,15 +102,10 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
             user_error('Form Fields could not be Found', E_USER_ERROR);
         }
 
-        $formFields->push(new HiddenField('Table', 'Table', $this->SecureClassNameToBeUpdatedAsString()));
-        $formFields->push(new HiddenField('Record', 'Record', $this->SecureRecordIdToBeUpdated()));
+        $formFields->push(HiddenField::create('Table', 'Table', $this->SecureClassNameToBeUpdatedAsString()));
+        $formFields->push(HiddenField::create('Record', 'Record', $this->SecureRecordIdToBeUpdated()));
 
-        $form = new Form(
-            $controller = $this,
-            $name = 'OneRecordForm',
-            $formFields,
-            $actions = new FieldList(new FormAction('save', 'save and close'))
-        );
+        $form = Form::create($controller = $this, $name = 'OneRecordForm', $formFields, $actions = FieldList::create(FormAction::create('save', 'save and close')));
         $form->loadDataFrom($obj);
 
         return $form;

@@ -47,7 +47,7 @@ class DataObjectSorterDOD extends Extension
     {
         $sortField = $this->SortFieldForDataObjectSorter();
         $schema = DataObject::getSchema();
-        $baseDataClass = $schema->baseDataClass(get_class($this->getOwner()));
+        $baseDataClass = $schema->baseDataClass($this->getOwner()::class);
         if ('' !== $baseDataClass) {
             if (is_array($data) && count($data)) {
                 foreach ($data as $position => $id) {
@@ -66,6 +66,7 @@ class DataObjectSorterDOD extends Extension
                                     $isPublished = false;
                                 }
                             }
+
                             $object->write();
                             if ($isPublished) {
                                 $object->publishRecursive();
@@ -93,9 +94,9 @@ class DataObjectSorterDOD extends Extension
     public function updateCMSFields(FieldList $fields)
     {
         $fields->removeFieldFromTab('Root.Main', $this->SortFieldForDataObjectSorter());
-        if (! $this->owner instanceof SiteTree) {
+        if (! $this->getOwner() instanceof SiteTree) {
             $link = $this->dataObjectSorterPopupLink();
-            $fields->addFieldToTab('Root.Sort', new LiteralField('DataObjectSorterPopupLink', "<h2 class='dataObjectSorterDODLink'>" . $link . '</h2>'));
+            $fields->addFieldToTab('Root.Sort', LiteralField::create('DataObjectSorterPopupLink', "<h2 class='dataObjectSorterDODLink'>" . $link . '</h2>'));
         }
     }
 
@@ -131,7 +132,7 @@ class DataObjectSorterDOD extends Extension
         } elseif ($this->getOwner()->hasDatabaseField('SortNumber')) {
             $field = 'SortNumber';
         } else {
-            user_error("No field Sort or AlternativeSortNumber (or {$sortField}) was found on data object: " . $this->getOwner()->ClassName, E_USER_WARNING);
+            user_error(sprintf('No field Sort or AlternativeSortNumber (or %s) was found on data object: ', $sortField) . $this->getOwner()->ClassName, E_USER_WARNING);
         }
 
         return $field;

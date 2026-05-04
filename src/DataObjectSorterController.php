@@ -3,9 +3,7 @@
 namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\Control\Director;
-use SilverStripe\Core\Injector\Injector;
 use SilverStripe\ORM\DataList;
-use SilverStripe\ORM\DataObject;
 use SilverStripe\Versioned\Versioned;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
@@ -106,6 +104,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                 'sort this list'
             );
         }
+
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField, $linkText);
 
         return self::link_html_maker(
@@ -150,6 +149,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
                 'sort this list'
             );
         }
+
         $link = self::popup_link_only($className, $filterField, $filterValue, $titleField, $linkText);
 
         return self::button_maker(
