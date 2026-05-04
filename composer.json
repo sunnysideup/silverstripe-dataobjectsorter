@@ -24,7 +24,7 @@
     }
   ],
   "require": {
-    "silverstripe/recipe-cms": "^4 || ^5"
+    "silverstripe/recipe-cms": "^6.0"
   },
   "suggest": {
     "fullscreeninteractive/silverstripe-manyfield": "alternative solution"
