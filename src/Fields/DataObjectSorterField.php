@@ -2,8 +2,8 @@
 
 namespace Sunnysideup\DataObjectSorter\Fields;
 
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\Forms\LiteralField;
-use SilverStripe\ORM\ArrayList;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
@@ -17,8 +17,9 @@ class DataObjectSorterField extends LiteralField
     {
         DataObjectSorterRequirements::popup_link_requirements();
         $objects = $className::get();
-        $arrayList = new ArrayList();
+        $arrayList = ArrayList::create();
         $arrayList->Children = $objects;
+
         $content = $this->customise($arrayList)->renderWith(DataObjectSorterField::class);
         parent::__construct($name, $content);
     }

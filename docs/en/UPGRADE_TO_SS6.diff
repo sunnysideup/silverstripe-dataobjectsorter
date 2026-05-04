@@ -1,0 +1,203 @@
+diff --git a/composer.json b/composer.json
+index d35a301..3578afc 100644
+--- a/composer.json
++++ b/composer.json
+@@ -24,7 +24,7 @@
+     }
+   ],
+   "require": {
+-    "silverstripe/recipe-cms": "^4 || ^5"
++    "silverstripe/recipe-cms": "^6.0"
+   },
+   "suggest": {
+     "fullscreeninteractive/silverstripe-manyfield": "alternative solution"
+diff --git a/src/Api/DataObjectOneFieldAddEditAllLink.php b/src/Api/DataObjectOneFieldAddEditAllLink.php
+index 782c516..a17f09f 100644
+--- a/src/Api/DataObjectOneFieldAddEditAllLink.php
++++ b/src/Api/DataObjectOneFieldAddEditAllLink.php
+@@ -15,7 +15,7 @@ class DataObjectOneFieldAddEditAllLink
+             user_error('Could not find ' . $className . ' as ClassName.');
+         }
+ 
+-        $dataFields = $feldList->dataFields();
++        $dataFields = $feldList->getDataFields();
+         foreach ($dataFields as $formField) {
+             if ($formField instanceof CheckboxField) {
+                 $fieldName = $formField->getName();
+diff --git a/src/DataObjectOneFieldOneRecordUpdateController.php b/src/DataObjectOneFieldOneRecordUpdateController.php
+index 3f5ffae..c7f1f62 100644
+--- a/src/DataObjectOneFieldOneRecordUpdateController.php
++++ b/src/DataObjectOneFieldOneRecordUpdateController.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Sunnysideup\DataObjectSorter;
+ 
++use Override;
+ use SilverStripe\Control\HTTPResponse;
+ use SilverStripe\Forms\FieldList;
+ use SilverStripe\Forms\Form;
+@@ -127,6 +128,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
+         return 'DONE';
+     }
+ 
++    #[Override]
+     protected function init()
+     {
+         //must set this first ...
+diff --git a/src/DataObjectOneFieldUpdateController.php b/src/DataObjectOneFieldUpdateController.php
+index b5170f6..47183e7 100644
+--- a/src/DataObjectOneFieldUpdateController.php
++++ b/src/DataObjectOneFieldUpdateController.php
+@@ -2,12 +2,13 @@
+ 
+ namespace Sunnysideup\DataObjectSorter;
+ 
++use Override;
++use SilverStripe\Model\List\ArrayList;
++use SilverStripe\Model\ArrayData;
+ use SilverStripe\ORM\DataList;
+-use SilverStripe\ORM\ArrayList;
+ use SilverStripe\ORM\DataObject;
+ use SilverStripe\Security\Security;
+ use SilverStripe\Versioned\Versioned;
+-use SilverStripe\View\ArrayData;
+ use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
+ 
+ /**
+@@ -227,6 +228,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
+         return self::$_objects_without_field;
+     }
+ 
++    #[Override]
+     protected function init()
+     {
+         //must set this first ...
+diff --git a/src/DataObjectOneRecordUpdateController.php b/src/DataObjectOneRecordUpdateController.php
+index 4985b22..874cb3c 100644
+--- a/src/DataObjectOneRecordUpdateController.php
++++ b/src/DataObjectOneRecordUpdateController.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Sunnysideup\DataObjectSorter;
+ 
++use Override;
+ use SilverStripe\Control\Director;
+ use SilverStripe\Control\HTTPResponse;
+ use SilverStripe\Forms\FieldList;
+@@ -125,6 +126,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
+         return '<script>window.parent.jQuery.modal.close(true)</script>';
+     }
+ 
++    #[Override]
+     public function show()
+     {
+         //important security check
+@@ -136,6 +138,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
+         return parent::show();
+     }
+ 
++    #[Override]
+     protected function init()
+     {
+         //must set this first.
+diff --git a/src/DataObjectSortBaseClass.php b/src/DataObjectSortBaseClass.php
+index 57c2d98..6509452 100644
+--- a/src/DataObjectSortBaseClass.php
++++ b/src/DataObjectSortBaseClass.php
+@@ -2,6 +2,8 @@
+ 
+ namespace Sunnysideup\DataObjectSorter;
+ 
++use Override;
++use SilverStripe\Model\List\PaginatedList;
+ use SilverStripe\Forms\FormField;
+ use SilverStripe\Control\Controller;
+ use SilverStripe\Control\HTTPResponse;
+@@ -11,7 +13,6 @@ use SilverStripe\Core\Injector\Injector;
+ use SilverStripe\Forms\FieldList;
+ use SilverStripe\ORM\DataObject;
+ use SilverStripe\ORM\DataObjectInterface;
+-use SilverStripe\ORM\PaginatedList;
+ use SilverStripe\Security\Permission;
+ use SilverStripe\Security\PermissionProvider;
+ use SilverStripe\Security\Security;
+@@ -88,6 +89,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
+      *
+      * @return string
+      */
++    #[Override]
+     public function Link($action = null)
+     {
+         $link = $this->config()->get('url_segment') . '/';
+@@ -148,6 +150,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
+         return $array;
+     }
+ 
++    #[Override]
+     protected function init()
+     {
+         // Only administrators can run this method
+@@ -193,7 +196,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
+             $className = $this->SecureClassNameToBeUpdated();
+             if (class_exists($className)) {
+                 if (! isset($this->objectCache[$className])) {
+-                    $this->objectCache[$className] = DataObject::get_one($className);
++                    $this->objectCache[$className] = $className::get()->setUseCache(true)->first();
+                 }
+ 
+                 $this->singletonToBeUpdated = $this->objectCache[$className];
+diff --git a/src/DataObjectSorterController.php b/src/DataObjectSorterController.php
+index 893a18d..9d762f0 100644
+--- a/src/DataObjectSorterController.php
++++ b/src/DataObjectSorterController.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Sunnysideup\DataObjectSorter;
+ 
++use Override;
+ use SilverStripe\Control\Director;
+ use SilverStripe\ORM\DataList;
+ use SilverStripe\Versioned\Versioned;
+@@ -242,6 +243,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
+         return self::$_children_cache_for_sorting;
+     }
+ 
++    #[Override]
+     protected function init()
+     {
+         DataObjectSorterRequirements::theme_fix();
+diff --git a/src/Extensions/DataObjectEditAnythingExtension.php b/src/Extensions/DataObjectEditAnythingExtension.php
+index 49e0850..1dc1bc3 100644
+--- a/src/Extensions/DataObjectEditAnythingExtension.php
++++ b/src/Extensions/DataObjectEditAnythingExtension.php
+@@ -2,6 +2,7 @@
+ 
+ namespace Sunnysideup\DataObjectSorter\Extensions;
+ 
++use SilverStripe\Forms\FormField;
+ use SilverStripe\Core\Extension;
+ use SilverStripe\Forms\FieldList;
+ use SilverStripe\ORM\FieldType\DBHTMLText;
+@@ -79,7 +80,7 @@ class DataObjectEditAnythingExtension extends Extension
+             }
+ 
+             $myFormField = $fields->dataFieldByName($dbField);
+-            if ($myFormField) {
++            if ($myFormField instanceof FormField) {
+                 if ($myFormField->isReadonly()) {
+                     continue;
+                 }
+diff --git a/src/Fields/DataObjectSorterField.php b/src/Fields/DataObjectSorterField.php
+index dd678d5..2e2dc09 100644
+--- a/src/Fields/DataObjectSorterField.php
++++ b/src/Fields/DataObjectSorterField.php
+@@ -2,8 +2,8 @@
+ 
+ namespace Sunnysideup\DataObjectSorter\Fields;
+ 
++use SilverStripe\Model\List\ArrayList;
+ use SilverStripe\Forms\LiteralField;
+-use SilverStripe\ORM\ArrayList;
+ use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
+ 
+ /**

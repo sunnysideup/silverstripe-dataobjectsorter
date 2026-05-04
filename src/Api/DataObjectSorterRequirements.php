@@ -107,7 +107,7 @@ class DataObjectSorterRequirements
 
                     break;
                 default:
-                    user_error("type {$type} is not a valid option");
+                    user_error(sprintf('type %s is not a valid option', $type));
             }
         }
     }

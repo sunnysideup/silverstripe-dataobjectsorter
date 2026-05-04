@@ -2,6 +2,9 @@
 
 namespace Sunnysideup\DataObjectSorter;
 
+use Override;
+use SilverStripe\Model\List\PaginatedList;
+use SilverStripe\Forms\FormField;
 use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Config\Config;
@@ -10,7 +13,6 @@ use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\DataObjectInterface;
-use SilverStripe\ORM\PaginatedList;
 use SilverStripe\Security\Permission;
 use SilverStripe\Security\PermissionProvider;
 use SilverStripe\Security\Security;
@@ -87,11 +89,12 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      *
      * @return string
      */
+    #[Override]
     public function Link($action = null)
     {
         $link = $this->config()->get('url_segment') . '/';
         if ($action) {
-            $link .= "{$action}/";
+            $link .= $action . '/';
         }
 
         return $link;
@@ -147,6 +150,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return $array;
     }
 
+    #[Override]
     protected function init()
     {
         // Only administrators can run this method
@@ -162,7 +166,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             $obj = $this->SecureSingletonToBeUpdated();
             if ($obj) {
                 if (isset($_POST['Field'])) {
-                    return addslashes($_POST['Field']);
+                    return addslashes((string) $_POST['Field']);
                 }
 
                 $field = $this->getRequest()->param('OtherID');
@@ -192,7 +196,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             $className = $this->SecureClassNameToBeUpdated();
             if (class_exists($className)) {
                 if (! isset($this->objectCache[$className])) {
-                    $this->objectCache[$className] = DataObject::get_one($className);
+                    $this->objectCache[$className] = $className::get()->setUseCache(true)->first();
                 }
 
                 $this->singletonToBeUpdated = $this->objectCache[$className];
@@ -259,7 +263,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      * @param DataObject $obj
      * @param string     $fieldName
      *
-     * @return \SilverStripe\Forms\FormField
+     * @return FormField
      */
     protected function getFormField($obj, $fieldName)
     {
@@ -267,6 +271,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             if ($obj->hasMethod('getFrontEndField')) {
                 self::$field = $obj->getFrontEndField($fieldName);
             }
+
             if (! self::$field) {
                 self::$field = $obj->dbObject($fieldName)->scaffoldFormField($obj->Title);
             }
@@ -289,6 +294,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                 //legacy!!!
                 self::$fields = $obj->$method();
             }
+
             if (! self::$fields) {
                 self::$fields = $obj->scaffoldFormFields();
             }
@@ -383,6 +389,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if ($this->request->requestVar('linkText')) {
             return $this->request->requestVar('linkText');
         }
+
         return null;
     }
 
@@ -417,7 +424,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected function getRecordsPaginated(): PaginatedList
     {
-        $records = new PaginatedList($this->getRecords(), $this->request);
+        $records = PaginatedList::create($this->getRecords(), $this->request);
         $records->setPageLength(Config::inst()->get(static::class, 'page_size'));
 
         return $records;
@@ -438,16 +445,18 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         } elseif ($obj->hasMethod('Title')) {
             $title = $obj->Title();
         }
+
         return $title;
     }
 
     protected function removePrefix(string $prefix, string $string): string
     {
         // Check if the string starts with the prefix
-        if (strpos($string, $prefix) === 0) {
+        if (str_starts_with($string, $prefix)) {
             // Remove the prefix by slicing the string
             return substr($string, strlen($prefix));
         }
+
         return $string; // Return the original string if prefix not at start
     }
 
@@ -475,13 +484,14 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             if (! is_array($getVars)) {
                 $getVars = [];
             }
+
             foreach ($getVars as $key => $value) {
                 // Match keys that start with "gridState-" and end with "-0"
-                if (preg_match('/^gridState-(.*)-0$/', $key, $matches)) {
+                if (preg_match('/^gridState-(.*)-0$/', (string) $key, $matches)) {
                     $className = str_replace('-', '\\', $matches[1]); // Convert to namespace format
 
                     if (class_exists($className)) {
-                        $jsonString = urldecode($value);
+                        $jsonString = urldecode((string) $value);
                         $decodedData = json_decode($jsonString, true);
 
                         if (is_array($decodedData)) {
@@ -490,14 +500,17 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                     }
                 }
             }
+
             if (isset($state[$className])) {
                 $state = $state[$className];
                 if (isset($state['GridFieldFilterHeader']['Columns'])) {
                     $filter = $state['GridFieldFilterHeader']['Columns'];
                 }
+
                 if (isset($state['GridFieldSortableHeader']['SortColumn'])) {
                     $sort = $state['GridFieldSortableHeader']['SortColumn'];
                 }
+
                 $fields = DataObject::getSchema()->databaseFields($className);
                 $fields['q'] = '';
 
@@ -510,19 +523,24 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                         unset($filter[$key]);
                     }
                 }
+
                 if (! is_array($sort)) {
                     $sort = [$sort];
                 }
+
                 foreach ($sort as $key => $value) {
                     if (! isset($fields[$value])) {
                         unset($sort[$key]);
                     }
+
                     $sort[$value] = 'ASC';
                     unset($sort[$key]);
                 }
             }
+
             $filterSortCachePerClassName[$className] = ['filter' => $filter, 'sort' => $sort];
         }
+
         return $filterSortCachePerClassName[$className];
     }
 
@@ -539,6 +557,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                     $isPublished = false;
                 }
             }
+
             $obj->write();
             if ($isPublished) {
                 $obj->publishRecursive();

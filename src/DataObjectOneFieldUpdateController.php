@@ -2,11 +2,13 @@
 
 namespace Sunnysideup\DataObjectSorter;
 
-use SilverStripe\ORM\ArrayList;
+use Override;
+use SilverStripe\Model\List\ArrayList;
+use SilverStripe\Model\ArrayData;
+use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Security\Security;
 use SilverStripe\Versioned\Versioned;
-use SilverStripe\View\ArrayData;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
@@ -84,6 +86,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                 'edit this field across records'
             );
         }
+
         $state = self::turnStateIntoFilterAndSort($className, $where, $sort);
         $link = self::popup_link_only($className, $fieldName, $state['filter'], $state['sort'], $titleField, $linkText);
         return self::link_html_maker(
@@ -128,7 +131,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         $className = $this->SecureClassNameToBeUpdated();
         $field = $request->param('OtherID');
         $titleField = (string) $request->requestVar('titleField');
-        $ids = trim($request->requestVar('id')) !== '' && trim($request->requestVar('id')) !== '0' ? explode(',', (string) $request->requestVar('id')) : [];
+        $ids = trim((string) $request->requestVar('id')) !== '' && trim((string) $request->requestVar('id')) !== '0' ? explode(',', (string) $request->requestVar('id')) : [];
         $newValue = $request->requestVar('value');
         $currentUserID = (int) Security::getCurrentUser()?->ID;
         if (0 !== $currentUserID) {
@@ -158,22 +161,23 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                 user_error('field does not exist', E_USER_ERROR);
                             }
                         } else {
-                            user_error("could not find record: {$className}, {$id} ", E_USER_ERROR);
+                            user_error(sprintf('could not find record: %s, %s ', $className, $id), E_USER_ERROR);
                         }
                     }
                 }
 
                 if ($updateCount > 1) {
-                    return "{$updateCount} records updated";
+                    return $updateCount . ' records updated';
                 }
 
                 return $updateMessage;
             }
 
-            user_error("data object specified: '{$className}' or id count: '" . count($ids) . "' or newValue: '{$newValue}' is not valid", E_USER_ERROR);
+            user_error(sprintf("data object specified: '%s' or id count: '", $className) . count($ids) . sprintf("' or newValue: '%s' is not valid", $newValue), E_USER_ERROR);
         } else {
             user_error('you need to be logged in to make the changes', E_USER_ERROR);
         }
+
         return null;
     }
 
@@ -199,7 +203,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                         $obj->FormField->setValue($obj->{$field});
                         $titleField = $this->request->requestVar('titleField');
                         $title = $this->getTitleForObject($obj, $titleField);
-                        $arrayList->push(new ArrayData(['FormField' => $obj->FormField, 'MyTitle' => $title]));
+                        $arrayList->push(ArrayData::create(['FormField' => $obj->FormField, 'MyTitle' => $title]));
                     }
                 }
             }
@@ -215,7 +219,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
      * retun a list of objects
      * we need it like this for pagination....
      *
-     * @return \SilverStripe\ORM\DataList
+     * @return DataList
      */
     public function PaginatedListItems()
     {
@@ -224,6 +228,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         return self::$_objects_without_field;
     }
 
+    #[Override]
     protected function init()
     {
         //must set this first ...

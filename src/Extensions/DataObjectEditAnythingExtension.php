@@ -2,19 +2,11 @@
 
 namespace Sunnysideup\DataObjectSorter\Extensions;
 
+use SilverStripe\Forms\FormField;
 use SilverStripe\Core\Extension;
 use SilverStripe\Forms\FieldList;
-use SilverStripe\ORM\FieldType\DBBoolean;
-use SilverStripe\ORM\FieldType\DBCurrency;
-use SilverStripe\ORM\FieldType\DBDate;
-use SilverStripe\ORM\FieldType\DBDatetime;
-use SilverStripe\ORM\FieldType\DBFloat;
 use SilverStripe\ORM\FieldType\DBHTMLText;
 use SilverStripe\ORM\FieldType\DBHTMLVarchar;
-use SilverStripe\ORM\FieldType\DBInt;
-use SilverStripe\ORM\FieldType\DBPercentage;
-use SilverStripe\ORM\FieldType\DBText;
-use SilverStripe\ORM\FieldType\DBVarchar;
 use Sunnysideup\DataObjectSorter\DataObjectOneFieldUpdateController;
 
 /**
@@ -73,7 +65,7 @@ class DataObjectEditAnythingExtension extends Extension
                     in_array(
                         true,
                         array_map(
-                            fn ($field) => stripos($dbType, $field) === 0,
+                            fn ($field) => stripos((string) $dbType, (string) $field) === 0,
                             $excludeFields
                         ),
                         true
@@ -81,25 +73,29 @@ class DataObjectEditAnythingExtension extends Extension
                 ) ||
                 (
                     ! empty($includeFields) &&
-                    ! in_array(true, array_map(fn ($field) => stripos($dbType, $field) === 0, $includeFields), true)
+                    ! in_array(true, array_map(fn ($field) => stripos((string) $dbType, (string) $field) === 0, $includeFields), true)
                 )
             ) {
                 continue;
             }
+
             $myFormField = $fields->dataFieldByName($dbField);
-            if ($myFormField) {
+            if ($myFormField instanceof FormField) {
                 if ($myFormField->isReadonly()) {
                     continue;
                 }
+
                 if ($myFormField->isDisabled()) {
                     continue;
                 }
+
                 $getMethod = 'getRightTitle';
                 $setMethod = 'setRightTitle';
                 if ($myFormField->hasMethod('getRightTitle') !== true) {
                     $getMethod = 'getDescription';
                     $setMethod = 'setDescription';
                 }
+
                 $rightTitle = $myFormField->$getMethod();
                 $rightTitleArray = [
                     $rightTitle,

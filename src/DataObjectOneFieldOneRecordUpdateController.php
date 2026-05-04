@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\DataObjectSorter;
 
+use Override;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\Form;
@@ -60,6 +61,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
                 'edit this field for this record'
             );
         }
+
         $link = self::popup_link_only($className, $fieldName, $recordID, $linkText);
 
         return self::link_html_maker(
@@ -87,6 +89,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
                 'edit this field for this record'
             );
         }
+
         $link = self::popup_link_only($className, $fieldName, $recordID, $linkText);
 
         return self::button_maker(
@@ -108,17 +111,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         $FormField = $this->getFormField($obj, $field);
         $FormField->setValue($obj->{$field});
 
-        return new Form(
-            $controller = $this,
-            $name = 'OneFieldForm',
-            $fields = new FieldList(
-                $FormField,
-                new HiddenField('Table', 'Table', self::classNameToString($this->SecureClassNameToBeUpdatedAsString())),
-                new HiddenField('Field', 'Field', $field),
-                new HiddenField('Record', 'Record', ($this->SecureRecordIdToBeUpdated()))
-            ),
-            $actions = new FieldList(new FormAction('save', 'save and close'))
-        );
+        return Form::create($controller = $this, $name = 'OneFieldForm', $fields = FieldList::create($FormField, HiddenField::create('Table', 'Table', self::classNameToString($this->SecureClassNameToBeUpdatedAsString())), HiddenField::create('Field', 'Field', $field), HiddenField::create('Record', 'Record', ($this->SecureRecordIdToBeUpdated()))), $actions = FieldList::create(FormAction::create('save', 'save and close')));
     }
 
     public function save($data, $form)
@@ -135,6 +128,7 @@ class DataObjectOneFieldOneRecordUpdateController extends DataObjectSortBaseClas
         return 'DONE';
     }
 
+    #[Override]
     protected function init()
     {
         //must set this first ...
