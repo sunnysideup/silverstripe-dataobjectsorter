@@ -193,7 +193,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
             $className = $this->SecureClassNameToBeUpdated();
             if (class_exists($className)) {
                 if (! isset($this->objectCache[$className])) {
-                    $this->objectCache[$className] = DataObject::get_one($className);
+                    $this->objectCache[$className] = $className::get()->setUseCache(true)->first();
                 }
 
                 $this->singletonToBeUpdated = $this->objectCache[$className];
