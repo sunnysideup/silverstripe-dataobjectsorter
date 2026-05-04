@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\DataObjectSorter;
 
+use Override;
 use SilverStripe\Model\List\ArrayList;
 use SilverStripe\Model\ArrayData;
 use SilverStripe\ORM\DataList;
@@ -227,6 +228,7 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
         return self::$_objects_without_field;
     }
 
+    #[Override]
     protected function init()
     {
         //must set this first ...

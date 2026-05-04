@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\DataObjectSorter\Extensions;
 
+use SilverStripe\Forms\FormField;
 use SilverStripe\Core\Extension;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\FieldType\DBHTMLText;
@@ -79,7 +80,7 @@ class DataObjectEditAnythingExtension extends Extension
             }
 
             $myFormField = $fields->dataFieldByName($dbField);
-            if ($myFormField) {
+            if ($myFormField instanceof FormField) {
                 if ($myFormField->isReadonly()) {
                     continue;
                 }

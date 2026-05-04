@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\DataObjectSorter;
 
+use Override;
 use SilverStripe\Model\List\PaginatedList;
 use SilverStripe\Forms\FormField;
 use SilverStripe\Control\Controller;
@@ -88,6 +89,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
      *
      * @return string
      */
+    #[Override]
     public function Link($action = null)
     {
         $link = $this->config()->get('url_segment') . '/';
@@ -148,6 +150,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         return $array;
     }
 
+    #[Override]
     protected function init()
     {
         // Only administrators can run this method

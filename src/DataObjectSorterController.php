@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\DataObjectSorter;
 
+use Override;
 use SilverStripe\Control\Director;
 use SilverStripe\ORM\DataList;
 use SilverStripe\Versioned\Versioned;
@@ -242,6 +243,7 @@ class DataObjectSorterController extends DataObjectSortBaseClass
         return self::$_children_cache_for_sorting;
     }
 
+    #[Override]
     protected function init()
     {
         DataObjectSorterRequirements::theme_fix();

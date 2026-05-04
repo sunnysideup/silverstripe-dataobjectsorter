@@ -2,6 +2,7 @@
 
 namespace Sunnysideup\DataObjectSorter;
 
+use Override;
 use SilverStripe\Control\Director;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Forms\FieldList;
@@ -125,6 +126,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         return '<script>window.parent.jQuery.modal.close(true)</script>';
     }
 
+    #[Override]
     public function show()
     {
         //important security check
@@ -136,6 +138,7 @@ class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
         return parent::show();
     }
 
+    #[Override]
     protected function init()
     {
         //must set this first.
