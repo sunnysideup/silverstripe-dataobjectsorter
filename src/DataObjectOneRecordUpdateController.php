@@ -13,6 +13,7 @@ use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
 /**
  * Class \Sunnysideup\DataObjectSorter\DataObjectOneRecordUpdateController
+ *
  */
 class DataObjectOneRecordUpdateController extends DataObjectSortBaseClass
 {
