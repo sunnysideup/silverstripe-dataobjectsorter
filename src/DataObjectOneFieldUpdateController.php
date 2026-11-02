@@ -5,7 +5,9 @@ namespace Sunnysideup\DataObjectSorter;
 use SilverStripe\ORM\DataList;
 use SilverStripe\ORM\ArrayList;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Core\Convert;
 use SilverStripe\Security\Security;
+use SilverStripe\Security\SecurityToken;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\View\ArrayData;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
@@ -125,6 +127,11 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
 
     public function updatefield($request = null)
     {
+        // This changes data so it can not be done with a link (GET): the request has to come from our own page.
+        if (! $request || ! $request->isPOST() || ! SecurityToken::inst()->checkRequest($request)) {
+            return $this->httpError(403, 'Please use the form on the page to make changes.');
+        }
+
         Versioned::set_reading_mode('Stage.Stage');
         $updateMessage = '';
         $updateCount = 0;
@@ -146,14 +153,14 @@ class DataObjectOneFieldUpdateController extends DataObjectSortBaseClass
                                 if ($obj->canEdit()) {
                                     $obj->{$field} = $newValue;
                                     $this->writeAndPublish($obj);
-                                    $title = $this->getTitleForObject($obj, $titleField);
+                                    $title = Convert::raw2xml((string) $this->getTitleForObject($obj, $titleField));
 
                                     $newValueObject = $obj->dbObject($field);
-                                    $newValueFancy = $newValueObject->hasMethod('Nice') ? $newValueObject->Nice() : $newValueObject->Raw();
+                                    $newValueFancy = Convert::raw2xml((string) ($newValueObject->hasMethod('Nice') ? $newValueObject->Nice() : $newValueObject->Raw()));
                                     ++$updateCount;
                                     $updateMessage .= "
                                         Record updated:
-                                        <i class=\"fieldTitle\">{$this->SecureFieldToBeUpdatedNice()}</i>
+                                        <i class=\"fieldTitle\">" . Convert::raw2xml((string) $this->SecureFieldToBeUpdatedNice()) . "</i>
                                         for <u><i class=\"recordTitle\">" . $title . '</i></u>
                                         updated to <i class="newValue">' . $newValueFancy . '</i><br />';
                                 }

@@ -46,11 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
       feedback.classList.add('loading')
     }
 
-    const url = `${DataObjectOneFieldUpdateURL}${tableName}/${fieldName}/?value=${encodeURIComponent(
-      value
-    )}&id=${ids.join()}`
+    const url = `${DataObjectOneFieldUpdateURL}${tableName}/${fieldName}/`
+    const body = new URLSearchParams()
+    body.set('value', value)
+    body.set('id', ids.join())
+    body.set(DataObjectSecurityIDName, DataObjectSecurityID)
 
-    fetch(url)
+    fetch(url, { method: 'POST', body, credentials: 'same-origin' })
       .then(res => res.text())
       .then(data => {
         if (feedback) {

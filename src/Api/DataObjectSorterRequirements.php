@@ -10,6 +10,7 @@ use SilverStripe\Core\Config\Configurable;
 use SilverStripe\Core\Extensible;
 use SilverStripe\Core\Injector\Injectable;
 use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Security\SecurityToken;
 use SilverStripe\View\Requirements;
 use SilverStripe\View\SSViewer;
 
@@ -119,8 +120,15 @@ class DataObjectSorterRequirements
                 ->Link($action)
         );
         Requirements::customScript(
-            'var ' . $varName . " = '" . rtrim($url, '/') . '/' . "'",
+            'var ' . $varName . ' = ' . json_encode(rtrim($url, '/') . '/', JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ';',
             $varName . 'URL'
+        );
+        // the token that proves that changes are made from our own page.
+        $token = SecurityToken::inst();
+        Requirements::customScript(
+            'var DataObjectSecurityIDName = ' . json_encode($token->getName(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ';'
+            . 'var DataObjectSecurityID = ' . json_encode($token->getValue(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) . ';',
+            'DataObjectSecurityIDScript'
         );
     }
 

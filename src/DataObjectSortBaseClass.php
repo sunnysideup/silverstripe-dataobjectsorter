@@ -7,6 +7,7 @@ use SilverStripe\Control\Controller;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
+use SilverStripe\Core\Environment;
 use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\ORM\DataObject;
@@ -129,24 +130,47 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
 
     protected static function params_builder(array $array): array
     {
-        // extract($array);
-        // $params = [];
-        // if ($where) {
-        //     $params['where'] = $where;
-        // }
-        // if ($sort) {
-        //     $params['sort'] =  $sort;
-        // }
-        // if ($titleField) {
-        //     $params['titlefield'] = $titleField;
-        // }
-        // if ($filterField) {
-        //     $params['filterField'] = $titleField;
-        // }
-        // if ($filterValue) {
-        //     $params['filterValue'] = $filterValue;
-        // }
+        // A "where" that is a piece of SQL is only accepted when it was made by the server (see getRecords).
+        if (isset($array['where']) && is_string($array['where']) && '' !== $array['where']) {
+            $array['whereSig'] = self::sign_sql_fragment($array['where']);
+        }
+
         return $array;
+    }
+
+    /**
+     * Set this to a long random string.  If it is empty then the database password
+     * (from the environment) is used.
+     *
+     * @var string
+     */
+    private static $signing_secret = '';
+
+    protected static function signing_key(): string
+    {
+        $key = (string) Config::inst()->get(DataObjectSortBaseClass::class, 'signing_secret');
+        if ('' === $key) {
+            $key = (string) Environment::getEnv('SS_DATABASE_PASSWORD') . (string) Environment::getEnv('SS_DEFAULT_ADMIN_PASSWORD');
+        }
+
+        return $key;
+    }
+
+    protected static function sign_sql_fragment(string $fragment): string
+    {
+        $key = self::signing_key();
+        if ('' === $key) {
+            return '';
+        }
+
+        return hash_hmac('sha256', $fragment, $key);
+    }
+
+    protected static function sql_fragment_is_signed(string $fragment, string $signature): bool
+    {
+        $expected = self::sign_sql_fragment($fragment);
+
+        return '' !== $expected && '' !== $signature && hash_equals($expected, $signature);
     }
 
     protected function init()
@@ -163,13 +187,12 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         if (! $this->fieldToBeUpdated) {
             $obj = $this->SecureSingletonToBeUpdated();
             if ($obj) {
+                $field = $this->getRequest()->param('OtherID');
                 if (isset($_POST['Field'])) {
-                    return addslashes((string) $_POST['Field']);
+                    $field = (string) $_POST['Field'];
                 }
 
-                $field = $this->getRequest()->param('OtherID');
-
-                if ($obj->hasDatabaseField($field)) {
+                if ($field && ! in_array($field, ['ID', 'ClassName', 'Created', 'LastEdited', 'Version', 'RecordID'], true) && $obj->hasDatabaseField($field)) {
                     $this->fieldToBeUpdated = $field;
 
                     return $field;
@@ -226,7 +249,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                 $classNameString = self::stringToClassName($classNameString);
             }
 
-            if (class_exists($classNameString)) {
+            if (class_exists($classNameString) && is_subclass_of($classNameString, DataObject::class)) {
                 $this->classNameToBeUpdated = $classNameString;
             } else {
                 user_error('Could not find className: ' . $classNameString, E_USER_ERROR);
@@ -396,28 +419,89 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
         Versioned::set_reading_mode('Stage.Stage');
         $className = $this->SecureClassNameToBeUpdated();
         if ($className !== '' && $className !== '0') {
-            $filterField = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('filterField')));
-            $filterValue = (string) Convert::raw2sql(urldecode((string) $this->request->requestVar('filterValue')));
+            $allowedFields = DataObject::getSchema()->databaseFields($className);
+            $filterField = trim(urldecode((string) $this->request->requestVar('filterField')));
+            $filterValue = trim(urldecode((string) $this->request->requestVar('filterValue')));
             $where = $this->request->requestVar('where');
             $sort = $this->request->requestVar('sort');
             $objects = $className::get();
             if ($filterField && $filterValue) {
-                $filterValue = explode(',', (string) $filterValue);
+                if (! isset($allowedFields[$filterField])) {
+                    return $this->httpError(400, 'Invalid filter field.');
+                }
+
+                $filterValue = explode(',', $filterValue);
                 $objects = $objects->filter([$filterField => $filterValue]);
             } elseif (is_numeric($filterField)) {
                 $objects = $objects->filter(['ParentID' => $filterField]);
             }
 
             if ($where) {
-                $objects = is_array($where) ? $objects->filter($where) : $objects->where($where);
+                if (is_array($where)) {
+                    $objects = $objects->filter($this->cleanFilterArray($where, $allowedFields));
+                } elseif (self::sql_fragment_is_signed((string) $where, (string) $this->request->requestVar('whereSig'))) {
+                    // a piece of SQL that was put in the link by the server, not by the visitor.
+                    $objects = $objects->where((string) $where);
+                } else {
+                    return $this->httpError(400, 'This filter is not allowed.');
+                }
             }
 
             if ($sort) {
-                $objects = $objects->sort($sort);
+                $objects = $objects->sort($this->cleanSort($sort, $allowedFields));
             }
 
             return $objects;
         }
+    }
+
+    /**
+     * Only filters on fields of this model (with the usual filter modifiers, e.g. "Title:PartialMatch").
+     */
+    protected function cleanFilterArray(array $filter, array $allowedFields): array
+    {
+        $clean = [];
+        foreach ($filter as $key => $value) {
+            if (! preg_match('/^([A-Za-z0-9_]+)(:[A-Za-z]+)*$/', (string) $key, $matches) || ! isset($allowedFields[$matches[1]])) {
+                $this->httpError(400, 'Invalid filter field.');
+            }
+
+            $clean[$key] = is_array($value) ? array_map('strval', array_filter($value, 'is_scalar')) : (string) $value;
+        }
+
+        return $clean;
+    }
+
+    /**
+     * Only sorts on fields of this model, e.g. "Title ASC, Sort DESC" or ["Title" => "ASC"].
+     */
+    protected function cleanSort(mixed $sort, array $allowedFields): array
+    {
+        $parts = [];
+        if (is_array($sort)) {
+            foreach ($sort as $key => $value) {
+                $parts[] = is_int($key) ? [(string) $value, 'ASC'] : [(string) $key, (string) $value];
+            }
+        } else {
+            foreach (explode(',', (string) $sort) as $piece) {
+                if (! preg_match('/^\s*"?([A-Za-z0-9_]+)"?(?:\s+(ASC|DESC))?\s*$/i', $piece, $matches)) {
+                    $this->httpError(400, 'Invalid sort.');
+                }
+
+                $parts[] = [$matches[1], $matches[2] ?? 'ASC'];
+            }
+        }
+
+        $clean = [];
+        foreach ($parts as [$field, $direction]) {
+            if (! isset($allowedFields[$field])) {
+                $this->httpError(400, 'Invalid sort field.');
+            }
+
+            $clean[$field] = 'DESC' === strtoupper($direction) ? 'DESC' : 'ASC';
+        }
+
+        return $clean;
     }
 
     protected function getRecordsPaginated(): PaginatedList
