@@ -7,7 +7,11 @@
                     update : function () {
                         $("#DataObjectSorterListInfo").text("updating records, please wait ...");
                         var order = $('#DataObjectSorterList').sortable('serialize');
-                        $("#DataObjectSorterListInfo").load( DataObjectSorterURL + "?" + order );
+                        // state change: POST the order together with the security token.
+                        var data = order + "&" + encodeURIComponent(DataObjectSecurityIDName) + "=" + encodeURIComponent(DataObjectSecurityID);
+                        $.post(DataObjectSorterURL, data, function (response) {
+                            $("#DataObjectSorterListInfo").html(response);
+                        });
                     }
                 }
             );

@@ -4,6 +4,7 @@ namespace Sunnysideup\DataObjectSorter;
 
 use SilverStripe\Control\Director;
 use SilverStripe\ORM\DataList;
+use SilverStripe\Security\SecurityToken;
 use SilverStripe\Versioned\Versioned;
 use Sunnysideup\DataObjectSorter\Api\DataObjectSorterRequirements;
 
@@ -177,6 +178,11 @@ class DataObjectSorterController extends DataObjectSortBaseClass
      */
     public function dosort($request)
     {
+        // This changes data so it can not be done with a link (GET): the request has to come from our own page.
+        if (! $request || ! $request->isPOST() || ! SecurityToken::inst()->checkRequest($request)) {
+            return $this->httpError(403, 'Please use the sorting list on the page to make changes.');
+        }
+
         Versioned::set_reading_mode('Stage.Stage');
         $request->param('ID');
         $obj = $this->SecureSingletonToBeUpdated();
