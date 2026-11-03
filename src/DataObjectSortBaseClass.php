@@ -601,7 +601,7 @@ class DataObjectSortBaseClass extends Controller implements PermissionProvider
                     if (! isset($fields[$key])) {
                         unset($filter[$key]);
                     } else {
-                        $filter[$key . ':PartialMatch'] = Convert::raw2sql($value);
+                        $filter[$key . ':PartialMatch'] = $value;
                         unset($filter[$key]);
                     }
                 }
